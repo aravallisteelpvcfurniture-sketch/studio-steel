@@ -1,29 +1,11 @@
-"use client";
+import AppLayout from "@/components/app-layout";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-
-export default function SplashScreen() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push('/auth');
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [router]);
-
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background">
-      <Image
-        src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
-        alt="Aravalli Steel PVC Logo"
-        width={200}
-        height={200}
-        priority
-      />
-    </main>
+    <AppLayout>
+      <div className="flex flex-1 items-center justify-center">
+        <h1 className="text-2xl font-bold">Welcome to Aravalli Steel PVC</h1>
+      </div>
+    </AppLayout>
   );
 }
