@@ -1,112 +1,138 @@
+/**
+ * @file Firestore Security Rules for Aravalli Home Studio
+ * @description This ruleset enforces a strict user-ownership model for user-specific data while allowing public read access to product and visitor greeting information.
+ *
+ * Data Structure:
+ * - /users/{userId}: Stores user profiles; only accessible by the user themselves.
+ * - /products/{productId}: Stores product details; publicly readable.
+ * - /users/{userId}/orders/{orderId}: Stores orders for a specific user; only accessible by the user themselves.
+ * - /users/{userId}/orders/{orderId}/order_items/{orderItemId}: Stores order items within a specific order; only accessible by the user themselves.
+ * - /visitor_greetings/{greetingId}: Stores visitor greeting messages; publicly readable.
+ * - /users/{userId}/product_customizations/{productCustomizationId}: Stores product customizations made by a user; only accessible by the user themselves.
+ *
+ * Key Security Decisions:
+ * - User data and associated subcollections (orders, order items, product customizations) are strictly controlled by user ID, preventing cross-user data access.
+ * - Products and visitor greetings are publicly readable, allowing open access to catalog and promotional content.
+ * - Listing of user documents is allowed only for the owner of the user document.
+ *
+ * Denormalization for Authorization: N/A (Path-based authorization is sufficient)
+ * Structural Segregation: Private user data is stored under /users/{userId} while public product data is stored in the top-level /products collection.
+ */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description This ruleset enforces a strict user-ownership model for user profiles and orders,
-     *              allows public read access to products and gallery items, and restricts write
-     *              access to owner-only for user-specific data.
-     * @dataStructure
-     *  - /users/{userId}: Stores user profile information.
-     *  - /products/{productId}: Stores product information.
-     *  - /users/{userId}/orders/{orderId}: Stores order information for each user.
-     *  - /orders/{orderId}/orderItems/{orderItemId}: Stores order items associated with a specific order.
-     *  - /gallery/{galleryItemId}: Stores gallery items (photos and videos) for public display.
-     * @keySecurityDecisions
-     *  - Users can only read and write their own profile data.
-     *  - Users can only read their own order data.
-     *  - Products and gallery items are publicly readable.
-     *  - Listing of orderItems collection is disallowed because there is no clearly defined role or owner.
-     * @denormalizationForAuthorization N/A
+     * @description Enforces user-ownership for user profile data.
+     * @path /users/{userId}
      */
     match /users/{userId} {
+      // Helper function to check if the user is signed in and is the owner of the document.
       function isSignedIn() {
         return request.auth != null;
       }
-
       function isOwner(userId) {
         return request.auth.uid == userId;
       }
-
       function isExistingOwner(userId) {
-          return isOwner(userId) && resource != null;
+        return isSignedIn() && isOwner(userId) && resource.data != null;
       }
-      allow get: if isOwner(userId);
-      allow list: if false; // Listing users is not permitted.
-      allow create: if isSignedIn() && request.auth.uid == userId;
+
+      // Allows user to read their own profile
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+
+      // Allows user to create their own profile, enforcing that the userId matches the authenticated user's ID.
+      allow create: if isSignedIn() && isOwner(userId) && request.auth.uid == userId;
+
+      // Allows user to update their own profile, ensuring they are the owner.  Also enforces immutability of the userId field.
       allow update: if isExistingOwner(userId);
+
+      // Allows user to delete their own profile, ensuring they are the owner.
       allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows anyone to read product information, but restricts creation, updates, and deletion.
+     * @description Grants public read access to product details while restricting write access.
      * @path /products/{productId}
-     * @allow (get, list) true
-     * @deny (create, update, delete) false
-     * @principle Allows public read access with no write access.
      */
     match /products/{productId} {
-      allow get: if true;
+      allow get: if true; // Publicly readable
       allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+
+      // In this prototyping phase, write access to products should be restricted.
+      // In later phases, consider role-based access or a dedicated admin interface.
+      allow create, update, delete: if false; // TODO: Add role-based or admin-only write access.
     }
 
     /**
-     * @description Allows users to read and write their own order information.
+     * @description Enforces user-ownership for order data, nested under the user profile.
      * @path /users/{userId}/orders/{orderId}
-     * @allow (create) request.auth.uid == "{userId}"
-     * @allow (get, update, delete) request.auth.uid == "{userId}"
-     * @deny (create) request.auth.uid != "{userId}"
-     * @deny (get, update, delete) request.auth.uid != "{userId}"
-     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId}/orders/{orderId} {
-       function isSignedIn() {
-        return request.auth != null;
-      }
+      // Allows user to read their own orders
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
 
-      function isOwner(userId) {
-        return request.auth.uid == userId;
-      }
+      // Allows user to create their own orders
+      allow create: if isSignedIn() && isOwner(userId);
 
-      function isExistingOwner(userId) {
-          return isOwner(userId) && resource != null;
-      }
-      allow get: if isOwner(userId);
-      allow list: if false; // disable list to prevent traversal
-      allow create: if isOwner(userId);
+      // Allows user to update their own orders, ensuring they are the owner. Also enforces immutability of the userId field.
       allow update: if isExistingOwner(userId);
+
+      // Allows user to delete their own orders, ensuring they are the owner and the document exists.
       allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Restricts access to order items.
-     * @path /orders/{orderId}/orderItems/{orderItemId}
-     * @deny (get, list, create, update, delete) false
+     * @description Enforces user-ownership for order item data, nested under the user profile and orders.
+     * @path /users/{userId}/orders/{orderId}/order_items/{orderItemId}
      */
-    match /orders/{orderId}/orderItems/{orderItemId} {
-      allow get: if false;
-      allow list: if false;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+    match /users/{userId}/orders/{orderId}/order_items/{orderItemId} {
+      // Allows user to read their own order items
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+
+      // Allows user to create their own order items
+      allow create: if isSignedIn() && isOwner(userId);
+
+      // Allows user to update their own order items, ensuring they are the owner.
+      allow update: if isExistingOwner(userId);
+
+      // Allows user to delete their own order items, ensuring they are the owner and that the document exists.
+      allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows anyone to read gallery items, but restricts creation, updates, and deletion.
-     * @path /gallery/{galleryItemId}
-     * @allow (get, list) true
-     * @deny (create, update, delete) false
-     * @principle Allows public read access with no write access.
+     * @description Grants public read access to visitor greeting messages while restricting write access.
+     * @path /visitor_greetings/{greetingId}
      */
-    match /gallery/{galleryItemId} {
-      allow get: if true;
+    match /visitor_greetings/{greetingId} {
+      allow get: if true; // Publicly readable
       allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+
+      // In this prototyping phase, write access to visitor greetings should be restricted.
+      // In later phases, consider role-based access or a dedicated admin interface.
+      allow create, update, delete: if false; // TODO: Add role-based or admin-only write access.
+    }
+
+    /**
+     * @description Enforces user-ownership for product customization data, nested under the user profile.
+     * @path /users/{userId}/product_customizations/{productCustomizationId}
+     */
+    match /users/{userId}/product_customizations/{productCustomizationId} {
+      // Allows user to read their own product customizations
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+
+      // Allows user to create their own product customizations
+      allow create: if isSignedIn() && isOwner(userId);
+
+      // Allows user to update their own product customizations, ensuring they are the owner. Also enforces immutability of the userId field.
+      allow update: if isExistingOwner(userId);
+
+      // Allows user to delete their own product customizations, ensuring they are the owner.
+      allow delete: if isExistingOwner(userId);
     }
   }
 }

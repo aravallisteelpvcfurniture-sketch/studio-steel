@@ -1,2 +1,348 @@
-
-{}
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user account within the Aravalli Home Studio application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "User's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "User's last name."
+        },
+        "signUpDate": {
+          "type": "string",
+          "description": "Date and time when the user signed up.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "firstName",
+        "lastName",
+        "signUpDate"
+      ]
+    },
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a product offered by Aravalli Steel PVC Furniture.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the product."
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the product."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the product image.",
+          "format": "uri"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the product (e.g., chair, table)."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "price",
+        "imageUrl",
+        "category"
+      ]
+    },
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents a customer order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Order)"
+        },
+        "orderDate": {
+          "type": "string",
+          "description": "Date and time when the order was placed.",
+          "format": "date-time"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total amount of the order."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the order (e.g., pending, processing, completed)."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "orderDate",
+        "totalAmount",
+        "status"
+      ]
+    },
+    "OrderItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderItem",
+      "type": "object",
+      "description": "Represents an item within an order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order item."
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Reference to Order. (Relationship: Order 1:N OrderItem)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to Product. (Relationship: Product 1:N OrderItem)"
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity of the product in the order item."
+        },
+        "itemPrice": {
+          "type": "number",
+          "description": "Price of the item at the time of the order."
+        }
+      },
+      "required": [
+        "id",
+        "orderId",
+        "productId",
+        "quantity",
+        "itemPrice"
+      ]
+    },
+    "VisitorGreeting": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "VisitorGreeting",
+      "type": "object",
+      "description": "Represents a greeting message displayed to visitors.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the greeting message."
+        },
+        "message": {
+          "type": "string",
+          "description": "The greeting message to display."
+        },
+        "displayFrom": {
+          "type": "string",
+          "description": "Date and time from which the message should be displayed.",
+          "format": "date-time"
+        },
+        "displayUntil": {
+          "type": "string",
+          "description": "Date and time until which the message should be displayed.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "message",
+        "displayFrom",
+        "displayUntil"
+      ]
+    },
+    "ProductCustomization": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ProductCustomization",
+      "type": "object",
+      "description": "Stores user-defined customizations for a product",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the customization."
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to the Product being customized."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User that created the customization."
+        },
+        "material": {
+          "type": "string",
+          "description": "Chosen material for the product (e.g., steel, PVC)."
+        },
+        "color": {
+          "type": "string",
+          "description": "Chosen color for the product."
+        },
+        "dimensions": {
+          "type": "string",
+          "description": "Chosen dimensions for the product."
+        }
+      },
+      "required": [
+        "id",
+        "productId",
+        "userId",
+        "material",
+        "color",
+        "dimensions"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile information. Accessible only by the user themselves.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product details. Publicly accessible for reading.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier for the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores order information for a specific user. Accessible only by the user themselves.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/orders/{orderId}/order_items/{orderItemId}",
+        "definition": {
+          "entityName": "OrderItem",
+          "schema": {
+            "$ref": "#/backend/entities/OrderItem"
+          },
+          "description": "Stores order items within a specific order for a user. Accessible only by the user themselves.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            },
+            {
+              "name": "orderItemId",
+              "description": "The unique identifier for the order item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/visitor_greetings/{greetingId}",
+        "definition": {
+          "entityName": "VisitorGreeting",
+          "schema": {
+            "$ref": "#/backend/entities/VisitorGreeting"
+          },
+          "description": "Stores visitor greeting messages. Publicly accessible for reading.",
+          "params": [
+            {
+              "name": "greetingId",
+              "description": "The unique identifier for the greeting message."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/product_customizations/{productCustomizationId}",
+        "definition": {
+          "entityName": "ProductCustomization",
+          "schema": {
+            "$ref": "#/backend/entities/ProductCustomization"
+          },
+          "description": "Stores product customizations made by a specific user. Accessible only by the user themselves.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "productCustomizationId",
+              "description": "The unique identifier for the product customization."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections, such as public products and user-specific orders. This approach avoids hierarchical authorization dependencies. This achieves Authorization Independence because access to subcollections (orders, order items, product customizations) is based solely on the `request.auth.uid` matching the `userId` in the path."
+  }
+}
