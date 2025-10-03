@@ -60,7 +60,7 @@ export default function SignupPage() {
         setDocumentNonBlocking(userDocRef, userData, { merge: true });
         // The useEffect will handle the redirect on user state change
       }
-    } catch (error: any) => {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Signup Failed",
