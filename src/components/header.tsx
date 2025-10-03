@@ -22,7 +22,9 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-            <Image src="https://i.ibb.co/8L1Hw4qh/image-2.jpg" alt="Aravalli Steel Logo" width={140} height={35} className="h-9 w-auto" />
+            <div className="relative h-9 w-36">
+              <Image src="https://i.ibb.co/8L1Hw4qh/image-2.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
+            </div>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -56,7 +58,9 @@ export function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col space-y-6 pt-10">
                   <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMenuOpen(false)}>
-                     <Image src="https://i.ibb.co/8L1Hw4qh/image-2.jpg" alt="Aravalli Steel Logo" width={160} height={40} />
+                     <div className="relative h-10 w-40">
+                        <Image src="https://i.ibb.co/8L1Hw4qh/image-2.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
+                     </div>
                   </Link>
                   {navLinks.map((link) => (
                     <Link key={link.href} href={link.href} className="flex items-center gap-4 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>
