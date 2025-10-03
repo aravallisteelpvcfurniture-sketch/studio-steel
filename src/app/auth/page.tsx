@@ -9,7 +9,7 @@ export default function AuthPage() {
       <Card className="w-full max-w-md mx-4">
         <CardHeader className="text-center">
            <Image
-            src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759490183/image-2_asr8zs.jpg"
+            src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760021643/aravalli-removebg-preview_h79b1w.png"
             alt="Aravalli Steel PVC Logo"
             width={100}
             height={100}
