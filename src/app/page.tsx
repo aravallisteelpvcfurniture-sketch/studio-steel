@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { products } from "@/lib/products";
-import { ArrowRight, Wand2, Image as ImageIcon } from "lucide-react";
+import { ArrowRight, Wrench, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -41,7 +41,7 @@ export default function Home() {
               </Link>
               <Link href="/customize">
                 <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-black w-full sm:w-auto">
-                  Customize with AI <Wand2 className="ml-2" />
+                  Customize with AI <Wrench className="ml-2" />
                 </Button>
               </Link>
             </div>
@@ -95,7 +95,7 @@ export default function Home() {
               <div className="space-y-6 text-lg">
                 <div className="flex items-start gap-4">
                   <div className="p-2 bg-accent/20 text-accent rounded-full mt-1">
-                    <Wand2 className="h-6 w-6" />
+                    <Wrench className="h-6 w-6" />
                   </div>
                   <div>
                     <h3 className="font-bold">AI-Powered Customization</h3>
