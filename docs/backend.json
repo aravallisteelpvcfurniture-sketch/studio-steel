@@ -8,7 +8,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the user."
+          "description": "Unique identifier for the user, matches Firebase Auth UID."
         },
         "email": {
           "type": "string",
@@ -235,7 +235,7 @@
         "definition": {
           "entityName": "User",
           "schema": {
-            "$ref": "#/backend/entities/User"
+            "$ref": "#/entities/User"
           },
           "description": "Stores user profile information. Accessible only by the user themselves.",
           "params": [
@@ -251,7 +251,7 @@
         "definition": {
           "entityName": "Product",
           "schema": {
-            "$ref": "#/backend/entities/Product"
+            "$ref": "#/entities/Product"
           },
           "description": "Stores product details. Publicly accessible for reading.",
           "params": [
@@ -267,7 +267,7 @@
         "definition": {
           "entityName": "Order",
           "schema": {
-            "$ref": "#/backend/entities/Order"
+            "$ref": "#/entities/Order"
           },
           "description": "Stores order information for a specific user. Accessible only by the user themselves.",
           "params": [
@@ -287,7 +287,7 @@
         "definition": {
           "entityName": "OrderItem",
           "schema": {
-            "$ref": "#/backend/entities/OrderItem"
+            "$ref": "#/entities/OrderItem"
           },
           "description": "Stores order items within a specific order for a user. Accessible only by the user themselves.",
           "params": [
@@ -311,7 +311,7 @@
         "definition": {
           "entityName": "VisitorGreeting",
           "schema": {
-            "$ref": "#/backend/entities/VisitorGreeting"
+            "$ref": "#/entities/VisitorGreeting"
           },
           "description": "Stores visitor greeting messages. Publicly accessible for reading.",
           "params": [
@@ -327,7 +327,7 @@
         "definition": {
           "entityName": "ProductCustomization",
           "schema": {
-            "$ref": "#/backend/entities/ProductCustomization"
+            "$ref": "#/entities/ProductCustomization"
           },
           "description": "Stores product customizations made by a specific user. Accessible only by the user themselves.",
           "params": [

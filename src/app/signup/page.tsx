@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth, useUser } from "@/firebase";
-import { initiateEmailSignUp } from "@/firebase/non-blocking-login";
+import { useAuth, useUser, setDocumentNonBlocking } from "@/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, serverTimestamp } from "firebase/firestore";
+import { useFirestore } from "@/firebase/provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,12 +16,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 export default function SignupPage() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
 
@@ -42,11 +47,22 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      // We are not awaiting this, the onAuthStateChanged will handle the redirect
-      initiateEmailSignUp(auth, email, password);
-      // We can't know for sure if signup will succeed, but we can give optimistic feedback.
-      // The onAuthStateChanged listener in FirebaseProvider will redirect on success.
-      // A global error listener will catch and display auth errors.
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const newUser = userCredential.user;
+      
+      if (newUser) {
+        const userDocRef = doc(firestore, "users", newUser.uid);
+        const userData = {
+          id: newUser.uid,
+          email: newUser.email,
+          firstName: firstName,
+          lastName: lastName,
+          signUpDate: serverTimestamp(),
+        };
+        // This is a non-blocking write
+        setDocumentNonBlocking(userDocRef, userData, { merge: true });
+      }
+      // Optimistic feedback. The onAuthStateChanged listener will handle the redirect.
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -83,6 +99,28 @@ export default function SignupPage() {
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="grid gap-4">
+             <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="first-name">First Name</Label>
+                <Input
+                  id="first-name"
+                  placeholder="Max"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="last-name">Last Name</Label>
+                <Input
+                  id="last-name"
+                  placeholder="Robinson"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input 
