@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Armchair, Menu } from 'lucide-react';
+import { Mountain, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from 'react';
@@ -21,7 +21,7 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-            <Armchair className="h-8 w-8 text-primary" />
+            <Mountain className="h-8 w-8 text-primary" />
             <span className="text-xl font-headline font-bold">Aravalli Home Studio</span>
           </Link>
 
@@ -55,7 +55,7 @@ export function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col space-y-6 pt-10">
                   <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMenuOpen(false)}>
-                    <Armchair className="h-8 w-8 text-primary" />
+                    <Mountain className="h-8 w-8 text-primary" />
                     <span className="text-xl font-headline font-bold">Aravalli Studio</span>
                   </Link>
                   {navLinks.map((link) => (
