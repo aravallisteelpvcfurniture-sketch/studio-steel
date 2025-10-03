@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Image from "next/image";
 import Link from "next/link";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, KeyRound } from 'lucide-react';
+import { Wave } from '@/components/ui/wave';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -33,11 +33,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // We are not awaiting this, the onAuthStateChanged will handle the redirect
       initiateEmailSignIn(auth, email, password);
-      // We can't know for sure if login will succeed, but we can give optimistic feedback.
-      // The onAuthStateChanged listener in FirebaseProvider will redirect on success.
-      // A global error listener will catch and display auth errors.
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -50,59 +46,57 @@ export default function LoginPage() {
   
   if (isUserLoading || user) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-400 to-cyan-600">
+        <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <Card className="w-full max-w-md mx-4 border-0 bg-transparent shadow-none sm:border sm:bg-card sm:shadow-sm">
-        <CardHeader className="space-y-1 text-center">
-           <Image
-            src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
-            alt="Aravalli Steel PVC Logo"
-            width={80}
-            height={80}
-            className="mx-auto mb-4 rounded-full"
-          />
-          <CardTitle className="text-2xl">Log In</CardTitle>
-          <CardDescription>
-            Enter your email below to log in to your account
-          </CardDescription>
-        </CardHeader>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-400 to-cyan-600 p-4">
+      <Card className="w-full max-w-md overflow-hidden border-0 shadow-2xl">
+        <div className="relative bg-primary text-primary-foreground p-8">
+            <Wave />
+            <div className="relative z-10">
+                <p className="text-lg text-primary-foreground/80">Welcome Back,</p>
+                <h1 className="text-4xl font-bold">Log In!</h1>
+            </div>
+        </div>
         <form onSubmit={handleLogin}>
-          <CardContent className="grid gap-4">
+          <CardContent className="grid gap-6 p-8">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Email Address</Label>
               <Input 
                 id="email" 
                 type="email" 
-                placeholder="m@example.com" 
+                placeholder="jacob@gmail.com" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="h-12 text-base"
               />
             </div>
-            <div className="grid gap-2">
+            <div className="grid gap-2 relative">
               <Label htmlFor="password">Password</Label>
               <Input 
                 id="password" 
-                type="password" 
+                type="password"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="h-12 text-base pr-10"
               />
+              <KeyRound className="absolute right-3 top-[2.4rem] h-5 w-5 text-muted-foreground" />
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button className="w-full" type="submit" disabled={isLoading}>
+          <CardFooter className="flex flex-col gap-4 p-8 pt-0">
+            <Button className="w-full h-12 text-base" type="submit" disabled={isLoading}>
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Log In'}
             </Button>
             <p className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline hover:text-primary">
+              <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
                 Sign up
               </Link>
             </p>

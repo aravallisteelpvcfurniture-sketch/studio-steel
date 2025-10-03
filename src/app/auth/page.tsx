@@ -1,30 +1,30 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import Image from 'next/image';
+import { Wave } from '@/components/ui/wave';
 
 export default function AuthPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <Card className="w-full max-w-md mx-4 border-0 bg-transparent shadow-none sm:border sm:bg-card sm:shadow-sm">
-        <CardHeader className="text-center">
-           <Image
-            src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
-            alt="Aravalli Steel PVC Logo"
-            width={100}
-            height={100}
-            className="mx-auto mb-4 rounded-full"
-          />
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-400 to-cyan-600 p-4">
+      <Card className="w-full max-w-md overflow-hidden border-0 shadow-2xl">
+        <div className="relative bg-primary text-primary-foreground p-8">
+            <Wave />
+            <div className='relative z-10'>
+                <h1 className="text-3xl font-bold">Aravalli Steel</h1>
+                <p className="text-primary-foreground/80">Your Modern Furniture Solution</p>
+            </div>
+        </div>
+        <CardHeader className="text-center pt-8">
+          <CardTitle className="text-2xl">Get Started</CardTitle>
           <CardDescription>
-            Choose your login method to continue.
+            Choose your path to continue
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <Button asChild>
+        <CardContent className="flex flex-col gap-4 p-8 pt-0">
+          <Button asChild size="lg" className="w-full">
             <Link href="/login">Log In</Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild size="lg" className="w-full">
             <Link href="/signup">Sign Up</Link>
           </Button>
         </CardContent>
