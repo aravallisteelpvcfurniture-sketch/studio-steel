@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Aravalli Steel PVC',
+  title: 'Aravalli Steel PVC - Dashboard',
   description: 'A modern app for Aravalli Steel PVC',
 };
 
