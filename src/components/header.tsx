@@ -22,8 +22,8 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-            <div className="relative h-9 w-36">
-              <Image src="https://i.ibb.co/8L1Hw4qh/image-2.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
+            <div className="relative h-10 w-40">
+              <Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759490183/image-2_asr8zs.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
             </div>
           </Link>
 
@@ -59,7 +59,7 @@ export function Header() {
                 <div className="flex flex-col space-y-6 pt-10">
                   <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMenuOpen(false)}>
                      <div className="relative h-10 w-40">
-                        <Image src="https://i.ibb.co/8L1Hw4qh/image-2.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
+                        <Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759490183/image-2_asr8zs.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
                      </div>
                   </Link>
                   {navLinks.map((link) => (
