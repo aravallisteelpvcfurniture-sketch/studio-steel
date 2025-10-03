@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, Home, ShoppingBasket, Wrench, GalleryVertical } from 'lucide-react';
+import { Menu, Home, ShoppingBasket, Wrench, GalleryVertical, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from 'react';
@@ -28,27 +28,33 @@ export function Header() {
             <span className="font-headline text-lg font-bold tracking-wide">Aravalli steel pvc</span>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary">
-                {link.icon}
-                <span>{link.label}</span>
-              </Link>
-            ))}
-          </nav>
+          <div className="flex-1 flex justify-end items-center space-x-2">
+            <nav className="hidden md:flex items-center space-x-8">
+              {navLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary">
+                  {link.icon}
+                  <span>{link.label}</span>
+                </Link>
+              ))}
+            </nav>
 
-          <div className="hidden md:flex items-center space-x-2">
-            <Link href="/login">
-              <Button variant="ghost">Login</Button>
-            </Link>
-            <Link href="/signup">
-              <Button variant="default" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                Sign Up
+            <div className="hidden md:flex items-center space-x-2">
+              <Button variant="ghost" size="icon">
+                <Bell className="h-5 w-5" />
+                <span className="sr-only">Notifications</span>
               </Button>
-            </Link>
+              <Link href="/login">
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link href="/signup">
+                <Button variant="default" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
           </div>
 
-          <div className="md:hidden">
+          <div className="md:hidden ml-2">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -70,6 +76,10 @@ export function Header() {
                       <span>{link.label}</span>
                     </Link>
                   ))}
+                   <Link href="#" className="flex items-center gap-4 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>
+                      <Bell />
+                      <span>Notifications</span>
+                    </Link>
                   <div className="border-t pt-6 space-y-4">
                     <Link href="/login" className="block w-full" onClick={() => setIsMenuOpen(false)}>
                       <Button variant="outline" className="w-full">Login</Button>
