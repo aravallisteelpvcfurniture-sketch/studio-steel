@@ -1,10 +1,29 @@
-export default function Home() {
+"use client";
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
+export default function SplashScreen() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push('/auth');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [router]);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Aravalli Steel PVC</h1>
-      <p className="mt-4 text-lg text-muted-foreground">
-        Let's build your app, step by step.
-      </p>
+    <main className="flex min-h-screen flex-col items-center justify-center bg-background">
+      <Image
+        src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759490183/image-2_asr8zs.jpg"
+        alt="Aravalli Steel PVC Logo"
+        width={200}
+        height={200}
+        priority
+      />
     </main>
   );
 }
