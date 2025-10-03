@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Mountain } from 'lucide-react';
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -7,10 +7,9 @@ export function Footer() {
       <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
           <div className="flex items-center gap-2">
-            <Mountain className="h-7 w-7 text-primary" />
-            <span className="text-lg font-headline font-bold">Aravalli Home Studio</span>
+            <Image src="/logo.png" alt="Aravalli Steel Logo" width={140} height={35} className="h-9 w-auto" />
           </div>
-          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Aravalli Home Studio. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Aravalli Steel. All rights reserved.</p>
           <div className="flex space-x-6">
             <Link href="/products" className="text-sm hover:text-primary transition-colors">Products</Link>
             <Link href="/gallery" className="text-sm hover:text-primary transition-colors">Gallery</Link>

@@ -5,8 +5,8 @@ import { Footer } from '@/components/footer';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Aravalli Home Studio',
-  description: 'Custom Steel and PVC Furniture by Aravalli Home Studio',
+  title: 'Aravalli Steel',
+  description: 'Custom Steel and PVC Furniture by Aravalli Steel',
 };
 
 export default function RootLayout({
