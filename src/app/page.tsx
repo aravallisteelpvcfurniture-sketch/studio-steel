@@ -39,7 +39,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!isUserLoading && user) {
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [user, isUserLoading, router]);
 
@@ -79,10 +79,16 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md mx-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader className="text-center">
+               <div className="flex justify-center items-center mb-4">
+                  <div className="relative h-12 w-12 flex-shrink-0">
+                      <img src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759490183/image-2_asr8zs.jpg" alt="Aravalli Steel Logo" className="object-contain" />
+                  </div>
+                  <span className="font-headline text-2xl font-bold tracking-wider ml-2">Aravalli steel pvc</span>
+              </div>
               <CardTitle className="text-2xl font-headline">Welcome Back</CardTitle>
               <CardDescription>Enter your credentials to access your account.</CardDescription>
             </CardHeader>
