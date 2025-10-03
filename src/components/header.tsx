@@ -1,16 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { Mountain, Menu } from 'lucide-react';
+import { Mountain, Menu, Home, ShoppingBasket, Wrench, GalleryVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from 'react';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/products', label: 'Products' },
-  { href: '/customize', label: 'Customize' },
-  { href: '/gallery', label: 'Gallery' },
+  { href: '/', label: 'Home', icon: <Home /> },
+  { href: '/products', label: 'Products', icon: <ShoppingBasket /> },
+  { href: '/customize', label: 'Customize', icon: <Wrench /> },
+  { href: '/gallery', label: 'Gallery', icon: <GalleryVertical /> },
 ];
 
 export function Header() {
@@ -27,8 +27,9 @@ export function Header() {
 
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="text-sm font-medium transition-colors hover:text-primary">
-                {link.label}
+              <Link key={link.href} href={link.href} className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary">
+                {link.icon}
+                <span>{link.label}</span>
               </Link>
             ))}
           </nav>
@@ -59,8 +60,9 @@ export function Header() {
                     <span className="text-xl font-headline font-bold">Aravalli Studio</span>
                   </Link>
                   {navLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className="text-lg font-medium" onClick={() => setIsMenuOpen(false)}>
-                      {link.label}
+                    <Link key={link.href} href={link.href} className="flex items-center gap-4 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>
+                      {link.icon}
+                      <span>{link.label}</span>
                     </Link>
                   ))}
                   <div className="border-t pt-6 space-y-4">
