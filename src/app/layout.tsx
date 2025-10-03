@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
 import { Toaster } from "@/components/ui/toaster";
+import { AppLayout } from '@/components/app-layout';
 
 export const metadata: Metadata = {
   title: 'Aravalli Steel',
@@ -22,11 +21,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </div>
+        <AppLayout>
+          {children}
+        </AppLayout>
         <Toaster />
       </body>
     </html>

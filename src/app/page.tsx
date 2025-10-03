@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
+      <section className="relative w-full h-[60vh] md:h-[70vh] text-white rounded-lg overflow-hidden">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -27,6 +27,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative h-full flex flex-col justify-center items-center text-center p-4">
           <div className="bg-black/20 backdrop-blur-sm p-8 rounded-lg">
+            
             <h1 className="text-4xl md:text-6xl font-headline font-bold mb-4 tracking-tight">
               Craft Your Space, Your Way
             </h1>
@@ -50,7 +51,7 @@ export default function Home() {
       </section>
 
       {/* Featured Products Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <section className="container mx-auto px-0 sm:px-6 lg:px-8 py-16 md:py-24">
         <h2 className="text-3xl md:text-4xl font-headline font-bold text-center mb-12">Featured Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.slice(0, 4).map((product) => (
@@ -87,7 +88,7 @@ export default function Home() {
       </section>
 
       {/* Core Features Section */}
-      <section className="bg-card/80 py-16 md:py-24">
+      <section className="bg-card/80 py-16 md:py-24 rounded-lg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="text-center md:text-left">
