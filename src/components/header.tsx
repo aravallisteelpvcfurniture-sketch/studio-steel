@@ -25,6 +25,7 @@ export function Header() {
             <div className="relative h-10 w-40">
               <Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759490183/image-2_asr8zs.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
             </div>
+            <span className="font-headline text-lg font-bold tracking-wide hidden sm:inline">Aravalli steel pvc</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -57,10 +58,11 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="right">
                 <div className="flex flex-col space-y-6 pt-10">
-                  <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/" className="flex flex-col items-center gap-2 mb-4" onClick={() => setIsMenuOpen(false)}>
                      <div className="relative h-10 w-40">
                         <Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759490183/image-2_asr8zs.jpg" alt="Aravalli Steel Logo" layout="fill" objectFit="contain" />
                      </div>
+                     <span className="font-headline text-lg font-bold tracking-wide">Aravalli steel pvc</span>
                   </Link>
                   {navLinks.map((link) => (
                     <Link key={link.href} href={link.href} className="flex items-center gap-4 text-lg font-medium" onClick={() => setIsMenuOpen(false)}>
