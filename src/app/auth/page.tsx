@@ -5,19 +5,19 @@ import Image from 'next/image';
 
 export default function AuthPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-950">
-      <Card className="w-full max-w-md mx-4">
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <Card className="w-full max-w-md mx-4 border-0 bg-transparent shadow-none sm:border sm:bg-card sm:shadow-sm">
         <CardHeader className="text-center">
            <Image
             src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
             alt="Aravalli Steel PVC Logo"
             width={100}
             height={100}
-            className="mx-auto mb-4"
+            className="mx-auto mb-4 rounded-full"
           />
-          <CardTitle className="text-2xl">Welcome</CardTitle>
+          <CardTitle className="text-2xl">Welcome Back</CardTitle>
           <CardDescription>
-            Log in or create an account to continue
+            Choose your login method to continue.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
