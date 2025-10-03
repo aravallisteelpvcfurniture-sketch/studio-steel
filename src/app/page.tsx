@@ -7,6 +7,8 @@ import AppLayout from "@/components/app-layout";
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import placeholderImages from '@/lib/placeholder-images.json';
+import { Button } from '@/components/ui/button';
+import { Calculator } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -41,8 +43,10 @@ export default function DashboardPage() {
           />
         </div>
         <div className="p-4 md:p-8">
-          <h2 className="text-3xl font-bold tracking-tight">Welcome to your Dashboard</h2>
-          {/* You can add more dashboard content here */}
+          <Button variant="outline" size="lg">
+            <Calculator className="mr-2 h-5 w-5" />
+            Estimate Tools
+          </Button>
         </div>
       </div>
     </AppLayout>
