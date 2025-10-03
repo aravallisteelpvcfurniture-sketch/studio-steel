@@ -27,6 +27,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative h-full flex flex-col justify-center items-center text-center p-4">
           <div className="bg-black/20 backdrop-blur-sm p-8 rounded-lg">
+            <h2 className="text-xl md:text-2xl font-body font-bold text-accent tracking-widest uppercase mb-2">
+                Aravalli steel pvc
+            </h2>
             <h1 className="text-4xl md:text-6xl font-headline font-bold mb-4 tracking-tight">
               Craft Your Space, Your Way
             </h1>
