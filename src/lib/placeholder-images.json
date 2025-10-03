@@ -1,9 +1,9 @@
 {
   "dashboardHero": {
-    "src": "https://picsum.photos/seed/10/1600/600",
+    "src": "https://picsum.photos/seed/11/1600/600",
     "width": 1600,
     "height": 600,
-    "alt": "Modern and stylish furniture",
-    "data-ai-hint": "modern furniture"
+    "alt": "Modular kitchen",
+    "data-ai-hint": "modular kitchen"
   }
 }
