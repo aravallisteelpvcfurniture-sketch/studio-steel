@@ -18,7 +18,7 @@ export default function SplashScreen() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background">
       <Image
-        src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760021643/aravalli-removebg-preview_h79b1w.png"
+        src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
         alt="Aravalli Steel PVC Logo"
         width={200}
         height={200}
