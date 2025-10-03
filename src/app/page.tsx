@@ -1,9 +1,31 @@
+'use client';
 
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useUser } from '@/firebase';
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, ShoppingCart, Users, CreditCard } from "lucide-react";
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardPage() {
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/auth');
+    }
+  }, [user, isUserLoading, router]);
+
+  if (isUserLoading || !user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Skeleton className="h-48 w-48 rounded-full" />
+      </div>
+    );
+  }
+
   return (
     <AppLayout>
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
