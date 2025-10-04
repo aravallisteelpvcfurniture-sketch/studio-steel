@@ -8,9 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Send } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAuth, useFirestore, useUser, useCollection, useMemoFirebase } from '@/firebase';
-import { addDoc, collection, serverTimestamp, query, orderBy, where, getDocs, limit } from 'firebase/firestore';
+import { useFirestore, useUser, useCollection, useMemoFirebase, addDocumentNonBlocking } from '@/firebase';
+import { collection, serverTimestamp, query, orderBy, getDocs, limit } from 'firebase/firestore';
 import type { WithId } from '@/firebase';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
+
 
 type ChatMessage = {
   text: string;
@@ -29,19 +32,30 @@ export default function HelpChatPage() {
   useEffect(() => {
     const findOrCreateChatSession = async () => {
       if (user && firestore) {
-        const chatsRef = collection(firestore, 'users', user.uid, 'chatSessions');
-        const q = query(chatsRef, limit(1));
-        const querySnapshot = await getDocs(q);
-        
-        if (!querySnapshot.empty) {
-          setChatSessionId(querySnapshot.docs[0].id);
-        } else {
-          const newSessionDoc = await addDoc(chatsRef, {
-            userId: user.uid,
-            createdAt: serverTimestamp(),
-            lastMessage: "",
-          });
-          setChatSessionId(newSessionDoc.id);
+        try {
+          const chatsRef = collection(firestore, 'users', user.uid, 'chatSessions');
+          const q = query(chatsRef, limit(1));
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            setChatSessionId(querySnapshot.docs[0].id);
+          } else {
+            const newSessionData = {
+              userId: user.uid,
+              createdAt: serverTimestamp(),
+              lastMessage: "",
+            };
+            const newSessionDoc = await addDocumentNonBlocking(chatsRef, newSessionData);
+            if(newSessionDoc) {
+                setChatSessionId(newSessionDoc.id);
+            }
+          }
+        } catch (e: any) {
+            const permissionError = new FirestorePermissionError({
+              path: `users/${user.uid}/chatSessions`,
+              operation: 'list', // Assuming getDocs is a list operation
+            });
+            errorEmitter.emit('permission-error', permissionError);
         }
       }
     };
@@ -72,7 +86,7 @@ export default function HelpChatPage() {
   }, [messages]);
 
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim() === '' || !user || !chatSessionId || !firestore) return;
 
@@ -84,7 +98,7 @@ export default function HelpChatPage() {
     };
 
     const messagesColRef = collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages');
-    await addDoc(messagesColRef, newMessage);
+    addDocumentNonBlocking(messagesColRef, newMessage);
 
     setInputValue('');
   };
