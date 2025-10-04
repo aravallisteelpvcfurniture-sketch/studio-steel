@@ -43,7 +43,7 @@ export default function DashboardPage() {
           />
         </div>
         <div className="p-4 md:p-8">
-          <Button variant="outline" size="lg">
+          <Button variant="destructive" size="lg" className="shadow-lg transform transition-transform hover:scale-105 active:scale-95">
             <Calculator className="mr-2 h-5 w-5" />
             Estimate Tools
           </Button>
