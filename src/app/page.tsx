@@ -43,8 +43,8 @@ export default function DashboardPage() {
           />
         </div>
         <div className="p-4 md:p-8">
-          <Button size="lg" className="w-full max-w-md bg-gradient-to-br from-red-500 to-red-700 text-white font-bold text-lg shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400">
-            <Construction className="mr-3 h-6 w-6" />
+          <Button className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold text-base shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400 px-6 py-3">
+            <Construction className="mr-2 h-5 w-5" />
             Estimate Tools
           </Button>
         </div>
