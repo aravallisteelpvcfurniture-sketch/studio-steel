@@ -1,137 +1,184 @@
 /**
- * @file Firestore Security Rules for Aravalli Home Studio
- * @description This ruleset enforces a strict user-ownership model for user-specific data while allowing public read access to product and visitor greeting information.
+ * @file Overview
+ * This ruleset enforces a strict user-ownership model for most data, with public read access to product and visitor greeting information.
  *
  * Data Structure:
- * - /users/{userId}: Stores user profiles; only accessible by the user themselves.
- * - /products/{productId}: Stores product details; publicly readable.
- * - /users/{userId}/orders/{orderId}: Stores orders for a specific user; only accessible by the user themselves.
- * - /users/{userId}/orders/{orderId}/order_items/{orderItemId}: Stores order items within a specific order; only accessible by the user themselves.
- * - /visitor_greetings/{greetingId}: Stores visitor greeting messages; publicly readable.
- * - /users/{userId}/product_customizations/{productCustomizationId}: Stores product customizations made by a user; only accessible by the user themselves.
+ * - Users: /users/{userId} (user-specific data)
+ * - Products: /products/{productId} (public read, owner-only write - currently unavailable)
+ * - Orders: /users/{userId}/orders/{orderId} (user-specific data)
+ * - Order Items: /users/{userId}/orders/{orderId}/order_items/{orderItemId} (user-specific data)
+ * - Visitor Greetings: /visitor_greetings/{greetingId} (public read, owner-only write - currently unavailable)
+ * - Product Customizations: /users/{userId}/product_customizations/{productCustomizationId} (user-specific data)
+ * - Chat Sessions: /users/{userId}/chatSessions/{chatSessionId} (user-specific data)
+ * - Chat Messages: /users/{userId}/chatSessions/{chatSessionId}/messages/{messageId} (user-specific data)
  *
  * Key Security Decisions:
- * - User data and associated subcollections (orders, order items, product customizations) are strictly controlled by user ID, preventing cross-user data access.
- * - Products and visitor greetings are publicly readable, allowing open access to catalog and promotional content.
- * - Listing of user documents is allowed only for the owner of the user document.
- *
- * Denormalization for Authorization: N/A (Path-based authorization is sufficient)
- * Structural Segregation: Private user data is stored under /users/{userId} while public product data is stored in the top-level /products collection.
+ * - Users can only access their own data under their /users/{userId} path.
+ * - Listing of the entire 'users' collection is forbidden.
+ * - Products and Visitor Greetings are intended for public read, but owner-only writes are currently unimplemented due to the lack of an ownership field in their schemas.
+ * - Default security posture for ambiguous relationships is strict owner-only access.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Enforces user-ownership for user profile data.
+     * @description Allows users to read and write their own user profile data.
      * @path /users/{userId}
+     * @allow (create) - Authenticated user creates their own profile with matching userId.
+     * @allow (get, update, delete) - Authenticated user reads/updates/deletes their own profile.
+     * @deny (create) - Authenticated user attempts to create a profile with a different userId.
+     * @deny (get, update, delete) - Authenticated user attempts to read/update/delete another user's profile.
+     * @deny (list) - Listing all users is disallowed.
+     * @principle Enforces document ownership for writes and restricts access to a user's own data tree.
      */
     match /users/{userId} {
-      // Helper function to check if the user is signed in and is the owner of the document.
-      function isSignedIn() {
-        return request.auth != null;
-      }
       function isOwner(userId) {
-        return request.auth.uid == userId;
+        return request.auth != null && request.auth.uid == userId;
       }
+
       function isExistingOwner(userId) {
-        return isSignedIn() && isOwner(userId) && resource.data != null;
+        return isOwner(userId) && resource != null;
       }
 
-      // Allows user to read their own profile
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if isSignedIn() && isOwner(userId);
-
-      // Allows user to create their own profile, enforcing that the userId matches the authenticated user's ID.
-      allow create: if isSignedIn() && isOwner(userId) && request.auth.uid == userId;
-
-      // Allows user to update their own profile, ensuring they are the owner.  Also enforces immutability of the userId field.
-      allow update: if isExistingOwner(userId);
-
-      // Allows user to delete their own profile, ensuring they are the owner.
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow get, list: if isOwner(userId);
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
       allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Grants public read access to product details while restricting write access.
+     * @description Allows anyone to read product details. Write access is currently open but MUST be restricted to admins.
      * @path /products/{productId}
+     * @allow (get, list) - Any user can read product details.
+     * @deny (create, update, delete) - All create, update, and delete operations are denied.
+     * @principle Allows public read access, but restricts write access.
      */
     match /products/{productId} {
-      allow get: if true; // Publicly readable
-      allow list: if true;
-
-      // In this prototyping phase, write access to products should be restricted.
-      // In later phases, consider role-based access or a dedicated admin interface.
-      allow create, update, delete: if false; // TODO: Add role-based or admin-only write access.
+      allow get, list: if true;
+      allow create, update, delete: if false;
+      // TODO: Add owner validation once the schema is updated with an ownership field.
     }
 
     /**
-     * @description Enforces user-ownership for order data, nested under the user profile.
+     * @description Allows a user to manage their own orders.
      * @path /users/{userId}/orders/{orderId}
+     * @allow (create, get, update, delete, list) - Authenticated user manages their own orders.
+     * @deny (create, get, update, delete, list) - Authenticated user attempts to manage another user's orders.
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId}/orders/{orderId} {
-      // Allows user to read their own orders
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if isSignedIn() && isOwner(userId);
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
 
-      // Allows user to create their own orders
-      allow create: if isSignedIn() && isOwner(userId);
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
 
-      // Allows user to update their own orders, ensuring they are the owner. Also enforces immutability of the userId field.
-      allow update: if isExistingOwner(userId);
-
-      // Allows user to delete their own orders, ensuring they are the owner and the document exists.
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow get, list: if isOwner(userId);
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
       allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Enforces user-ownership for order item data, nested under the user profile and orders.
+     * @description Allows a user to manage their own order items within their orders.
      * @path /users/{userId}/orders/{orderId}/order_items/{orderItemId}
+     * @allow (create, get, update, delete, list) - Authenticated user manages their own order items.
+     * @deny (create, get, update, delete, list) - Authenticated user attempts to manage another user's order items.
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId}/orders/{orderId}/order_items/{orderItemId} {
-      // Allows user to read their own order items
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if isSignedIn() && isOwner(userId);
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
 
-      // Allows user to create their own order items
-      allow create: if isSignedIn() && isOwner(userId);
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
 
-      // Allows user to update their own order items, ensuring they are the owner.
+      allow create: if isOwner(userId);
+      allow get, list: if isOwner(userId);
       allow update: if isExistingOwner(userId);
-
-      // Allows user to delete their own order items, ensuring they are the owner and that the document exists.
       allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Grants public read access to visitor greeting messages while restricting write access.
+     * @description Allows anyone to read visitor greeting messages. Write access is currently open but MUST be restricted to admins.
      * @path /visitor_greetings/{greetingId}
+     * @allow (get, list) - Any user can read visitor greeting messages.
+     * @deny (create, update, delete) - All create, update, and delete operations are denied.
+     * @principle Allows public read access, but restricts write access.
      */
     match /visitor_greetings/{greetingId} {
-      allow get: if true; // Publicly readable
-      allow list: if true;
-
-      // In this prototyping phase, write access to visitor greetings should be restricted.
-      // In later phases, consider role-based access or a dedicated admin interface.
-      allow create, update, delete: if false; // TODO: Add role-based or admin-only write access.
+      allow get, list: if true;
+      allow create, update, delete: if false;
+       // TODO: Add owner validation once the schema is updated with an ownership field.
     }
 
     /**
-     * @description Enforces user-ownership for product customization data, nested under the user profile.
+     * @description Allows a user to manage their own product customizations.
      * @path /users/{userId}/product_customizations/{productCustomizationId}
+     * @allow (create, get, update, delete, list) - Authenticated user manages their own product customizations.
+     * @deny (create, get, update, delete, list) - Authenticated user attempts to manage another user's product customizations.
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId}/product_customizations/{productCustomizationId} {
-      // Allows user to read their own product customizations
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if isSignedIn() && isOwner(userId);
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
 
-      // Allows user to create their own product customizations
-      allow create: if isSignedIn() && isOwner(userId);
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow get, list: if isOwner(userId);
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
 
-      // Allows user to update their own product customizations, ensuring they are the owner. Also enforces immutability of the userId field.
+    /**
+     * @description Allows a user to manage their own chat sessions.
+     * @path /users/{userId}/chatSessions/{chatSessionId}
+     * @allow (create, get, update, delete, list) - Authenticated user manages their own chat sessions.
+     * @deny (create, get, update, delete, list) - Authenticated user attempts to manage another user's chat sessions.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/chatSessions/{chatSessionId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow get, list: if isOwner(userId);
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows a user to manage their own chat messages within their chat sessions.
+     * @path /users/{userId}/chatSessions/{chatSessionId}/messages/{messageId}
+     * @allow (create, get, update, delete, list) - Authenticated user manages their own chat messages.
+     * @deny (create, get, update, delete, list) - Authenticated user attempts to manage another user's chat messages.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/chatSessions/{chatSessionId}/messages/{messageId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+
+      allow create: if isOwner(userId);
+      allow get, list: if isOwner(userId);
       allow update: if isExistingOwner(userId);
-
-      // Allows user to delete their own product customizations, ensuring they are the owner.
       allow delete: if isExistingOwner(userId);
     }
   }
