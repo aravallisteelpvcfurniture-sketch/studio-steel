@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { Button } from '@/components/ui/button';
-import { Calculator } from 'lucide-react';
+import { Construction } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -43,8 +43,8 @@ export default function DashboardPage() {
           />
         </div>
         <div className="p-4 md:p-8">
-          <Button variant="destructive" size="lg" className="shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-            <Calculator className="mr-2 h-5 w-5" />
+          <Button size="lg" className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold text-lg shadow-2xl rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400">
+            <Construction className="mr-3 h-6 w-6" />
             Estimate Tools
           </Button>
         </div>
