@@ -9,7 +9,6 @@ import Image from 'next/image';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { Button } from '@/components/ui/button';
 import { Construction } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -44,14 +43,10 @@ export default function DashboardPage() {
           />
         </div>
         <div className="p-4 md:p-8">
-          <Card className="w-full max-w-md shadow-2xl">
-            <CardContent className="p-6">
-              <Button size="lg" className="w-full bg-gradient-to-br from-red-500 to-red-700 text-white font-bold text-lg shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400">
-                <Construction className="mr-3 h-6 w-6" />
-                Estimate Tools
-              </Button>
-            </CardContent>
-          </Card>
+          <Button size="lg" className="w-full max-w-md bg-gradient-to-br from-red-500 to-red-700 text-white font-bold text-lg shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400">
+            <Construction className="mr-3 h-6 w-6" />
+            Estimate Tools
+          </Button>
         </div>
       </div>
     </AppLayout>
