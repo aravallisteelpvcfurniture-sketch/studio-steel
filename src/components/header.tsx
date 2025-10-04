@@ -2,17 +2,43 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAuth, useUser } from '@/firebase';
+import { useAuth, useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { User as UserIcon, LogOut, Bell } from 'lucide-react';
+import { collectionGroup, query, where } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
   const { user } = useUser();
   const auth = useAuth();
+  const firestore = useFirestore();
   const router = useRouter();
+  const [hasNewMessages, setHasNewMessages] = useState(false);
+
+  const unreadMessagesQuery = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    // This assumes an admin/support user should see all new messages.
+    // We query the 'messages' subcollection across all documents in 'chatSessions' across all 'users'.
+    return query(
+        collectionGroup(firestore, 'messages'), 
+        where('senderType', '==', 'user'),
+        where('isRead', '==', false)
+    );
+  }, [firestore, user]);
+
+  const { data: unreadMessages } = useCollection(unreadMessagesQuery);
+
+  useEffect(() => {
+    if (unreadMessages && unreadMessages.length > 0) {
+      setHasNewMessages(true);
+    } else {
+      setHasNewMessages(false);
+    }
+  }, [unreadMessages]);
+
 
   const handleSignOut = () => {
     auth.signOut();
@@ -40,7 +66,13 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 hover:text-white">
+          <Button variant="ghost" size="icon" className="relative text-white hover:bg-white/10 hover:text-white" onClick={() => router.push('/help-chat')}>
+            {hasNewMessages && (
+                <span className="absolute top-1.5 right-1.5 flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+            )}
             <Bell className="h-5 w-5" />
             <span className="sr-only">Notifications</span>
           </Button>

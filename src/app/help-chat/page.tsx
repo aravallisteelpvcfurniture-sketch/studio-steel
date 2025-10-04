@@ -20,6 +20,7 @@ type ChatMessage = {
   senderId: string;
   senderType: 'user' | 'support';
   timestamp: any;
+  isRead: boolean;
 };
 
 export default function HelpChatPage() {
@@ -95,6 +96,7 @@ export default function HelpChatPage() {
       senderId: user.uid,
       senderType: 'user',
       timestamp: serverTimestamp(),
+      isRead: false,
     };
 
     const messagesColRef = collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages');
