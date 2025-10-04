@@ -18,7 +18,7 @@ export default function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-      <div className="bg-gradient-to-t from-blue-600 to-blue-500 text-white rounded-t-3xl shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+      <div className="bg-gradient-to-t from-blue-700 to-blue-600 text-white rounded-t-3xl shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
         <div className="container flex h-20 max-w-screen-2xl items-center">
           <div className="flex w-full items-center justify-around">
             {navItems.map((item) => {

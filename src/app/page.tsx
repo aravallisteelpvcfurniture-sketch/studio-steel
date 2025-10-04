@@ -32,7 +32,7 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="w-full h-full flex-grow bg-slate-800">
+      <div className="w-full h-full flex-grow bg-slate-900">
         <div className="relative h-64 md:h-96">
           <Image
             src={heroImage.src}
