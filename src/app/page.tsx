@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { Button } from '@/components/ui/button';
-import { Construction } from 'lucide-react';
+import { Construction, Handshake, Users, ClipboardCheck } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -42,10 +42,22 @@ export default function DashboardPage() {
             priority
           />
         </div>
-        <div className="p-4 md:p-8">
+        <div className="p-4 md:p-8 flex flex-wrap gap-4">
           <Button size="sm" className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400 px-4 py-2">
             <Construction className="mr-2 h-4 w-4" />
             Estimate Tools
+          </Button>
+          <Button size="sm" className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-400 px-4 py-2">
+            <Handshake className="mr-2 h-4 w-4" />
+            Greetings
+          </Button>
+          <Button size="sm" className="bg-gradient-to-br from-green-500 to-green-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-green-400 px-4 py-2">
+            <Users className="mr-2 h-4 w-4" />
+            Visitors
+          </Button>
+          <Button size="sm" className="bg-gradient-to-br from-purple-500 to-purple-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-400 px-4 py-2">
+            <ClipboardCheck className="mr-2 h-4 w-4" />
+            Order Confirm
           </Button>
         </div>
       </div>
