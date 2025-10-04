@@ -66,6 +66,7 @@ export default function DashboardPage() {
             Gallery
           </Button>
         </div>
+        <Separator className="my-4 md:my-6" />
       </div>
     </AppLayout>
   );
