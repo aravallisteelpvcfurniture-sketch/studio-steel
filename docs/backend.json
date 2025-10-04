@@ -220,6 +220,81 @@
         "color",
         "dimensions"
       ]
+    },
+    "ChatSession": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ChatSession",
+      "type": "object",
+      "description": "Represents a single chat conversation between a user and support.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the chat session."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who initiated the chat."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the chat session was created."
+        },
+        "lastMessage": {
+          "type": "string",
+          "description": "The text of the last message sent in the session."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "createdAt"
+      ]
+    },
+    "ChatMessage": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ChatMessage",
+      "type": "object",
+      "description": "Represents a single message within a chat session.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the message."
+        },
+        "sessionId": {
+          "type": "string",
+          "description": "The ID of the chat session this message belongs to."
+        },
+        "senderId": {
+          "type": "string",
+          "description": "The ID of the user or support agent who sent the message."
+        },
+        "senderType": {
+          "type": "string",
+          "enum": [
+            "user",
+            "support"
+          ],
+          "description": "Indicates if the sender is a user or a support agent."
+        },
+        "text": {
+          "type": "string",
+          "description": "The content of the chat message."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the message was sent."
+        }
+      },
+      "required": [
+        "id",
+        "sessionId",
+        "senderId",
+        "senderType",
+        "text",
+        "timestamp"
+      ]
     }
   },
   "auth": {
@@ -341,8 +416,52 @@
             }
           ]
         }
+      },
+      {
+        "path": "/users/{userId}/chatSessions/{chatSessionId}",
+        "definition": {
+          "entityName": "ChatSession",
+          "schema": {
+            "$ref": "#/entities/ChatSession"
+          },
+          "description": "Stores chat sessions for a specific user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "chatSessionId",
+              "description": "The unique identifier for the chat session."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/chatSessions/{chatSessionId}/messages/{messageId}",
+        "definition": {
+          "entityName": "ChatMessage",
+          "schema": {
+            "$ref": "#/entities/ChatMessage"
+          },
+          "description": "Stores messages within a specific chat session for a user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "chatSessionId",
+              "description": "The unique identifier for the chat session."
+            },
+            {
+              "name": "messageId",
+              "description": "The unique identifier for the chat message."
+            }
+          ]
+        }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections, such as public products and user-specific orders. This approach avoids hierarchical authorization dependencies. This achieves Authorization Independence because access to subcollections (orders, order items, product customizations) is based solely on the `request.auth.uid` matching the `userId` in the path."
+    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. Chat sessions and messages are nested under the user to ensure only the user and authorized support can access them. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections. This approach avoids hierarchical authorization dependencies and achieves Authorization Independence."
   }
 }

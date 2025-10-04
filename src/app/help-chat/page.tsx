@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,39 +8,85 @@ import { Button } from "@/components/ui/button";
 import { Send } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAuth, useFirestore, useUser, useCollection, useMemoFirebase } from '@/firebase';
+import { addDoc, collection, serverTimestamp, query, orderBy, where, getDocs, limit } from 'firebase/firestore';
+import type { WithId } from '@/firebase';
 
-type Message = {
+type ChatMessage = {
   text: string;
-  sender: 'user' | 'support';
-  timestamp: string;
+  senderId: string;
+  senderType: 'user' | 'support';
+  timestamp: any;
 };
 
 export default function HelpChatPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [chatSessionId, setChatSessionId] = useState<string | null>(null);
+  const firestore = useFirestore();
+  const { user, isUserLoading } = useUser();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  useEffect(() => {
+    const findOrCreateChatSession = async () => {
+      if (user && firestore) {
+        const chatsRef = collection(firestore, 'users', user.uid, 'chatSessions');
+        const q = query(chatsRef, limit(1));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          setChatSessionId(querySnapshot.docs[0].id);
+        } else {
+          const newSessionDoc = await addDoc(chatsRef, {
+            userId: user.uid,
+            createdAt: serverTimestamp(),
+            lastMessage: "",
+          });
+          setChatSessionId(newSessionDoc.id);
+        }
+      }
+    };
+    if(!isUserLoading) {
+      findOrCreateChatSession();
+    }
+  }, [user, firestore, isUserLoading]);
+
+  const messagesQuery = useMemoFirebase(() => {
+    if (user && chatSessionId && firestore) {
+      return query(
+        collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages'),
+        orderBy('timestamp', 'asc')
+      );
+    }
+    return null;
+  }, [user, chatSessionId, firestore]);
+
+  const { data: messages, isLoading } = useCollection<ChatMessage>(messagesQuery);
+  
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+        const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+        if (viewport) {
+            viewport.scrollTop = viewport.scrollHeight;
+        }
+    }
+  }, [messages]);
+
+
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim() === '') return;
+    if (inputValue.trim() === '' || !user || !chatSessionId || !firestore) return;
 
-    const newMessage: Message = {
+    const newMessage: Omit<ChatMessage, 'id' | 'timestamp'> & { timestamp: any } = {
       text: inputValue,
-      sender: 'user',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      senderId: user.uid,
+      senderType: 'user',
+      timestamp: serverTimestamp(),
     };
 
-    setMessages([...messages, newMessage]);
+    const messagesColRef = collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages');
+    await addDoc(messagesColRef, newMessage);
+
     setInputValue('');
-    
-    // Simulate a support reply
-    setTimeout(() => {
-        const supportReply: Message = {
-            text: "Thank you for your message. Our support team will get back to you shortly.",
-            sender: 'support',
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        };
-        setMessages(prevMessages => [...prevMessages, supportReply]);
-    }, 1000);
   };
 
   return (
@@ -51,35 +97,36 @@ export default function HelpChatPage() {
             <CardTitle>Help & Support</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden p-0">
-            <ScrollArea className="h-full p-6">
+            <ScrollArea className="h-full p-6" ref={scrollAreaRef}>
                 <div className="space-y-4">
-                {messages.map((msg, index) => (
+                {isLoading && <p>Loading chat...</p>}
+                {messages && messages.map((msg: WithId<ChatMessage>) => (
                     <div
-                    key={index}
+                    key={msg.id}
                     className={`flex items-end gap-2 ${
-                        msg.sender === 'user' ? 'justify-end' : 'justify-start'
+                        msg.senderType === 'user' ? 'justify-end' : 'justify-start'
                     }`}
                     >
-                    {msg.sender === 'support' && (
+                    {msg.senderType === 'support' && (
                         <Avatar className="h-8 w-8">
                         <AvatarFallback>S</AvatarFallback>
                         </Avatar>
                     )}
                     <div
                         className={`max-w-xs rounded-lg p-3 text-sm md:max-w-md ${
-                        msg.sender === 'user'
+                        msg.senderType === 'user'
                             ? 'bg-primary text-primary-foreground'
                             : 'bg-muted'
                         }`}
                     >
                         <p>{msg.text}</p>
-                        <p className={`text-xs mt-1 ${msg.sender === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground/70'}`}>
-                            {msg.timestamp}
+                        <p className={`text-xs mt-1 ${msg.senderType === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground/70'}`}>
+                           {msg.timestamp?.toDate()?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || 'Sending...'}
                         </p>
                     </div>
-                    {msg.sender === 'user' && (
+                    {msg.senderType === 'user' && (
                         <Avatar className="h-8 w-8">
-                        <AvatarFallback>U</AvatarFallback>
+                        <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
                         </Avatar>
                     )}
                     </div>
@@ -96,8 +143,9 @@ export default function HelpChatPage() {
                 autoComplete="off"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
+                disabled={isLoading || !chatSessionId}
               />
-              <Button type="submit" size="icon">
+              <Button type="submit" size="icon" disabled={isLoading || !chatSessionId}>
                 <Send className="h-4 w-4" />
                 <span className="sr-only">Send</span>
               </Button>
