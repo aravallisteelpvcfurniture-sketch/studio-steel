@@ -9,6 +9,7 @@ import Image from 'next/image';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { Button } from '@/components/ui/button';
 import { Construction, Handshake, Users, ClipboardCheck, Image as ImageIcon } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -42,7 +43,8 @@ export default function DashboardPage() {
             priority
           />
         </div>
-        <div className="p-4 md:p-8 flex flex-wrap gap-4">
+        <Separator className="my-4 md:my-6" />
+        <div className="p-4 md:p-8 pt-0 flex flex-wrap gap-4">
           <Button size="sm" className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400 px-4 py-2">
             <Construction className="mr-2 h-4 w-4" />
             Estimate Tools
