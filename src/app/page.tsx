@@ -31,7 +31,7 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="w-full">
+      <div className="w-full h-full flex-grow bg-slate-800">
         <div className="relative h-64 md:h-96">
           <Image
             src={heroImage.src}
@@ -43,8 +43,8 @@ export default function DashboardPage() {
           />
         </div>
         <div className="p-4 md:p-8">
-          <Button className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold text-base shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400 px-6 py-3">
-            <Construction className="mr-2 h-5 w-5" />
+          <Button size="sm" className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400 px-4 py-2">
+            <Construction className="mr-2 h-4 w-4" />
             Estimate Tools
           </Button>
         </div>
