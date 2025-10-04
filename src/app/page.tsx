@@ -10,6 +10,7 @@ import placeholderImages from '@/lib/placeholder-images.json';
 import { Button } from '@/components/ui/button';
 import { Construction, Handshake, Users, ClipboardCheck, Image as ImageIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -49,9 +50,11 @@ export default function DashboardPage() {
             <Construction className="mr-2 h-4 w-4" />
             Estimate Tools
           </Button>
-          <Button size="sm" className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-400 px-4 py-2">
-            <Handshake className="mr-2 h-4 w-4" />
-            Greetings
+          <Button asChild size="sm" className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-400 px-4 py-2">
+            <Link href="/greetings">
+              <Handshake className="mr-2 h-4 w-4" />
+              Greetings
+            </Link>
           </Button>
           <Button size="sm" className="bg-gradient-to-br from-green-500 to-green-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-green-400 px-4 py-2">
             <Users className="mr-2 h-4 w-4" />
@@ -61,9 +64,11 @@ export default function DashboardPage() {
             <ClipboardCheck className="mr-2 h-4 w-4" />
             Order Confirm
           </Button>
-          <Button size="sm" className="bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-yellow-400 px-4 py-2">
-            <ImageIcon className="mr-2 h-4 w-4" />
-            Gallery
+          <Button asChild size="sm" className="bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-yellow-400 px-4 py-2">
+            <Link href="/gallery">
+              <ImageIcon className="mr-2 h-4 w-4" />
+              Gallery
+            </Link>
           </Button>
         </div>
         <Separator className="my-4 md:my-6" />
