@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { Button } from '@/components/ui/button';
-import { Construction, Handshake, Users, ClipboardCheck } from 'lucide-react';
+import { Construction, Handshake, Users, ClipboardCheck, Image as ImageIcon } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -58,6 +58,10 @@ export default function DashboardPage() {
           <Button size="sm" className="bg-gradient-to-br from-purple-500 to-purple-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-400 px-4 py-2">
             <ClipboardCheck className="mr-2 h-4 w-4" />
             Order Confirm
+          </Button>
+          <Button size="sm" className="bg-gradient-to-br from-yellow-500 to-yellow-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-yellow-400 px-4 py-2">
+            <ImageIcon className="mr-2 h-4 w-4" />
+            Gallery
           </Button>
         </div>
       </div>
