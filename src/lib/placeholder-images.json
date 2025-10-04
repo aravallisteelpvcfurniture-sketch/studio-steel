@@ -1,9 +1,9 @@
 {
   "dashboardHero": {
-    "src": "https://picsum.photos/seed/railing/1600/600",
+    "src": "https://res.cloudinary.com/dsgirle5v/image/upload/v1760083040/WhatsApp_Image_2024-07-04_at_15.54.55_f28b7e05_a1w2no.jpg",
     "width": 1600,
     "height": 600,
-    "alt": "Stainless steel railing",
-    "data-ai-hint": "stainless steel railing"
+    "alt": "Modern kitchen design",
+    "data-ai-hint": "modern kitchen"
   }
 }
