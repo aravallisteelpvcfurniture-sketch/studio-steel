@@ -82,6 +82,7 @@ export default function CreateEstimatePage() {
     };
 
     const overallTotal = items.reduce((sum, item) => sum + item.total, 0);
+    const overallSqFt = items.reduce((sum, item) => sum + item.sqft, 0);
 
     const shareOnWhatsApp = () => {
         if (!party) return;
@@ -101,6 +102,7 @@ export default function CreateEstimatePage() {
         });
 
         message += `*--- Total ---*\n`;
+        message += `Total SqFt: *${overallSqFt.toFixed(2)}*\n`;
         message += `*Grand Total: ₹${overallTotal.toFixed(2)}*\n\n`;
         message += `From:\n*Aravalli Steel PVC Furniture*`;
 
@@ -177,8 +179,11 @@ export default function CreateEstimatePage() {
                             <CardFooter className="flex-col items-stretch gap-4">
                                 <Separator />
                                 <div className="flex justify-between items-center">
-                                    <span className="text-xl font-bold">Grand Total</span>
-                                    <span className="text-2xl font-bold text-primary">₹{overallTotal.toFixed(2)}</span>
+                                    <div className="space-y-1">
+                                        <div className="text-sm text-muted-foreground">Total SqFt: <span className="font-bold text-foreground">{overallSqFt.toFixed(2)}</span></div>
+                                        <div className="text-xl font-bold">Grand Total</div>
+                                    </div>
+                                    <div className="text-2xl font-bold text-primary">₹{overallTotal.toFixed(2)}</div>
                                 </div>
                                 <Button onClick={shareOnWhatsApp} size="lg">
                                     <MessageSquare className="mr-2 h-5 w-5" /> Share on WhatsApp
