@@ -2,42 +2,38 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAuth, useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { useAuth, useUser } from '@/firebase';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { User as UserIcon, LogOut, Bell } from 'lucide-react';
-import { collectionGroup, query, where } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function Header() {
   const { user } = useUser();
   const auth = useAuth();
-  const firestore = useFirestore();
   const router = useRouter();
   const [hasNewMessages, setHasNewMessages] = useState(false);
 
-  const unreadMessagesQuery = useMemoFirebase(() => {
-    if (!firestore || !user) return null;
-    // This assumes an admin/support user should see all new messages.
-    // We query the 'messages' subcollection across all documents in 'chatSessions' across all 'users'.
-    return query(
-        collectionGroup(firestore, 'messages'), 
-        where('senderType', '==', 'user'),
-        where('isRead', '==', false)
-    );
-  }, [firestore, user]);
-
-  const { data: unreadMessages } = useCollection(unreadMessagesQuery);
-
-  useEffect(() => {
-    if (unreadMessages && unreadMessages.length > 0) {
-      setHasNewMessages(true);
-    } else {
-      setHasNewMessages(false);
-    }
-  }, [unreadMessages]);
+  // Temporarily disabled the query causing permission errors.
+  // const firestore = useFirestore();
+  // const unreadMessagesQuery = useMemoFirebase(() => {
+  //   if (!firestore || !user) return null;
+  //   return query(
+  //       collectionGroup(firestore, 'messages'),
+  //       where('senderType', '==', 'user'),
+  //       where('isRead', '==', false)
+  //   );
+  // }, [firestore, user]);
+  // const { data: unreadMessages } = useCollection(unreadMessagesQuery);
+  // useEffect(() => {
+  //   if (unreadMessages && unreadMessages.length > 0) {
+  //     setHasNewMessages(true);
+  //   } else {
+  //     setHasNewMessages(false);
+  //   }
+  // }, [unreadMessages]);
 
 
   const handleSignOut = () => {
