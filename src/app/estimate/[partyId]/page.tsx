@@ -50,22 +50,23 @@ export default function CreateEstimatePage() {
         setNextId(nextId + 1);
     };
 
-    const handleItemChange = (id: number, field: keyof EstimateItem, value: any) => {
+    const handleItemChange = (id: number, field: keyof EstimateItem, value: string) => {
         setItems(items.map(item => {
             if (item.id === id) {
                 const newItem = { ...item, [field]: value };
 
                 const height = parseFloat(String(newItem.height));
                 const width = parseFloat(String(newItem.width));
-                const price = parseFloat(String(newItem.price));
-
-                if (!isNaN(height) && !isNaN(width)) {
+                
+                if (!isNaN(height) && !isNaN(width) && height > 0 && width > 0) {
                     newItem.sqft = parseFloat((height * width).toFixed(2));
                 } else {
                     newItem.sqft = 0;
                 }
+                
+                const price = parseFloat(String(newItem.price));
 
-                if (!isNaN(newItem.sqft) && !isNaN(price)) {
+                if (!isNaN(newItem.sqft) && !isNaN(price) && newItem.sqft > 0 && price > 0) {
                     newItem.total = parseFloat((newItem.sqft * price).toFixed(2));
                 } else {
                     newItem.total = 0;
