@@ -8,6 +8,7 @@ import { useFirestore, useUser, useCollection, useMemoFirebase } from '@/firebas
 import { collection, query, orderBy } from 'firebase/firestore';
 import type { WithId } from '@/firebase';
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Party = {
     partyName: string;
@@ -20,6 +21,7 @@ type Party = {
 export default function EstimatePage() {
     const firestore = useFirestore();
     const { user } = useUser();
+    const router = useRouter();
 
     const partiesQuery = useMemoFirebase(() => {
         if (!firestore || !user) return null;
@@ -27,6 +29,10 @@ export default function EstimatePage() {
     }, [firestore, user]);
 
     const { data: parties, isLoading: isLoadingParties } = useCollection<Party>(partiesQuery);
+
+    const handlePartyClick = (partyId: string) => {
+        router.push(`/estimate/${partyId}`);
+    };
 
     return (
         <AppLayout>
@@ -38,7 +44,7 @@ export default function EstimatePage() {
                                 <Users className="h-6 w-6" />
                                 Party List
                             </CardTitle>
-                            <CardDescription>Here are the parties you have added.</CardDescription>
+                            <CardDescription>Select a party to create or view an estimate.</CardDescription>
                         </div>
                         <Button asChild>
                             <Link href="/estimate/add">
@@ -55,7 +61,11 @@ export default function EstimatePage() {
                         ) : parties && parties.length > 0 ? (
                             <div className="space-y-4">
                                 {parties.map((party: WithId<Party>) => (
-                                    <div key={party.id} className="p-4 border rounded-lg bg-muted/50 flex justify-between items-center">
+                                    <div 
+                                        key={party.id} 
+                                        className="p-4 border rounded-lg bg-muted/50 flex justify-between items-center cursor-pointer hover:bg-muted"
+                                        onClick={() => handlePartyClick(party.id)}
+                                    >
                                         <div>
                                             <p className="font-semibold text-foreground">{party.partyName}</p>
                                             <p className="text-sm text-muted-foreground">{party.mobile}</p>
