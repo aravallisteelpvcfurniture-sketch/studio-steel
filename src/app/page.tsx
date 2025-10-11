@@ -46,9 +46,11 @@ export default function DashboardPage() {
         </div>
         <Separator className="my-4 md:my-6" />
         <div className="p-4 md:p-8 pt-0 flex flex-wrap gap-4">
-          <Button size="sm" className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400 px-4 py-2">
-            <Construction className="mr-2 h-4 w-4" />
-            Estimate Tools
+          <Button asChild size="sm" className="bg-gradient-to-br from-red-500 to-red-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-red-400 px-4 py-2">
+            <Link href="/estimate">
+              <Construction className="mr-2 h-4 w-4" />
+              Estimate Tools
+            </Link>
           </Button>
           <Button asChild size="sm" className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-bold shadow-lg rounded-full transform transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-400 px-4 py-2">
             <Link href="/greetings">
