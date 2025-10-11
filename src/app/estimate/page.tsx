@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Loader2, UserPlus, Users, FilePlus } from "lucide-react";
+import { Loader2, UserPlus, Users, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useUser, useCollection, useMemoFirebase, addDocumentNonBlocking } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
@@ -148,8 +148,8 @@ export default function EstimatePage() {
                                             {party.email && <p className="text-sm text-muted-foreground">{party.email}</p>}
                                         </div>
                                         <Button variant="outline" size="sm">
-                                            <FilePlus className="mr-2 h-4 w-4" />
-                                            Create Estimate
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Add Party
                                         </Button>
                                     </div>
                                 ))}
