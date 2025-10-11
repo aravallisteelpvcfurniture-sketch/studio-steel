@@ -295,6 +295,46 @@
         "text",
         "timestamp"
       ]
+    },
+    "Party": {
+      "title": "Party",
+      "type": "object",
+      "description": "Represents a party or client for estimates.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the party."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who added this party."
+        },
+        "partyName": {
+          "type": "string",
+          "description": "Name of the party."
+        },
+        "mobile": {
+          "type": "string",
+          "description": "Mobile number of the party."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the party.",
+          "format": "email"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the party was added."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "partyName",
+        "mobile",
+        "createdAt"
+      ]
     }
   },
   "auth": {
@@ -460,8 +500,28 @@
             }
           ]
         }
+      },
+       {
+        "path": "/users/{userId}/parties/{partyId}",
+        "definition": {
+          "entityName": "Party",
+          "schema": {
+            "$ref": "#/entities/Party"
+          },
+          "description": "Stores party details for a specific user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "partyId",
+              "description": "The unique identifier for the party."
+            }
+          ]
+        }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. Chat sessions and messages are nested under the user to ensure only the user and authorized support can access them. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections. This approach avoids hierarchical authorization dependencies and achieves Authorization Independence."
+    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. Chat sessions and messages are nested under the user to ensure only the user and authorized support can access them. Parties are stored under `/users/{userId}/parties/{partyId}` so each user can only access their own parties. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections. This approach avoids hierarchical authorization dependencies and achieves Authorization Independence."
   }
 }
