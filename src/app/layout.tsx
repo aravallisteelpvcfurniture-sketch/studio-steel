@@ -10,6 +10,10 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Aravalli Steel PVC - Dashboard',
   description: 'A modern app for Aravalli Steel PVC',
+  icons: {
+    icon: 'https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png',
+    apple: 'https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png',
+  },
 };
 
 export default function RootLayout({
