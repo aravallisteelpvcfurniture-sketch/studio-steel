@@ -5,56 +5,81 @@
  * This ruleset enforces a strict user-ownership model for personal data while allowing public read access to product and visitor greeting information.
  *
  * Data Structure:
- * - User-specific data (profiles, orders, customizations, chat sessions) is nested under /users/{userId}.
- * - Products and visitor greetings are stored in top-level collections (/products, /visitor_greetings) with public read access.
+ * - User-specific data (profile, orders, customizations, chat sessions, messages) is nested under /users/{userId}.
+ * - Products and visitor greetings are stored in top-level collections (/products, /visitor_greetings) for public readability.
  *
  * Key Security Decisions:
- * - Users can only access their own data. No cross-user data access is allowed except where explicitly public.
- * - Public listing is enabled for `/products` and `/visitor_greetings`.
- * - The rules explicitly deny all write operations (create, update, delete) if the authorization conditions are not met.
+ * - Users can only access their own data, enforced through path-based authorization (isOwner(userId)).
+ * - Listing user documents is disallowed as there is no business need for it and that could expose private information.
+ * - Products and visitor greetings are publicly readable but currently have no write rules defined, which defaults to denying all writes. If public write access is needed, it must be implemented with care, including input validation and rate limiting.
  *
  * Denormalization for Authorization:
- * - User-owned documents, such as `ProductCustomization`, implicitly include the `userId` in the path.
- *   The security rules validate that `request.auth.uid` matches the `userId` in the path for write operations, avoiding the need to duplicate this data inside the document.
- *   This provides a balance between data integrity and rule performance by avoiding a need for potentially redundant checks.
+ *  - The data structure enforces that userId is part of the path for any user-owned documents, enabling simple path-based authorization without needing denormalized fields.
  *
  * Structural Segregation:
- * - Public data (products, visitor greetings) is stored in separate top-level collections, while private user data is stored under the `/users/{userId}` path.
- *   This segregation enables public read access to products and visitor greetings while maintaining strict user ownership for other data.
+ *  - Publicly readable data (products, greetings) is stored in separate top-level collections, while private user data is stored under /users/{userId}. This avoids the need for a shared collection with access control flags.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Allows users to read and write their own profile data.
-     * @path /users/{userId}
-     * @allow (create, update, delete) if the user's UID matches the userId.
-     * @allow (get, list) if the user's UID matches the userId.
-     * @deny (create, update, delete) if the user's UID does not match the userId.
-     * @principle Enforces document ownership for reads and writes.
+     * @description Checks if the request is made by a signed-in user.
+     * @param {string} userId - The user ID to check against.
+     * @returns {boolean} True if the user is signed in, false otherwise.
      */
-    match /users/{userId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-
-      function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
-      }
-
-      allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId);
-      allow update: if isOwner(userId);
-      allow delete: if isOwner(userId);
+    function isSignedIn() {
+      return request.auth != null;
     }
 
     /**
-     * @description Allows anyone to read product details, but no one to create, update, or delete products.
+     * @description Checks if the request is made by the owner of the resource.
+     * @param {string} userId - The user ID to check against.
+     * @returns {boolean} True if the user is the owner, false otherwise.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the request is made by the owner of the resource and the resource exists.
+     * @param {string} userId - The user ID to check against.
+     * @returns {boolean} True if the user is the owner and the resource exists, false otherwise.
+     */
+    function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description Rules for user profile information.
+     * @path /users/{userId}
+     * @allow (create) User with UID 'user123' can create their profile if request.auth.uid == 'user123'.
+     * @deny (create) User with UID 'user456' cannot create a profile with ID 'user123'.
+     * @allow (get) User with UID 'user123' can read their profile at /users/user123.
+     * @deny (get) User with UID 'user456' cannot read the profile at /users/user123.
+     * @allow (update) User with UID 'user123' can update their profile at /users/user123.
+     * @deny (update) User with UID 'user456' cannot update the profile at /users/user123.
+     * @allow (delete) User with UID 'user123' can delete their profile at /users/user123.
+     * @deny (delete) User with UID 'user456' cannot delete the profile at /users/user123.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false; // Listing user documents is disallowed.
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Rules for product details. Publicly accessible for reading.
      * @path /products/{productId}
-     * @allow (get, list) to anyone.
-     * @deny (create, update, delete) to everyone.
-     * @principle Public read access with no write access.
+     * @allow (get) Any user (signed in or not) can read product details.
+     * @allow (list) Any user (signed in or not) can list products.
+     * @deny (create) No one can create product through the app.
+     * @deny (update) No one can update product through the app.
+     * @deny (delete) No one can delete product through the app.
+     * @principle Public read access with owner-only (or admin-only) writes.
      */
     match /products/{productId} {
       allow get, list: if true;
@@ -64,57 +89,56 @@ service cloud.firestore {
     }
 
     /**
-     * @description Allows users to read, create, update, and delete their own orders.
+     * @description Rules for order information for a specific user.
      * @path /users/{userId}/orders/{orderId}
-     * @allow (create, update, delete) if the user's UID matches the userId.
-     * @allow (get, list) if the user's UID matches the userId.
-     * @deny (create, update, delete) if the user's UID does not match the userId.
-     * @principle Enforces document ownership for reads and writes.
+     * @allow (create) User with UID 'user123' can create an order under /users/user123/orders/order456 if request.auth.uid == 'user123'.
+     * @deny (create) User with UID 'user456' cannot create an order under /users/user123/orders/order456.
+     * @allow (get) User with UID 'user123' can read their order at /users/user123/orders/order456.
+     * @deny (get) User with UID 'user456' cannot read the order at /users/user123/orders/order456.
+     * @allow (update) User with UID 'user123' can update their order at /users/user123/orders/order456.
+     * @deny (update) User with UID 'user456' cannot update the order at /users/user123/orders/order456.
+     * @allow (delete) User with UID 'user123' can delete their order at /users/user123/orders/order456.
+     * @deny (delete) User with UID 'user456' cannot delete the order at /users/user123/orders/order456.
+     * @principle Enforces document ownership for writes.
      */
     match /users/{userId}/orders/{orderId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-
-      function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
-      }
-
-      allow get, list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
       allow create: if isOwner(userId);
-      allow update: if isOwner(userId) && resource != null;
-      allow delete: if isOwner(userId) && resource != null;
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows users to read, create, update, and delete their own order items.
+     * @description Rules for order items within a specific order for a user.
      * @path /users/{userId}/orders/{orderId}/order_items/{orderItemId}
-     * @allow (create, update, delete) if the user's UID matches the userId.
-     * @allow (get, list) if the user's UID matches the userId.
-     * @deny (create, update, delete) if the user's UID does not match the userId.
-     * @principle Enforces document ownership for reads and writes.
+     * @allow (create) User with UID 'user123' can create an order item under /users/user123/orders/order456/order_items/item789 if request.auth.uid == 'user123'.
+     * @deny (create) User with UID 'user456' cannot create an order item under /users/user123/orders/order456/order_items/item789.
+     * @allow (get) User with UID 'user123' can read their order item at /users/user123/orders/order456/order_items/item789.
+     * @deny (get) User with UID 'user456' cannot read the order item at /users/user123/orders/order456/order_items/item789.
+     * @allow (update) User with UID 'user123' can update their order item at /users/user123/orders/order456/order_items/item789.
+     * @deny (update) User with UID 'user456' cannot update the order item at /users/user123/orders/order456/order_items/item789.
+     * @allow (delete) User with UID 'user123' can delete their order item at /users/user123/orders/order456/order_items/item789.
+     * @deny (delete) User with UID 'user456' cannot delete the order item at /users/user123/orders/order456/order_items/item789.
+     * @principle Enforces document ownership for writes.
      */
     match /users/{userId}/orders/{orderId}/order_items/{orderItemId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-
-      function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
-      }
-
-      allow get, list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
       allow create: if isOwner(userId);
-      allow update: if isOwner(userId) && resource != null;
-      allow delete: if isOwner(userId) && resource != null;
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows anyone to read visitor greetings, but no one to create, update, or delete them.
+     * @description Rules for visitor greeting messages. Publicly accessible for reading.
      * @path /visitor_greetings/{greetingId}
-     * @allow (get, list) to anyone.
-     * @deny (create, update, delete) to everyone.
-     * @principle Public read access with no write access.
+     * @allow (get) Any user can read visitor greetings.
+     * @allow (list) Any user can list visitor greetings.
+     * @deny (create) No one can create visitor greetings through the app.
+     * @deny (update) No one can update visitor greetings through the app.
+     * @deny (delete) No one can delete visitor greetings through the app.
+     * @principle Public read access, restricted writes.
      */
     match /visitor_greetings/{greetingId} {
       allow get, list: if true;
@@ -124,72 +148,66 @@ service cloud.firestore {
     }
 
     /**
-     * @description Allows users to read, create, update, and delete their own product customizations.
+     * @description Rules for product customizations made by a specific user.
      * @path /users/{userId}/product_customizations/{productCustomizationId}
-     * @allow (create, update, delete) if the user's UID matches the userId.
-     * @allow (get, list) if the user's UID matches the userId.
-     * @deny (create, update, delete) if the user's UID does not match the userId.
-     * @principle Enforces document ownership for reads and writes.
+     * @allow (create) User with UID 'user123' can create a customization under /users/user123/product_customizations/custom456 if request.auth.uid == 'user123'.
+     * @deny (create) User with UID 'user456' cannot create a customization under /users/user123/product_customizations/custom456.
+     * @allow (get) User with UID 'user123' can read their customization at /users/user123/product_customizations/custom456.
+     * @deny (get) User with UID 'user456' cannot read the customization at /users/user123/product_customizations/custom456.
+     * @allow (update) User with UID 'user123' can update their customization at /users/user123/product_customizations/custom456.
+     * @deny (update) User with UID 'user456' cannot update the customization at /users/user123/product_customizations/custom456.
+     * @allow (delete) User with UID 'user123' can delete their customization at /users/user123/product_customizations/custom456.
+     * @deny (delete) User with UID 'user456' cannot delete the customization at /users/user123/product_customizations/custom456.
+     * @principle Enforces document ownership for writes.
      */
     match /users/{userId}/product_customizations/{productCustomizationId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-
-      function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
-      }
-
-      allow get, list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
       allow create: if isOwner(userId);
-      allow update: if isOwner(userId) && resource != null;
-      allow delete: if isOwner(userId) && resource != null;
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
 
-    /**
-     * @description Allows users to read, create, update, and delete their own chat sessions.
-     * @path /users/{userId}/chatSessions/{chatSessionId}
-     * @allow (create, update, delete) if the user's UID matches the userId.
-     * @allow (get, list) if the user's UID matches the userId.
-     * @deny (create, update, delete) if the user's UID does not match the userId.
-     * @principle Enforces document ownership for reads and writes.
-     */
+     /**
+      * @description Rules for chat sessions for a specific user.
+      * @path /users/{userId}/chatSessions/{chatSessionId}
+      * @allow (create) User with UID 'user123' can create a chat session under /users/user123/chatSessions/session456 if request.auth.uid == 'user123'.
+      * @deny (create) User with UID 'user456' cannot create a chat session under /users/user123/chatSessions/session456.
+      * @allow (get) User with UID 'user123' can read their chat session at /users/user123/chatSessions/session456.
+      * @deny (get) User with UID 'user456' cannot read the chat session at /users/user123/chatSessions/session456.
+      * @allow (update) User with UID 'user123' can update their chat session at /users/user123/chatSessions/session456.
+      * @deny (update) User with UID 'user456' cannot update the chat session at /users/user123/chatSessions/session456.
+      * @allow (delete) User with UID 'user123' can delete their chat session at /users/user123/chatSessions/session456.
+      * @deny (delete) User with UID 'user456' cannot delete the chat session at /users/user123/chatSessions/session456.
+      * @principle Enforces document ownership for writes.
+      */
     match /users/{userId}/chatSessions/{chatSessionId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-
-      function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
-      }
-
-      allow get, list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
       allow create: if isOwner(userId);
-      allow update: if isOwner(userId) && resource != null;
-      allow delete: if isOwner(userId) && resource != null;
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows users to read, create, update, and delete their own chat messages within a specific chat session.
+     * @description Rules for messages within a specific chat session for a user.
      * @path /users/{userId}/chatSessions/{chatSessionId}/messages/{messageId}
-     * @allow (create, update, delete) if the user's UID matches the userId.
-     * @allow (get, list) if the user's UID matches the userId.
-     * @deny (create, update, delete) if the user's UID does not match the userId.
-     * @principle Enforces document ownership for reads and writes.
+     * @allow (create) User with UID 'user123' can create a message under /users/user123/chatSessions/session456/messages/message789 if request.auth.uid == 'user123'.
+     * @deny (create) User with UID 'user456' cannot create a message under /users/user123/chatSessions/session456/messages/message789.
+     * @allow (get) User with UID 'user123' can read their message at /users/user123/chatSessions/session456/messages/message789.
+     * @deny (get) User with UID 'user456' cannot read the message at /users/user123/chatSessions/session456/messages/message789.
+     * @allow (update) User with UID 'user123' can update their message at /users/user123/chatSessions/session456/messages/message789.
+     * @deny (update) User with UID 'user456' cannot update the message at /users/user123/chatSessions/session456/messages/message789.
+     * @allow (delete) User with UID 'user123' can delete their message at /users/user123/chatSessions/session456/messages/message789.
+     * @deny (delete) User with UID 'user456' cannot delete the message at /users/user123/chatSessions/session456/messages/message789.
+     * @principle Enforces document ownership for writes.
      */
     match /users/{userId}/chatSessions/{chatSessionId}/messages/{messageId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-
-      function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
-      }
-
-      allow get, list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
       allow create: if isOwner(userId);
-      allow update: if isOwner(userId) && resource != null;
-      allow delete: if isOwner(userId) && resource != null;
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
   }
 }
