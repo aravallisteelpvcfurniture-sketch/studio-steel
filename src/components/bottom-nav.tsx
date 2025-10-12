@@ -10,7 +10,7 @@ const ScanIcon = () => (
         <path d="M4 7V4H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M4 17V20H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M17 4H20V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M17 20H20V17" stroke="currentColor" strokeWidth-="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M17 20H20V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M5 12H19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
 );
