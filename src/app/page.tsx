@@ -155,7 +155,7 @@ export default function DashboardPage() {
             <DashboardCard href="/gallery" icon={<Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760173678/catalogue_kpfqcu.png" alt="Catalogue" width={48} height={48} />} label="Catalogue" />
             <DashboardCard href="#" icon={<Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760252119/furniture_idea_qotui2.png" alt="Furniture Idea" width={48} height={48} />} label="Furniture Idea" />
             <DashboardCard href="/estimate" icon={<Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760252119/estimate_o1qj2t.png" alt="Estimate" width={48} height={48} />} label="Estimate" />
-            <DashboardCard href="#" icon={<Image src="https://rescloudinary.com/dsgirle5v/image/upload/v1760252119/video_reels_j3v3p2.png" alt="Video/Reels" width={48} height={48} />} label="Video/Reels" />
+            <DashboardCard href="#" icon={<Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760252119/video_reels_j3v3p2.png" alt="Video/Reels" width={48} height={48} />} label="Video/Reels" />
             <DashboardCard href="#" icon={<Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760252119/news_nsl5v2.png" alt="News" width={48} height={48} />} label="News" />
             <DashboardCard href="#" icon={<Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760252119/offer_b1r5i2.png" alt="Offer" width={48} height={48} />} label="Offer" />
             <DashboardCard href="#" icon={<Image src="https://res.cloudinary.com/dsgirle5v/image/upload/v1760252119/my_gift_yqj5qf.png" alt="My Gift" width={48} height={48} />} label="My Gift" />
