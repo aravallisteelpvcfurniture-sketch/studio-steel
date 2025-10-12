@@ -8,9 +8,9 @@ type AppLayoutProps = {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="flex flex-1 flex-col pb-16">{children}</main>
+      <main className="flex flex-1 flex-col">{children}</main>
       <BottomNav />
     </div>
   );
