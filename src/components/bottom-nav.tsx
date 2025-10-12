@@ -2,14 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, User, Menu } from 'lucide-react';
+import { Home, Folder, Scan, User, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/gallery', label: 'Catalogue', icon: Compass },
+  { href: '/gallery', label: 'Catalogue', icon: Folder },
+  { href: '/scan', label: 'Scan', icon: Scan },
   { href: '/profile', label: 'Profile', icon: User },
-  { href: '/more', label: 'More', icon: Menu },
+  { href: '/more', label: 'More', icon: MoreHorizontal },
 ];
 
 export default function BottomNav() {
@@ -28,12 +29,22 @@ export default function BottomNav() {
                 className="flex flex-col items-center justify-center gap-1 text-muted-foreground transition-colors hover:text-primary"
               >
                 <div className={cn(
-                    "flex items-center justify-center rounded-full transition-all duration-300 relative",
-                    isActive ? "h-10 w-10 bg-primary/10" : "h-8 w-8"
+                    "flex items-center justify-center rounded-full transition-all duration-300 relative h-10 w-10",
                 )}>
-                    <item.icon className={cn("h-6 w-6", isActive ? "text-primary" : "text-muted-foreground")} />
-                     {isActive && <span className="absolute -bottom-1 h-1 w-6 rounded-full bg-primary"></span>}
+                    {isActive ? (
+                        <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center">
+                             <item.icon className="h-6 w-6 text-white" />
+                        </div>
+                    ) : (
+                        <item.icon className="h-6 w-6 text-gray-400" />
+                    )}
                 </div>
+                <span className={cn(
+                    "text-xs mt-0.5",
+                    isActive ? "text-primary font-bold" : "text-gray-500"
+                )}>
+                    {/* {item.label} Commenting out label as per design */}
+                </span>
               </Link>
             );
           })}
