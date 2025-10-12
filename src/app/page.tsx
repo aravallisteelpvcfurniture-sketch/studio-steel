@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
+import { cn } from "@/lib/utils";
 
 // Custom SVG Icons to match the design
 const EstimateIcon = () => (
