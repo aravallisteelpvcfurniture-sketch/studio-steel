@@ -38,11 +38,14 @@ export default function BottomNav() {
                     <Link
                         key={item.href}
                         href={item.href}
-                        className="flex flex-col items-center justify-center"
+                        className="flex flex-col items-center justify-center text-white"
                     >
                         <div className="h-14 w-14 rounded-full bg-primary flex items-center justify-center -translate-y-4 border-4 border-background shadow-lg">
                              <item.icon />
                         </div>
+                         <span className="sr-only">
+                            {item.label}
+                        </span>
                     </Link>
                  )
             }
@@ -50,22 +53,22 @@ export default function BottomNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex flex-col items-center justify-center gap-1 text-muted-foreground transition-colors hover:text-primary"
+                className={cn(
+                    "flex flex-col items-center justify-center gap-1 transition-colors hover:text-primary",
+                    isActive ? "text-primary" : "text-muted-foreground"
+                )}
               >
-                <div className={cn(
-                    "flex items-center justify-center rounded-full transition-all duration-300 relative h-10 w-10",
-                )}>
+                <div className="h-10 w-10 flex items-center justify-center relative">
                     {isActive ? (
-                        <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center">
-                             <item.icon className="h-6 w-6 text-white" />
+                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                             <item.icon className="h-6 w-6" />
                         </div>
                     ) : (
-                        <item.icon className="h-6 w-6 text-gray-400" />
+                        <item.icon className="h-6 w-6" />
                     )}
                 </div>
                 <span className={cn(
-                    "text-xs mt-0.5 sr-only",
-                    isActive ? "text-primary font-bold" : "text-gray-500"
+                    "text-xs font-medium",
                 )}>
                     {item.label}
                 </span>
