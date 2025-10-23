@@ -10,6 +10,9 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Image from "next/image";
 import placeholderImages from '@/lib/placeholder-images.json';
 import Autoplay from "embla-carousel-autoplay";
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ClipboardList, Handshake, Users } from 'lucide-react';
 
 
 export default function DashboardPage() {
@@ -75,6 +78,28 @@ export default function DashboardPage() {
           <CarouselPrevious className="ml-16" />
           <CarouselNext className="mr-16" />
         </Carousel>
+
+        <div className="grid grid-cols-3 gap-4">
+            <Button asChild variant="outline" className="h-20 flex-col gap-2 text-base font-semibold">
+                <Link href="/estimate">
+                    <ClipboardList className="h-6 w-6" />
+                    <span>Estimate</span>
+                </Link>
+            </Button>
+             <Button asChild variant="outline" className="h-20 flex-col gap-2 text-base font-semibold">
+                <Link href="/greetings">
+                    <Handshake className="h-6 w-6" />
+                    <span>Greetings</span>
+                </Link>
+            </Button>
+             <Button asChild variant="outline" className="h-20 flex-col gap-2 text-base font-semibold">
+                <Link href="#">
+                    <Users className="h-6 w-6" />
+                    <span>Visitors</span>
+                </Link>
+            </Button>
+        </div>
+
       </div>
     </AppLayout>
   );
