@@ -80,19 +80,19 @@ export default function DashboardPage() {
         </Carousel>
 
         <div className="grid grid-cols-3 gap-4">
-            <Button asChild variant="outline" className="h-20 flex-col gap-2 text-base font-semibold">
+            <Button asChild className="h-20 flex-col gap-2 text-base font-semibold">
                 <Link href="/estimate">
                     <ClipboardList className="h-6 w-6" />
                     <span>Estimate</span>
                 </Link>
             </Button>
-             <Button asChild variant="outline" className="h-20 flex-col gap-2 text-base font-semibold">
+             <Button asChild className="h-20 flex-col gap-2 text-base font-semibold">
                 <Link href="/greetings">
                     <Handshake className="h-6 w-6" />
                     <span>Greetings</span>
                 </Link>
             </Button>
-             <Button asChild variant="outline" className="h-20 flex-col gap-2 text-base font-semibold">
+             <Button asChild className="h-20 flex-col gap-2 text-base font-semibold">
                 <Link href="#">
                     <Users className="h-6 w-6" />
                     <span>Visitors</span>
