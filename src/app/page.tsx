@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useUser } from '@/firebase';
 import AppLayout from "@/components/app-layout";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from "@/lib/utils";
