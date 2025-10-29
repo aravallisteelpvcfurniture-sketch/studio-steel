@@ -12,7 +12,7 @@ import placeholderImages from '@/lib/placeholder-images.json';
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ClipboardList, Handshake, Users, ClipboardCheck, Calculator, Video, GalleryVertical, Tag, BookOpen } from 'lucide-react';
+import { ClipboardList, Handshake, Users, ClipboardCheck, Calculator, Video, GalleryVertical, Tag, BookOpen, Plus } from 'lucide-react';
 
 
 export default function DashboardPage() {
@@ -79,7 +79,7 @@ export default function DashboardPage() {
           <CarouselNext className="mr-16" />
         </Carousel>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#2563EB' }}>
                 <Link href="/estimate">
                     <ClipboardList className="h-6 w-6" />
@@ -135,8 +135,13 @@ export default function DashboardPage() {
                 </Link>
             </Button>
         </div>
-
       </div>
+       <Button asChild className="fixed bottom-24 right-6 h-16 w-16 rounded-full shadow-lg z-40">
+        <Link href="/estimate/add">
+          <Plus className="h-8 w-8" />
+          <span className="sr-only">Add New Estimate</span>
+        </Link>
+      </Button>
     </AppLayout>
   );
 }
