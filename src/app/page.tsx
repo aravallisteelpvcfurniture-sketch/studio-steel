@@ -43,7 +43,7 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="flex-1 p-4 md:p-6 space-y-6">
+      <div className="flex-1 p-4 md:p-6 space-y-6 pb-24">
         <Carousel
           className="w-full"
           plugins={[
@@ -136,6 +136,12 @@ export default function DashboardPage() {
             </Button>
         </div>
       </div>
+       <Button asChild className="fixed bottom-20 right-6 h-16 w-16 rounded-full shadow-lg" size="icon">
+        <Link href="/estimate/add">
+          <Plus className="h-8 w-8" />
+          <span className="sr-only">Add Estimate</span>
+        </Link>
+      </Button>
     </AppLayout>
   );
 }
