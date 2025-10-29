@@ -136,12 +136,6 @@ export default function DashboardPage() {
             </Button>
         </div>
       </div>
-       <Button asChild className="fixed bottom-20 right-6 h-16 w-16 rounded-full shadow-lg" size="icon">
-        <Link href="/estimate/add">
-          <Plus className="h-8 w-8" />
-          <span className="sr-only">Add Estimate</span>
-        </Link>
-      </Button>
     </AppLayout>
   );
 }
