@@ -12,7 +12,7 @@ import placeholderImages from '@/lib/placeholder-images.json';
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ClipboardList, Handshake, Users, ClipboardCheck, Calculator, Video, GalleryVertical, Tag, BookOpen, Plus } from 'lucide-react';
+import { ClipboardList, Handshake, Users, ClipboardCheck, Calculator, Video, GalleryVertical, Tag, BookOpen } from 'lucide-react';
 
 
 export default function DashboardPage() {

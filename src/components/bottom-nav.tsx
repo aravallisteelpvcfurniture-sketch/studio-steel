@@ -6,7 +6,7 @@ import { Home, Folder, User, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ScanIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 7V4H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M4 17V20H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M17 4H20V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -28,9 +28,8 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-      <div className="container flex h-16 max-w-md mx-auto items-center">
-        <div className="flex w-full items-center justify-around">
+    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md mx-auto">
+      <div className="bg-background/80 backdrop-blur-lg border rounded-full shadow-lg h-16 flex items-center justify-around">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             if (item.href === '/scan') {
@@ -39,13 +38,11 @@ export default function BottomNav() {
                         key={item.href}
                         href={item.href}
                         className="flex flex-col items-center justify-center text-white"
+                        aria-label={item.label}
                     >
-                        <div className="h-14 w-14 rounded-full bg-primary flex items-center justify-center -translate-y-4 border-4 border-background shadow-lg">
+                        <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center -translate-y-3 border-4 border-background shadow-xl transform transition-transform hover:scale-110">
                              <item.icon />
                         </div>
-                         <span className="sr-only">
-                            {item.label}
-                        </span>
                     </Link>
                  )
             }
@@ -54,28 +51,20 @@ export default function BottomNav() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                    "flex flex-col items-center justify-center gap-1 transition-colors hover:text-primary",
-                    isActive ? "text-primary" : "text-muted-foreground"
+                    "flex flex-col items-center justify-center gap-1 transition-colors w-16",
+                    isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
                 )}
               >
-                <div className="h-10 w-10 flex items-center justify-center relative">
-                    {isActive ? (
-                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                             <item.icon className="h-6 w-6" />
-                        </div>
-                    ) : (
-                        <item.icon className="h-6 w-6" />
-                    )}
-                </div>
+                <item.icon className="h-6 w-6" />
                 <span className={cn(
                     "text-xs font-medium",
+                     isActive ? "font-bold" : ""
                 )}>
                     {item.label}
                 </span>
               </Link>
             );
           })}
-        </div>
       </div>
     </nav>
   );
