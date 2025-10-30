@@ -29,7 +29,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-primary text-primary-foreground">
       <div className="container flex h-16 max-w-screen-2xl items-center px-4">
         <div className="flex items-center space-x-2">
            <Link href="/" className="flex items-center space-x-2">
@@ -40,7 +40,7 @@ export default function Header() {
                 height={32}
                 className="rounded-full"
             />
-            <span className="text-lg font-bold text-foreground tracking-tight">ARAVALLI</span>
+            <span className="text-lg font-bold tracking-tight">ARAVALLI</span>
           </Link>
         </div>
 
@@ -49,15 +49,15 @@ export default function Header() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                 placeholder="Search..."
-                className="w-full rounded-full bg-muted pl-9 h-9"
+                className="w-full rounded-full bg-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/70 pl-9 h-9 border-0 focus-visible:ring-primary-foreground"
                 />
             </div>
-           <Button variant="outline" size="sm" className="hidden sm:inline-flex h-9">
+           <Button variant="secondary" size="sm" className="hidden sm:inline-flex h-9">
              Check In
            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative h-9 w-9 text-muted-foreground hover:bg-muted">
+                <Button variant="ghost" size="icon" className="relative h-9 w-9 hover:bg-primary-foreground/10">
                   <Bell className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -92,10 +92,10 @@ export default function Header() {
             {user && (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                         <Button variant="ghost" className="relative h-9 w-9 rounded-full hover:bg-primary-foreground/10">
                             <Avatar className="h-9 w-9">
                                 <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User'} />
-                                <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                                <AvatarFallback className="bg-secondary text-secondary-foreground">{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
                             </Avatar>
                         </Button>
                     </DropdownMenuTrigger>
