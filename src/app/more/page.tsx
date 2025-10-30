@@ -2,8 +2,7 @@
 
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ChevronRight, HelpCircle, Calculator, LogOut, Settings } from 'lucide-react';
+import { ChevronRight, HelpCircle, Calculator, LogOut, User, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/firebase';
@@ -25,6 +24,12 @@ const menuItems = [
 
 const settingsItems = [
      {
+        href: "/profile",
+        icon: User,
+        title: "My Profile",
+        description: "View and manage your profile details.",
+    },
+    {
         href: "#",
         icon: Settings,
         title: "App Settings",
@@ -49,27 +54,26 @@ export default function MorePage() {
             <CardTitle>More Options</CardTitle>
             <CardDescription>Explore additional features and settings.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-                {menuItems.map((item) => (
-                    <Link href={item.href} key={item.title}>
-                        <div className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
-                            <item.icon className="h-6 w-6 mr-4 text-primary" />
-                            <div className="flex-1">
-                                <p className="font-semibold">{item.title}</p>
-                                <p className="text-sm text-muted-foreground">{item.description}</p>
-                            </div>
-                            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          <CardContent className="space-y-2">
+            {menuItems.map((item) => (
+                <Link href={item.href} key={item.title}>
+                    <div className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
+                        <item.icon className="h-6 w-6 mr-4 text-primary" />
+                        <div className="flex-1">
+                            <p className="font-semibold">{item.title}</p>
+                            <p className="text-sm text-muted-foreground">{item.description}</p>
                         </div>
-                    </Link>
-                ))}
-            </div>
+                        <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                </Link>
+            ))}
           </CardContent>
         </Card>
         
         <Card>
             <CardHeader>
-                <CardTitle>App Settings</CardTitle>
+                <CardTitle>Account & Settings</CardTitle>
+                 <CardDescription>Manage your account, profile, and app settings.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
                  {settingsItems.map((item) => (
