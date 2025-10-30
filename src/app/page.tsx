@@ -136,27 +136,21 @@ export default function DashboardPage() {
             </Button>
         </div>
 
-        <Card className="bg-primary/10 border-primary/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Megaphone className="h-6 w-6 text-primary" />
-              <span className="text-primary">Latest Updates</span>
-            </CardTitle>
-            <CardDescription>
-              Stay informed about the latest features and offers in the app.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between p-4 rounded-lg bg-background">
-                <div>
-                    <h3 className="font-semibold text-foreground">New Feature: Stairs Estimator!</h3>
-                    <p className="text-sm text-muted-foreground">Quickly calculate estimates for staircase projects.</p>
+        <Card>
+          <CardContent className="p-0">
+            <div className="p-6 bg-green-500/10 flex items-start gap-4 rounded-lg">
+                <div className="bg-green-500/20 p-3 rounded-full">
+                    <Megaphone className="h-6 w-6 text-green-700" />
                 </div>
-                <Button variant="ghost" size="icon" asChild>
-                    <Link href="/stairs-estimate">
-                        <ArrowRight className="h-5 w-5" />
-                    </Link>
-                </Button>
+                <div className="flex-1">
+                    <h3 className="font-bold text-base text-green-800">New Feature: Stairs Estimator!</h3>
+                    <p className="text-sm text-green-700/80 mt-1">Quickly calculate estimates for staircase projects with our new powerful tool.</p>
+                     <Button asChild variant="link" className="px-0 h-auto mt-2 text-green-800 font-bold">
+                        <Link href="/stairs-estimate">
+                            Check it out <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                    </Button>
+                </div>
             </div>
           </CardContent>
         </Card>
