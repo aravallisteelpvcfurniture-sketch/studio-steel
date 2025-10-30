@@ -26,10 +26,8 @@ export default function RootLayout({
     <html lang="en">
        <head>
         <link rel="manifest" href="/manifest.json" />
-        {/* Light mode primary color: hsl(142 71% 45%) */}
         <meta name="theme-color" content="#27ae60" media="(prefers-color-scheme: light)" />
-        {/* Dark mode primary color: hsl(142 71% 50%) */}
-        <meta name="theme-color" content="#34c778" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#27ae60" media="(prefers-color-scheme: dark)" />
       </head>
       <body className={cn('min-h-screen font-sans antialiased', inter.className)}>
         <FirebaseClientProvider>
