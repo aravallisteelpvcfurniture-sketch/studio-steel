@@ -138,19 +138,19 @@ export default function DashboardPage() {
 
         <Card className="relative overflow-hidden rounded-lg">
           <Image
-            src="https://picsum.photos/seed/feature-banner/1200/250"
+            src="https://picsum.photos/seed/feature-banner/1200/350"
             alt="New feature announcement banner"
             width={1200}
-            height={250}
+            height={350}
             className="w-full h-auto object-cover"
             data-ai-hint="abstract background"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent p-6 flex flex-col justify-center">
-            <h3 className="font-bold text-xl text-white">New Feature: Stairs Estimator!</h3>
-            <p className="text-sm text-white/80 mt-1 max-w-sm">Quickly calculate estimates for staircase projects with our new powerful tool.</p>
-            <Button asChild variant="link" className="px-0 h-auto mt-3 text-white font-bold justify-start w-fit">
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent p-8 flex flex-col justify-center">
+            <h3 className="font-bold text-2xl md:text-3xl text-white">New Feature: Stairs Estimator!</h3>
+            <p className="text-base text-white/80 mt-2 max-w-md">Quickly calculate estimates for staircase projects with our new powerful tool.</p>
+            <Button asChild variant="link" className="px-0 h-auto mt-4 text-white font-bold justify-start w-fit text-base">
               <Link href="/stairs-estimate">
-                Check it out <ArrowRight className="ml-2 h-4 w-4" />
+                Check it out <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>
