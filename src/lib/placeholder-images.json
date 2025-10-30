@@ -26,5 +26,71 @@
     "height": 700,
     "alt": "Sleek PVC wardrobe design",
     "data-ai-hint": "pvc wardrobe"
-  }
+  },
+  "galleryImages": [
+    {
+      "src": "https://picsum.photos/seed/gal1/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "Custom PVC Wardrobe",
+      "title": "Custom PVC Wardrobe",
+      "data-ai-hint": "pvc wardrobe"
+    },
+    {
+      "src": "https://picsum.photos/seed/gal2/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "Modular Kitchen Design",
+      "title": "Modular Kitchen Design",
+      "data-ai-hint": "modular kitchen"
+    },
+    {
+      "src": "https://picsum.photos/seed/gal3/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "Steel Frame Sofa",
+      "title": "Steel Frame Sofa",
+      "data-ai-hint": "steel sofa"
+    },
+    {
+      "src": "https://picsum.photos/seed/gal4/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "Entertainment TV Unit",
+      "title": "Entertainment TV Unit",
+      "data-ai-hint": "tv unit"
+    },
+    {
+      "src": "https://picsum.photos/seed/gal5/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "PVC Bathroom Vanity",
+      "title": "PVC Bathroom Vanity",
+      "data-ai-hint": "bathroom vanity"
+    },
+    {
+      "src": "https://picsum.photos/seed/gal6/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "Office Workstation Desk",
+      "title": "Office Workstation Desk",
+      "data-ai-hint": "office desk"
+    },
+    {
+      "src": "https://picsum.photos/seed/gal7/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "Modern Steel Bed Frame",
+      "title": "Modern Steel Bed Frame",
+      "data-ai-hint": "bed frame"
+    },
+    {
+      "src": "https://picsum.photos/seed/gal8/400/400",
+      "width": 400,
+      "height": 400,
+      "alt": "PVC Wall Paneling",
+      "title": "PVC Wall Paneling",
+      "data-ai-hint": "wall paneling"
+    }
+  ]
 }
