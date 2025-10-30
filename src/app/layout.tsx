@@ -25,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
        <head>
+        <link rel="manifest" href="/manifest.json" />
         {/* Light mode primary color: hsl(142 71% 45%) */}
         <meta name="theme-color" content="#27ae60" media="(prefers-color-scheme: light)" />
         {/* Dark mode primary color: hsl(142 71% 50%) */}
