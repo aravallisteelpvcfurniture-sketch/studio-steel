@@ -37,8 +37,10 @@ export default function MorePage() {
     const router = useRouter();
 
     const handleSignOut = () => {
-        auth.signOut();
-        router.push('/auth');
+        if (auth) {
+            auth.signOut();
+            router.push('/auth');
+        }
     };
 
   return (
@@ -51,7 +53,7 @@ export default function MorePage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {menuItems.map((item) => (
-                <Link href={item.href} key={item.title}>
+                <Link href={item.href} key={item.title} className="block">
                     <div className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
                         <item.icon className="h-6 w-6 mr-4 text-primary" />
                         <div className="flex-1">
@@ -72,7 +74,7 @@ export default function MorePage() {
             </CardHeader>
             <CardContent className="space-y-2">
                  {settingsItems.map((item) => (
-                    <Link href={item.href} key={item.title}>
+                    <Link href={item.href} key={item.title} className="block">
                         <div className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
                             <item.icon className="h-6 w-6 mr-4" />
                             <div className="flex-1">
@@ -92,7 +94,7 @@ export default function MorePage() {
                     <ThemeSwitcher />
                 </div>
                 <div 
-                    className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                    className="flex items-center p-3 rounded-lg hover:bg-destructive/10 cursor-pointer transition-colors"
                     onClick={handleSignOut}
                     role="button"
                 >
