@@ -90,30 +90,14 @@ export default function Header() {
             </DropdownMenu>
 
             {user && (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                         <Button variant="ghost" className="relative h-9 w-9 rounded-full hover:bg-primary-foreground/10">
-                            <Avatar className="h-9 w-9">
-                                <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User'} />
-                                <AvatarFallback className="bg-secondary text-secondary-foreground">{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
-                            </Avatar>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56" align="end" forceMount>
-                        <DropdownMenuLabel className="font-normal">
-                            <div className="flex flex-col space-y-1">
-                                <p className="text-sm font-medium leading-none">{user.displayName || user.email}</p>
-                                <p className="text-xs leading-none text-muted-foreground">
-                                {user.email}
-                                </p>
-                            </div>
-                        </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={handleSignOut}>
-                        Log out
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Link href="/profile">
+                    <Button variant="ghost" className="relative h-9 w-9 rounded-full hover:bg-primary-foreground/10">
+                        <Avatar className="h-9 w-9">
+                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User'} />
+                            <AvatarFallback className="bg-secondary text-secondary-foreground">{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                </Link>
             )}
         </div>
       </div>
