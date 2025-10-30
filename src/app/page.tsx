@@ -5,14 +5,14 @@ import { useEffect } from 'react';
 import { useUser } from '@/firebase';
 import AppLayout from "@/components/app-layout";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Image from "next/image";
 import placeholderImages from '@/lib/placeholder-images.json';
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ClipboardList, Handshake, Users, ClipboardCheck, Calculator, Video, GalleryVertical, Tag, BookOpen } from 'lucide-react';
+import { ClipboardList, Handshake, Users, ClipboardCheck, Calculator, Video, GalleryVertical, Tag, BookOpen, Megaphone, ArrowRight } from 'lucide-react';
 
 
 export default function DashboardPage() {
@@ -135,6 +135,32 @@ export default function DashboardPage() {
                 </Link>
             </Button>
         </div>
+
+        <Card className="bg-primary/10 border-primary/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3">
+              <Megaphone className="h-6 w-6 text-primary" />
+              <span className="text-primary">Latest Updates</span>
+            </CardTitle>
+            <CardDescription>
+              Stay informed about the latest features and offers in the app.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between p-4 rounded-lg bg-background">
+                <div>
+                    <h3 className="font-semibold text-foreground">New Feature: Stairs Estimator!</h3>
+                    <p className="text-sm text-muted-foreground">Quickly calculate estimates for staircase projects.</p>
+                </div>
+                <Button variant="ghost" size="icon" asChild>
+                    <Link href="/stairs-estimate">
+                        <ArrowRight className="h-5 w-5" />
+                    </Link>
+                </Button>
+            </div>
+          </CardContent>
+        </Card>
+
       </div>
     </AppLayout>
   );
