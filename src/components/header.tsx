@@ -58,7 +58,7 @@ export default function Header() {
            <Button variant="ghost" size="icon" className="relative h-9 w-9 text-muted-foreground hover:bg-muted">
              <Bell className="h-5 w-5" />
            </Button>
-            {user ? (
+            {user && (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                          <Button variant="ghost" className="relative h-9 w-9 rounded-full">
@@ -83,8 +83,6 @@ export default function Header() {
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-            ) : (
-                <Button size="sm" onClick={() => router.push('/auth')}>Login</Button>
             )}
         </div>
       </div>
