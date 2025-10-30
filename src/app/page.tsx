@@ -104,12 +104,6 @@ export default function DashboardPage() {
                     <span>Order Confirm</span>
                 </Link>
             </Button>
-            <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#6d28d9' }}>
-                <Link href="/stairs-estimate">
-                    <Calculator className="h-6 w-6" />
-                    <span>Stairs Estimate</span>
-                </Link>
-            </Button>
             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#db2777' }}>
                 <Link href="#">
                     <Video className="h-6 w-6" />
