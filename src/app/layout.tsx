@@ -15,7 +15,6 @@ export const metadata: Metadata = {
     icon: 'https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png',
     apple: 'https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png',
   },
-   themeColor: '#3498db', // Placeholder, will be overridden by HSL
 };
 
 export default function RootLayout({
@@ -26,8 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
        <head>
-        {/* HSL value for primary color: 142 71% 45% */}
-        <meta name="theme-color" content="#27ae60" />
+        {/* Light mode primary color: hsl(142 71% 45%) */}
+        <meta name="theme-color" content="#27ae60" media="(prefers-color-scheme: light)" />
+        {/* Dark mode primary color: hsl(142 71% 50%) */}
+        <meta name="theme-color" content="#34c778" media="(prefers-color-scheme: dark)" />
       </head>
       <body className={cn('min-h-screen font-sans antialiased', inter.className)}>
         <FirebaseClientProvider>
