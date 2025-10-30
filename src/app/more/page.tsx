@@ -69,7 +69,7 @@ export default function MorePage() {
         
         <Card>
             <CardHeader>
-                <CardTitle>Account & Settings</CardTitle>
+                <CardTitle>Account &amp; Settings</CardTitle>
                  <CardDescription>Manage your account, profile, and app settings.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
