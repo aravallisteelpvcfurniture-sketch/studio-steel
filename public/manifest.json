@@ -1,0 +1,21 @@
+{
+  "name": "Aravalli Home Studio",
+  "short_name": "Aravalli",
+  "description": "A modern app for Aravalli Steel PVC",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#22c55e",
+  "icons": [
+    {
+      "src": "https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
