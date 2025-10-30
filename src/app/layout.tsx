@@ -4,6 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,17 +24,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
        <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#27ae60" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#27ae60" media="(prefers-color-scheme: dark)" />
       </head>
       <body className={cn('min-h-screen font-sans antialiased', inter.className)}>
-        <FirebaseClientProvider>
-          {children}
-        </FirebaseClientProvider>
-        <Toaster />
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+          <FirebaseClientProvider>
+            {children}
+          </FirebaseClientProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

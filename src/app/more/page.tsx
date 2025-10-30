@@ -2,10 +2,11 @@
 
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ChevronRight, HelpCircle, Calculator, LogOut, User, Settings } from 'lucide-react';
+import { ChevronRight, HelpCircle, Calculator, LogOut, User, Palette } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/firebase';
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 const menuItems = [
     {
@@ -28,12 +29,6 @@ const settingsItems = [
         icon: User,
         title: "My Profile",
         description: "View and manage your profile details.",
-    },
-    {
-        href: "#",
-        icon: Settings,
-        title: "App Settings",
-        description: "Manage your application settings.",
     },
 ]
 
@@ -88,6 +83,14 @@ export default function MorePage() {
                         </div>
                     </Link>
                 ))}
+                 <div className="flex items-center p-3 rounded-lg">
+                    <Palette className="h-6 w-6 mr-4" />
+                    <div className="flex-1">
+                        <p className="font-semibold">Theme</p>
+                        <p className="text-sm text-muted-foreground">Switch between light and dark mode.</p>
+                    </div>
+                    <ThemeSwitcher />
+                </div>
                 <div 
                     className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                     onClick={handleSignOut}
