@@ -55,9 +55,40 @@ export default function Header() {
            <Button variant="outline" size="sm" className="hidden sm:inline-flex h-9">
              Check In
            </Button>
-           <Button variant="ghost" size="icon" className="relative h-9 w-9 text-muted-foreground hover:bg-muted">
-             <Bell className="h-5 w-5" />
-           </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative h-9 w-9 text-muted-foreground hover:bg-muted">
+                  <Bell className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-80" align="end">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <div className="flex flex-col">
+                    <p className="font-semibold">New Estimate Request</p>
+                    <p className="text-xs text-muted-foreground">You have a new estimate request from John Doe.</p>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <div className="flex flex-col">
+                    <p className="font-semibold">Order Confirmed</p>
+                    <p className="text-xs text-muted-foreground">Your order #12345 has been confirmed.</p>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <div className="flex flex-col">
+                    <p className="font-semibold">New Message</p>
+                    <p className="text-xs text-muted-foreground">You have a new message in the help chat.</p>
+                  </div>
+                </DropdownMenuItem>
+                 <DropdownMenuSeparator />
+                 <DropdownMenuItem className="justify-center text-sm text-primary hover:!text-primary">
+                    View all notifications
+                 </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {user && (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
