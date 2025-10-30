@@ -136,23 +136,24 @@ export default function DashboardPage() {
             </Button>
         </div>
 
-        <Card>
-          <CardContent className="p-0">
-            <div className="p-6 bg-green-500/10 flex items-start gap-4 rounded-lg">
-                <div className="bg-green-500/20 p-3 rounded-full">
-                    <Megaphone className="h-6 w-6 text-green-700" />
-                </div>
-                <div className="flex-1">
-                    <h3 className="font-bold text-base text-green-800">New Feature: Stairs Estimator!</h3>
-                    <p className="text-sm text-green-700/80 mt-1">Quickly calculate estimates for staircase projects with our new powerful tool.</p>
-                     <Button asChild variant="link" className="px-0 h-auto mt-2 text-green-800 font-bold">
-                        <Link href="/stairs-estimate">
-                            Check it out <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                    </Button>
-                </div>
-            </div>
-          </CardContent>
+        <Card className="relative overflow-hidden rounded-lg">
+          <Image
+            src="https://picsum.photos/seed/feature-banner/1200/250"
+            alt="New feature announcement banner"
+            width={1200}
+            height={250}
+            className="w-full h-auto object-cover"
+            data-ai-hint="abstract background"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent p-6 flex flex-col justify-center">
+            <h3 className="font-bold text-xl text-white">New Feature: Stairs Estimator!</h3>
+            <p className="text-sm text-white/80 mt-1 max-w-sm">Quickly calculate estimates for staircase projects with our new powerful tool.</p>
+            <Button asChild variant="link" className="px-0 h-auto mt-3 text-white font-bold justify-start w-fit">
+              <Link href="/stairs-estimate">
+                Check it out <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </Card>
 
       </div>
