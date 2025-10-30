@@ -105,7 +105,7 @@ export default function DashboardPage() {
                 </Link>
             </Button>
             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#6d28d9' }}>
-                <Link href="#">
+                <Link href="/stairs-estimate">
                     <Calculator className="h-6 w-6" />
                     <span>Stairs Estimate</span>
                 </Link>
