@@ -24,7 +24,7 @@ export default function GalleryPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {galleryImages.map((image, index) => (
             <Card key={index} className="overflow-hidden group">
-              <CardContent className="p-0 aspect-w-1 aspect-h-1">
+              <CardContent className="p-0 aspect-square">
                 <Image
                   src={image.src}
                   alt={image.alt}
