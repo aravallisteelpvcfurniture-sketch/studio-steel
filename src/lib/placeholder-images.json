@@ -92,5 +92,39 @@
       "title": "PVC Wall Paneling",
       "data-ai-hint": "wall paneling"
     }
+  ],
+  "videoReels": [
+    {
+      "poster": "https://picsum.photos/seed/reel1/400/711",
+      "width": 400,
+      "height": 711,
+      "alt": "Kitchen transformation reel",
+      "title": "Kitchen Transformation",
+      "data-ai-hint": "kitchen interior"
+    },
+    {
+      "poster": "https://picsum.photos/seed/reel2/400/711",
+      "width": 400,
+      "height": 711,
+      "alt": "Wardrobe assembly time-lapse",
+      "title": "Wardrobe Assembly",
+      "data-ai-hint": "wardrobe design"
+    },
+    {
+      "poster": "https://picsum.photos/seed/reel3/400/711",
+      "width": 400,
+      "height": 711,
+      "alt": "Living room furniture showcase",
+      "title": "Living Room Showcase",
+      "data-ai-hint": "living room"
+    },
+    {
+      "poster": "https://picsum.photos/seed/reel4/400/711",
+      "width": 400,
+      "height": 711,
+      "alt": "Behind the scenes of furniture making",
+      "title": "Behind the Scenes",
+      "data-ai-hint": "furniture workshop"
+    }
   ]
 }

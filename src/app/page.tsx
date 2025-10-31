@@ -111,7 +111,7 @@ export default function DashboardPage() {
                 </Link>
             </Button>
             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#db2777' }}>
-                <Link href="#">
+                <Link href="/reels">
                     <Video className="h-6 w-6" />
                     <span>Video/Reels</span>
                 </Link>

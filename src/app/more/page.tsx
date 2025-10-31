@@ -2,7 +2,7 @@
 
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ChevronRight, HelpCircle, Calculator, LogOut, User, Palette, ClipboardList, BookOpen, Handshake, GalleryVertical } from 'lucide-react';
+import { ChevronRight, HelpCircle, Calculator, LogOut, User, Palette, ClipboardList, BookOpen, Handshake, GalleryVertical, Video } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/firebase';
@@ -21,6 +21,12 @@ const toolsItems = [
         icon: Calculator,
         title: "Stairs Estimate",
         description: "Calculate estimates for staircases.",
+    },
+    {
+        href: "/reels",
+        icon: Video,
+        title: "Video Reels",
+        description: "Watch our latest video reels.",
     },
 ];
 
