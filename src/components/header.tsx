@@ -24,8 +24,10 @@ export default function Header() {
   const router = useRouter();
 
   const handleSignOut = () => {
-    auth.signOut();
-    router.push('/auth');
+    if (auth) {
+      auth.signOut();
+      router.push('/auth');
+    }
   };
 
   return (
@@ -91,7 +93,7 @@ export default function Header() {
 
             {user && (
                 <Link href="/profile">
-                    <Button variant="ghost" className="relative h-9 w-9 rounded-full hover:bg-primary-foreground/10">
+                    <Button variant="ghost" className="relative h-9 w-9 rounded-full hover:bg-primary-foreground/10 p-0">
                         <Avatar className="h-9 w-9">
                             <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User'} />
                             <AvatarFallback className="bg-secondary text-secondary-foreground">{user.email?.charAt(0).toUpperCase()}</AvatarFallback>

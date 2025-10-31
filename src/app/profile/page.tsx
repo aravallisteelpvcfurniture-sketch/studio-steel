@@ -15,14 +15,16 @@ export default function ProfilePage() {
     const router = useRouter();
 
     const handleSignOut = () => {
-        auth.signOut();
-        router.push('/auth');
+        if (auth) {
+            auth.signOut();
+            router.push('/auth');
+        }
     };
 
     const getInitials = (name: string | null | undefined) => {
         if (!name) return 'U';
         const nameParts = name.split(' ');
-        if (nameParts.length > 1) {
+        if (nameParts.length > 1 && nameParts[1]) {
             return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase();
         }
         return name[0].toUpperCase();
@@ -39,7 +41,7 @@ export default function ProfilePage() {
     }
 
     if (!user) {
-        // This case should ideally not be hit if AppLayout handles redirection
+        // This case should ideally not be hit if AppLayout handles redirection, but it's good practice.
         return (
             <AppLayout>
                 <div className="p-4 md:p-8">
@@ -83,7 +85,6 @@ export default function ProfilePage() {
             </div>
             <Separator />
             <div className="grid gap-4">
-                {/* Add more profile details here in the future */}
                 <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">User ID</span>
                     <span className="font-mono text-sm bg-muted px-2 py-1 rounded">{user.uid}</span>
