@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import placeholderImages from "@/lib/placeholder-images.json";
@@ -19,7 +20,7 @@ export default function ReelsPage() {
 
   return (
     <AppLayout>
-      <Dialog>
+      <Dialog onOpenChange={(isOpen) => !isOpen && setSelectedReel(null)}>
         <div className="p-4 md:p-8 space-y-6">
           <div className="text-center">
             <h1 className="text-3xl font-bold tracking-tight">Video Reels</h1>
@@ -56,6 +57,7 @@ export default function ReelsPage() {
         
         {selectedReel && (
             <DialogContent className="p-0 border-0 max-w-md w-full aspect-[9/16]">
+                 <DialogTitle className="sr-only">{selectedReel.title}</DialogTitle>
                  <video
                     src={selectedReel.videoSrc}
                     className="w-full h-full object-contain rounded-lg"
