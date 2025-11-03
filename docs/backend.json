@@ -153,32 +153,50 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "VisitorGreeting",
       "type": "object",
-      "description": "Represents a greeting message displayed to visitors.",
+      "description": "Represents a greeting poster displayed to visitors.",
       "properties": {
         "id": {
           "type": "string",
           "description": "Unique identifier for the greeting message."
         },
-        "message": {
+        "title": {
           "type": "string",
-          "description": "The content of the greeting message."
+          "description": "The title of the greeting (e.g., 'Happy Diwali')."
         },
-        "displayFrom": {
+        "imageUrl": {
           "type": "string",
-          "description": "Date and time from which the message should be displayed.",
-          "format": "date-time"
+          "description": "URL for the background image of the poster.",
+          "format": "uri"
         },
-        "displayUntil": {
+        "logoUrl": {
           "type": "string",
-          "description": "Date and time until which the message should be displayed.",
+          "description": "URL for the company logo to be displayed on the poster.",
+          "format": "uri"
+        },
+        "companyName": {
+          "type": "string",
+          "description": "Company name to display on the poster."
+        },
+        "mobile": {
+          "type": "string",
+          "description": "Contact mobile number."
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email address.",
+          "format": "email"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the greeting was created.",
           "format": "date-time"
         }
       },
       "required": [
         "id",
-        "message",
-        "displayFrom",
-        "displayUntil"
+        "title",
+        "imageUrl",
+        "createdAt"
       ]
     },
     "ProductCustomization": {
@@ -428,11 +446,11 @@
           "schema": {
             "$ref": "#/entities/VisitorGreeting"
           },
-          "description": "Stores visitor greeting messages. Publicly accessible for reading.",
+          "description": "Stores visitor greeting posters. Publicly accessible for reading, authenticated users can manage them.",
           "params": [
             {
               "name": "greetingId",
-              "description": "The unique identifier for the greeting message."
+              "description": "The unique identifier for the greeting poster."
             }
           ]
         }
