@@ -60,7 +60,7 @@ export default function GreetingsPage() {
                                 <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                             </div>
                         ) : greetings && greetings.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                                 {greetings.map((greeting: WithId<VisitorGreeting>) => (
                                     <Card key={greeting.id} className="overflow-hidden group relative">
                                         <div className="aspect-[9/16] relative">

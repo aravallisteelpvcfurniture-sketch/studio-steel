@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { useFirestore, useCollection, useMemoFirebase, addDocumentNonBlocking, deleteDocumentNonBlocking, type WithId } from '@/firebase';
 import { collection, doc, serverTimestamp, query, orderBy } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, PlusCircle, Trash2, Image as ImageIcon } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertDialogFooter } from "@/components/ui/alert-dialog";
 
@@ -125,7 +125,7 @@ export default function PosterAdminPage() {
                                 <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                             </div>
                         ) : greetings && greetings.length > 0 ? (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                                 {greetings.map((greeting: WithId<VisitorGreeting>) => (
                                     <Card key={greeting.id} className="overflow-hidden group relative">
                                         <div className="aspect-[9/16] relative bg-muted">
