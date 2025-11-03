@@ -11,7 +11,7 @@ import { collection, doc, serverTimestamp, query, orderBy } from 'firebase/fires
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, PlusCircle, Trash2, Image as ImageIcon, Building, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertDialogFooter } from "@/components/ui/alert-dialog";
 
 type VisitorGreeting = {
     title: string;
