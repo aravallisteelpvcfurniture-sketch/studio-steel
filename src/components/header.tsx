@@ -31,8 +31,8 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-primary/80 bg-primary text-primary-foreground">
-      <div className="container flex h-16 max-w-screen-2xl items-center px-4">
+    <header className="fixed top-0 left-0 right-0 z-40 px-4 pt-4">
+      <div className="container flex h-16 max-w-screen-2xl items-center px-4 bg-primary text-primary-foreground rounded-xl shadow-lg">
         <div className="flex items-center space-x-2">
            <Link href="/" className="flex items-center space-x-2">
             <Image
