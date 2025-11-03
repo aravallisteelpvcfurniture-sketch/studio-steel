@@ -31,7 +31,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b border-primary/80 bg-primary text-primary-foreground">
       <div className="container flex h-16 max-w-screen-2xl items-center px-4">
         <div className="flex items-center space-x-2">
            <Link href="/" className="flex items-center space-x-2">
@@ -48,10 +48,10 @@ export default function Header() {
 
         <div className="flex flex-1 items-center justify-end space-x-2">
             <div className="relative w-full max-w-xs sm:max-w-sm hidden sm:block">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary-foreground/70" />
                 <Input
                 placeholder="Search..."
-                className="w-full rounded-full bg-muted text-foreground placeholder:text-muted-foreground pl-9 h-9 border-0 focus-visible:ring-ring"
+                className="w-full rounded-full bg-primary/80 text-primary-foreground placeholder:text-primary-foreground/70 pl-9 h-9 border-0 focus-visible:ring-ring"
                 />
             </div>
            <Button variant="secondary" size="sm" className="hidden sm:inline-flex h-9">
@@ -59,7 +59,7 @@ export default function Header() {
            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative h-9 w-9">
+                <Button variant="ghost" size="icon" className="relative h-9 w-9 hover:bg-primary/80">
                   <Bell className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -93,7 +93,7 @@ export default function Header() {
 
             {user && (
                 <Link href="/profile">
-                    <Button variant="ghost" className="relative h-9 w-9 rounded-full hover:bg-accent p-0">
+                    <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0 hover:bg-primary/80">
                         <Avatar className="h-9 w-9">
                             <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User'} />
                             <AvatarFallback className="bg-secondary text-secondary-foreground">{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
