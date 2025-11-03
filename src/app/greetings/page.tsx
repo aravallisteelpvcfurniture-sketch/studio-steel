@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef } from 'react';
 import AppLayout from "@/components/app-layout";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useFirestore, useUser, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
-import { Loader2, Download, Pencil, Phone, Mail, MapPin, Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { Loader2, Download } from 'lucide-react';
 import Image from 'next/image';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { toPng } from 'html-to-image';
 
 type UserProfile = {
     companyInfo?: {
@@ -17,13 +17,18 @@ type UserProfile = {
         companyName?: string;
         mobile?: string;
         email?: string;
-        address?: string;
     }
 }
+
+type Greeting = {
+    title: string;
+    imageUrl: string;
+};
 
 export default function GreetingsPage() {
     const firestore = useFirestore();
     const { user } = useUser();
+    const posterRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const userProfileRef = useMemoFirebase(() => {
         if (!user || !firestore) return null;
@@ -34,108 +39,80 @@ export default function GreetingsPage() {
 
     const companyInfo = userProfile?.companyInfo;
     const allPosters = placeholderImages.festivalPosters;
-    const [mainPoster, setMainPoster] = useState(allPosters[0]);
 
-    const handleDownload = async (greeting: typeof mainPoster) => {
-        // Download logic remains the same
+    const handleDownload = async (greeting: Greeting, index: number) => {
+        const posterElement = posterRefs.current[index];
+        if (posterElement) {
+            try {
+                const dataUrl = await toPng(posterElement, { cacheBust: true });
+                const link = document.createElement('a');
+                link.download = `${greeting.title.replace(/\s+/g, '-')}-aravalli.png`;
+                link.href = dataUrl;
+                link.click();
+            } catch (err) {
+                console.error('oops, something went wrong!', err);
+            }
+        }
     };
     
-    const isLoading = isLoadingProfile;
-    const otherPosters = allPosters.filter(p => p.title !== mainPoster.title);
+    if (isLoadingProfile) {
+        return (
+            <AppLayout>
+                <div className="flex flex-1 items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                </div>
+            </AppLayout>
+        )
+    }
 
     return (
         <AppLayout>
-            <div className="bg-background">
-                {isLoading ? (
-                    <div className="flex items-center justify-center h-screen">
-                        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                    </div>
-                ) : (
-                    <>
-                        <div className="p-4 relative">
-                             <div className="flex justify-between items-center mb-4">
-                                <Link href="/more">
-                                    <Button variant="ghost" size="icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                                    </Button>
-                                </Link>
-                                <h1 className="text-xl font-bold">Quotes</h1>
-                                <div className="flex items-center gap-2">
-                                    <Button variant="ghost" size="icon">
-                                        <Pencil className="h-5 w-5" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" onClick={() => handleDownload(mainPoster)}>
-                                        <Download className="h-5 w-5" />
-                                    </Button>
-                                </div>
-                            </div>
+            <div className="p-4 md:p-8 space-y-6">
+                <div className="text-center">
+                    <h1 className="text-3xl font-bold tracking-tight">Festival Greetings</h1>
+                    <p className="text-muted-foreground mt-2">Download and share greetings for every occasion.</p>
+                </div>
 
-                            <Card className="overflow-hidden relative shadow-lg">
-                                <CardContent className="p-0 aspect-square">
-                                    {companyInfo?.logoUrl && (
-                                        <Image src={companyInfo.logoUrl} alt="Company Logo" width={100} height={40} className="absolute top-4 left-4 z-10 bg-white p-1 rounded-md" />
-                                    )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {allPosters.map((greeting, index) => (
+                        <div key={index}>
+                            <Card 
+                                className="overflow-hidden group"
+                                ref={el => posterRefs.current[index] = el}
+                            >
+                                <CardContent className="p-0 aspect-square relative">
                                     <Image
-                                        src={mainPoster.imageUrl}
-                                        alt={mainPoster.title}
+                                        src={greeting.imageUrl}
+                                        alt={greeting.title}
                                         fill
                                         className="object-cover"
-                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
-                                    {/* Footer on image */}
-                                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-blue-700 text-white rounded-b-lg">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <div className="text-sm">
-                                                <p className="font-semibold">Call us</p>
-                                                <p>{companyInfo?.mobile || '99790 44449'}</p>
+                                    <div className="absolute inset-0 bg-black/20"></div>
+                                    <div className="absolute top-4 left-4">
+                                        {companyInfo?.logoUrl && (
+                                            <div className="bg-white/80 p-2 rounded-lg backdrop-blur-sm">
+                                                <Image src={companyInfo.logoUrl} alt="Company Logo" width={80} height={30} className="object-contain" />
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <Instagram size={18} />
-                                                <Facebook size={18} />
-                                                <Twitter size={18} />
-                                                <Linkedin size={18} />
-                                            </div>
-                                        </div>
-                                         <div className="text-xs flex items-center gap-2 border-t border-white/50 pt-2">
-                                            <Mail size={14} className="shrink-0" />
-                                            <p className="truncate">{companyInfo?.email || 'festivalbrandflexcodexial@gmail.com'}</p>
-                                        </div>
-                                        <div className="text-xs flex items-center gap-2 mt-1">
-                                            <MapPin size={14} className="shrink-0" />
-                                            <p className="truncate">{companyInfo?.address || 'Mirjapur, Near Mahakali Hotel, Ahmedabad'}</p>
-                                        </div>
+                                        )}
+                                    </div>
+                                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                                         <h2 className="text-3xl font-bold text-shadow-lg">{greeting.title}</h2>
+                                         {companyInfo?.companyName && <p className="font-semibold text-lg">{companyInfo.companyName}</p>}
+                                         <div className="mt-2 text-sm">
+                                             {companyInfo?.mobile && <p>{companyInfo.mobile}</p>}
+                                             {companyInfo?.email && <p>{companyInfo.email}</p>}
+                                         </div>
                                     </div>
                                 </CardContent>
                             </Card>
+                            <Button className="w-full mt-4" onClick={() => handleDownload(greeting, index)}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Download Poster
+                            </Button>
                         </div>
-                        
-                        {/* Image Gallery */}
-                        <div className="px-4 pb-24">
-                           <div className="flex justify-center my-4">
-                                <div className="flex items-center gap-2 rounded-full bg-muted p-1">
-                                    <Button size="sm" className="rounded-full">Image</Button>
-                                    <Button size="sm" variant="ghost" className="rounded-full">Video</Button>
-                                    <Button size="sm" variant="ghost" className="rounded-full">Story Image</Button>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-3 gap-2">
-                                {otherPosters.map((poster) => (
-                                    <Card key={poster.title} className="overflow-hidden group" onClick={() => setMainPoster(poster)}>
-                                        <CardContent className="p-0 aspect-square relative">
-                                            <Image
-                                                src={poster.imageUrl}
-                                                alt={poster.title}
-                                                fill
-                                                className="object-cover"
-                                                sizes="33vw"
-                                            />
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </div>
-                    </>
-                )}
+                    ))}
+                </div>
             </div>
         </AppLayout>
     );
