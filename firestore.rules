@@ -93,19 +93,6 @@ service cloud.firestore {
     }
 
     /**
-     * @description Defines rules for visitor greeting documents, allowing public read and authenticated write.
-     * @path /visitor_greetings/{greetingId}
-     * @allow (get) Any user can retrieve a visitor greeting.
-     * @allow (create) Any authenticated user can create a greeting.
-     * @principle Allows public read access and authenticated write access.
-     */
-    match /visitor_greetings/{greetingId} {
-      allow get, list: if true;
-      allow create, delete: if isSignedIn();
-      allow update: if false;
-    }
-
-    /**
      * @description Defines rules for product customization documents, ensuring only the owning user can access them.
      * @path /users/{userId}/product_customizations/{productCustomizationId}
      * @allow (create) User with ID 'user123' can create a product customization under their profile.

@@ -130,5 +130,31 @@
       "title": "Behind the Scenes",
       "data-ai-hint": "furniture workshop"
     }
+  ],
+  "festivalPosters": [
+    {
+      "title": "Happy Diwali",
+      "imageUrl": "https://i.ibb.co/k0gTszY/diwali-greeting-aravalli.png"
+    },
+    {
+      "title": "Happy Holi",
+      "imageUrl": "https://i.ibb.co/3kC0b35/holi-greeting-aravalli.png"
+    },
+    {
+      "title": "Eid Mubarak",
+      "imageUrl": "https://i.ibb.co/D7cSRgS/eid-greeting-aravalli.png"
+    },
+    {
+      "title": "Happy New Year",
+      "imageUrl": "https://i.ibb.co/G0T8Z0s/new-year-greeting-aravalli.png"
+    },
+    {
+      "title": "Merry Christmas",
+      "imageUrl": "https://i.ibb.co/9rGNDbZ/christmas-greeting-aravalli.png"
+    },
+    {
+      "title": "Happy Raksha Bandhan",
+      "imageUrl": "https://i.ibb.co/mFpxsH5/raksha-bandhan-greeting-aravalli.png"
+    }
   ]
 }

@@ -173,38 +173,6 @@
         "itemPrice"
       ]
     },
-    "VisitorGreeting": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "VisitorGreeting",
-      "type": "object",
-      "description": "Represents a greeting poster displayed to visitors.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the greeting message."
-        },
-        "title": {
-          "type": "string",
-          "description": "The title of the greeting (e.g., 'Happy Diwali')."
-        },
-        "imageUrl": {
-          "type": "string",
-          "description": "URL for the background image of the poster.",
-          "format": "uri"
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the greeting was created.",
-          "format": "date-time"
-        }
-      },
-      "required": [
-        "id",
-        "title",
-        "imageUrl",
-        "createdAt"
-      ]
-    },
     "ProductCustomization": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "ProductCustomization",
@@ -441,22 +409,6 @@
             {
               "name": "orderItemId",
               "description": "The unique identifier for the order item."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/visitor_greetings/{greetingId}",
-        "definition": {
-          "entityName": "VisitorGreeting",
-          "schema": {
-            "$ref": "#/entities/VisitorGreeting"
-          },
-          "description": "Stores visitor greeting posters. Publicly accessible for reading, authenticated users can manage them.",
-          "params": [
-            {
-              "name": "greetingId",
-              "description": "The unique identifier for the greeting poster."
             }
           ]
         }

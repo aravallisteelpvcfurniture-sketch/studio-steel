@@ -44,10 +44,10 @@ const contentItems = [
         description: "View our full range of products.",
     },
      {
-        href: "/poster-admin",
+        href: "/greetings",
         icon: Handshake,
         title: "Visitor Greetings",
-        description: "Manage welcome messages for visitors.",
+        description: "Download posters for festivals.",
     },
 ];
 
