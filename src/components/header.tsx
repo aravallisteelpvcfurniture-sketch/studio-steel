@@ -31,8 +31,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 px-4 pt-4">
-      <div className="container flex h-16 max-w-screen-2xl items-center px-4 bg-primary text-primary-foreground rounded-xl shadow-lg">
+    <header className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center bg-primary px-4 text-primary-foreground shadow-lg">
         <div className="flex items-center space-x-2">
            <Link href="/" className="flex items-center space-x-2">
             <Image
@@ -102,7 +101,6 @@ export default function Header() {
                 </Link>
             )}
         </div>
-      </div>
     </header>
   );
 }
