@@ -28,8 +28,8 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md mx-auto">
-      <div className="bg-background/80 backdrop-blur-lg border rounded-full shadow-lg h-16 flex items-center justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 w-full">
+      <div className="bg-background/95 backdrop-blur-lg border-t h-16 flex items-center justify-around">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             if (item.href === '/scan') {
@@ -37,10 +37,10 @@ export default function BottomNav() {
                     <Link
                         key={item.href}
                         href={item.href}
-                        className="flex flex-col items-center justify-center text-white"
+                        className="flex flex-col items-center justify-center text-white -translate-y-4"
                         aria-label={item.label}
                     >
-                        <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center -translate-y-3 border-4 border-background shadow-xl transform transition-transform hover:scale-110">
+                        <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center border-4 border-background shadow-xl transform transition-transform hover:scale-110">
                              <item.icon />
                         </div>
                     </Link>
