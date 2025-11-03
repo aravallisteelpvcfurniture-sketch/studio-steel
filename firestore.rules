@@ -93,15 +93,16 @@ service cloud.firestore {
     }
 
     /**
-     * @description Defines rules for visitor greeting documents, allowing public read access.
+     * @description Defines rules for visitor greeting documents, allowing public read and authenticated write.
      * @path /visitor_greetings/{greetingId}
      * @allow (get) Any user can retrieve a visitor greeting.
-     * @deny (create) No one can create, update or delete a visitor greeting through the client.
-     * @principle Allows public read access to visitor greeting data.
+     * @allow (create) Any authenticated user can create a greeting.
+     * @principle Allows public read access and authenticated write access.
      */
     match /visitor_greetings/{greetingId} {
       allow get, list: if true;
-      allow create, update, delete: if false; // Greetings are managed via a separate admin interface.
+      allow create, delete: if isSignedIn();
+      allow update: if false;
     }
 
     /**

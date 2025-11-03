@@ -153,15 +153,20 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "VisitorGreeting",
       "type": "object",
-      "description": "Represents a greeting message displayed to visitors.",
+      "description": "Represents a greeting poster displayed to visitors.",
       "properties": {
         "id": {
           "type": "string",
           "description": "Unique identifier for the greeting message."
         },
-        "message": {
+        "title": {
           "type": "string",
-          "description": "The greeting message to display."
+          "description": "The title of the greeting (e.g., Happy Diwali)."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the festival poster image.",
+          "format": "uri"
         },
         "displayFrom": {
           "type": "string",
@@ -176,7 +181,8 @@
       },
       "required": [
         "id",
-        "message",
+        "title",
+        "imageUrl",
         "displayFrom",
         "displayUntil"
       ]
