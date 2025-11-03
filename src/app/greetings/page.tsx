@@ -1,101 +1,47 @@
 'use client';
 
-import { useState } from 'react';
 import AppLayout from "@/components/app-layout";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useFirestore, useCollection, useMemoFirebase, addDocumentNonBlocking, deleteDocumentNonBlocking, type WithId } from '@/firebase';
-import { collection, doc, serverTimestamp, query, orderBy } from 'firebase/firestore';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, PlusCircle, Trash2, Image as ImageIcon, Building, Phone, Mail } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useFirestore, useCollection, useMemoFirebase, useUser, useDoc, type WithId } from '@/firebase';
+import { collection, query, orderBy, doc } from 'firebase/firestore';
+import { Loader2, Handshake } from 'lucide-react';
 import Image from 'next/image';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertDialogFooter } from "@/components/ui/alert-dialog";
 
 type VisitorGreeting = {
     title: string;
     imageUrl: string;
-    logoUrl?: string;
-    companyName?: string;
-    mobile?: string;
-    email?: string;
     createdAt: any;
 };
 
-export default function GreetingsPage() {
-    const [title, setTitle] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
-    const [logoUrl, setLogoUrl] = useState('');
-    const [companyName, setCompanyName] = useState('Aravalli Home Studio');
-    const [mobile, setMobile] = useState('+91 1234567890');
-    const [email, setEmail] = useState('contact@aravalli.com');
+type UserProfile = {
+    companyInfo?: {
+        logoUrl?: string;
+        companyName?: string;
+        mobile?: string;
+        email?: string;
+    }
+}
 
-    const [isLoading, setIsLoading] = useState(false);
+export default function GreetingsPage() {
     const firestore = useFirestore();
-    const { toast } = useToast();
+    const { user } = useUser();
 
     const greetingsQuery = useMemoFirebase(() => {
         if (!firestore) return null;
         return query(collection(firestore, 'visitor_greetings'), orderBy('createdAt', 'desc'));
     }, [firestore]);
 
+    const userProfileRef = useMemoFirebase(() => {
+        if (!user || !firestore) return null;
+        return doc(firestore, 'users', user.uid);
+    }, [user, firestore]);
+
     const { data: greetings, isLoading: isLoadingGreetings } = useCollection<VisitorGreeting>(greetingsQuery);
+    const { data: userProfile, isLoading: isLoadingProfile } = useDoc<UserProfile>(userProfileRef);
 
-    const handleAddGreeting = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!title.trim() || !imageUrl.trim() || !firestore) {
-             toast({
-                variant: "destructive",
-                title: "Error",
-                description: "Please provide at least a title and an image URL.",
-            });
-            return;
-        }
-        
-        setIsLoading(true);
+    const companyInfo = userProfile?.companyInfo;
 
-        const newGreeting = {
-            title,
-            imageUrl,
-            logoUrl,
-            companyName,
-            mobile,
-            email,
-            createdAt: serverTimestamp()
-        };
-
-        try {
-            await addDocumentNonBlocking(collection(firestore, 'visitor_greetings'), newGreeting);
-            toast({
-                title: "Greeting Added!",
-                description: "The new poster has been saved.",
-            });
-            // Reset fields
-            setTitle('');
-            setImageUrl('');
-            setLogoUrl('');
-
-        } catch (error) {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: "Could not save the greeting poster. Please try again.",
-            });
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    
-    const handleDeleteGreeting = (greetingId: string) => {
-        if (!firestore) return;
-        const greetingDocRef = doc(firestore, 'visitor_greetings', greetingId);
-        deleteDocumentNonBlocking(greetingDocRef);
-        toast({
-            title: "Greeting Deleted",
-            description: "The greeting poster has been removed.",
-        });
-    }
+    const isLoading = isLoadingGreetings || isLoadingProfile;
 
     return (
         <AppLayout>
@@ -103,56 +49,13 @@ export default function GreetingsPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <PlusCircle className="h-6 w-6" />
-                            Create Greeting Poster
+                           <Handshake className="h-6 w-6" />
+                           Festival Greetings
                         </CardTitle>
-                        <CardDescription>Design a new poster for festivals or announcements.</CardDescription>
-                    </CardHeader>
-                    <form onSubmit={handleAddGreeting}>
-                        <CardContent className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="title">Title</Label>
-                                    <Input id="title" placeholder="e.g., Happy Diwali" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="imageUrl">Background Image URL</Label>
-                                    <Input id="imageUrl" placeholder="https://example.com/background.jpg" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="logoUrl">Logo URL (Optional)</Label>
-                                    <Input id="logoUrl" placeholder="https://example.com/logo.png" value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="companyName">Company Name</Label>
-                                    <Input id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="mobile">Mobile</Label>
-                                    <Input id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                                </div>
-                            </div>
-                        </CardContent>
-                        <CardFooter>
-                            <Button type="submit" disabled={isLoading}>
-                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Create Poster
-                            </Button>
-                        </CardFooter>
-                    </form>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Existing Posters</CardTitle>
-                        <CardDescription>Here are the current greeting posters.</CardDescription>
+                        <CardDescription>A gallery of festive posters for your visitors.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {isLoadingGreetings ? (
+                        {isLoading ? (
                             <div className="flex items-center justify-center py-8">
                                 <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                             </div>
@@ -166,56 +69,43 @@ export default function GreetingsPage() {
                                                 alt={greeting.title}
                                                 fill
                                                 className="object-cover"
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 flex flex-col justify-end">
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex flex-col justify-end">
                                                
-                                                <h3 className="text-3xl font-bold text-white shadow-lg leading-tight">{greeting.title}</h3>
+                                                <h3 className="text-4xl font-bold text-white shadow-lg leading-tight" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.5)'}}>{greeting.title}</h3>
                                                
-                                                <div className="mt-4 border-t border-white/30 pt-4">
-                                                    <div className='flex items-center gap-4'>
-                                                        {greeting.logoUrl && (
-                                                            <div className='relative w-16 h-16 bg-white/90 p-1 rounded-md'>
-                                                                <Image
-                                                                    src={greeting.logoUrl}
-                                                                    alt="Company Logo"
-                                                                    fill
-                                                                    className="object-contain"
-                                                                />
+                                                {companyInfo && (
+                                                    <div className="mt-4 border-t border-white/30 pt-4">
+                                                        <div className='flex items-center gap-4'>
+                                                            {companyInfo.logoUrl && (
+                                                                <div className='relative w-16 h-16 bg-white/90 p-1 rounded-md shadow-lg'>
+                                                                    <Image
+                                                                        src={companyInfo.logoUrl}
+                                                                        alt={companyInfo.companyName || "Company Logo"}
+                                                                        fill
+                                                                        className="object-contain"
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                            <div className="text-white text-shadow-sm">
+                                                                {companyInfo.companyName && <p className="font-bold text-lg">{companyInfo.companyName}</p>}
+                                                                {companyInfo.mobile && <p className="text-sm">{companyInfo.mobile}</p>}
+                                                                {companyInfo.email && <p className="text-sm">{companyInfo.email}</p>}
                                                             </div>
-                                                        )}
-                                                        <div className="text-white">
-                                                            {greeting.companyName && <p className="font-bold text-lg">{greeting.companyName}</p>}
-                                                            {greeting.mobile && <p className="text-sm">{greeting.mobile}</p>}
-                                                            {greeting.email && <p className="text-sm">{greeting.email}</p>}
                                                         </div>
                                                     </div>
-                                                </div>
+                                                )}
                                             </div>
-                                        </div>
-                                         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                             <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button variant="destructive" size="icon" className="h-8 w-8">
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                        <AlertDialogDescription>This will permanently delete the greeting poster. This action cannot be undone.</AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                        <AlertDialogAction onClick={() => handleDeleteGreeting(greeting.id)}>Delete</AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
                                         </div>
                                     </Card>
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-center text-muted-foreground py-8">No greeting posters found.</p>
+                            <div className="text-center text-muted-foreground py-16">
+                                <p>No greeting posters are live right now.</p>
+                                <p className="text-sm">Posters can be managed from the 'More' tab.</p>
+                            </div>
                         )}
                     </CardContent>
                 </Card>

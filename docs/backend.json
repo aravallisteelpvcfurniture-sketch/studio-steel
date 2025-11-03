@@ -27,6 +27,30 @@
           "type": "string",
           "description": "Date and time when the user signed up.",
           "format": "date-time"
+        },
+        "companyInfo": {
+          "type": "object",
+          "description": "Company information for use in greetings posters.",
+          "properties": {
+             "companyName": {
+              "type": "string",
+              "description": "Company name to display on the poster."
+            },
+            "logoUrl": {
+              "type": "string",
+              "description": "URL for the company logo to be displayed on the poster.",
+              "format": "uri"
+            },
+            "mobile": {
+              "type": "string",
+              "description": "Contact mobile number."
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email address.",
+              "format": "email"
+            }
+          }
         }
       },
       "required": [
@@ -167,24 +191,6 @@
           "type": "string",
           "description": "URL for the background image of the poster.",
           "format": "uri"
-        },
-        "logoUrl": {
-          "type": "string",
-          "description": "URL for the company logo to be displayed on the poster.",
-          "format": "uri"
-        },
-        "companyName": {
-          "type": "string",
-          "description": "Company name to display on the poster."
-        },
-        "mobile": {
-          "type": "string",
-          "description": "Contact mobile number."
-        },
-        "email": {
-          "type": "string",
-          "description": "Contact email address.",
-          "format": "email"
         },
         "createdAt": {
           "type": "string",
@@ -540,7 +546,7 @@
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. Chat sessions and messages are nested under the user to ensure only the user and authorized support can access them. Parties are stored under `/users/{userId}/parties/{partyId}` so each user can only access their own parties. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections. This approach avoids hierarchical authorization dependencies and achieves Authorization Independence."
+    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. Chat sessions and messages are nested under the user to ensure only the user and authorized support can access them. Parties are stored under `/users/{userId}/parties/{partyId}` so each user can only access their own parties. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections."
   }
 }
     

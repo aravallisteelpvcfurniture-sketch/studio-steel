@@ -2,7 +2,7 @@
 
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ChevronRight, HelpCircle, Calculator, LogOut, User, Palette, ClipboardList, BookOpen, Handshake, GalleryVertical, Video } from 'lucide-react';
+import { ChevronRight, HelpCircle, Calculator, LogOut, User, Palette, ClipboardList, BookOpen, Handshake, GalleryVertical, Video, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/firebase';
@@ -44,7 +44,7 @@ const contentItems = [
         description: "View our full range of products.",
     },
      {
-        href: "/greetings",
+        href: "/poster-admin",
         icon: Handshake,
         title: "Visitor Greetings",
         description: "Manage welcome messages for visitors.",
@@ -57,6 +57,12 @@ const accountItems = [
         icon: User,
         title: "My Profile",
         description: "View and manage your profile details.",
+    },
+    {
+        href: "/settings",
+        icon: Settings,
+        title: "My Settings",
+        description: "Manage company info for posters.",
     },
     {
         href: "/help-chat",

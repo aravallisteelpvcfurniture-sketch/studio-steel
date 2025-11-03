@@ -32,7 +32,7 @@ service cloud.firestore {
       * @principle Enforces user-based ownership of data and that the resource exists.
       */
     function isExistingOwner(userId) {
-      return isOwner(userId) && exists(resource);
+      return isOwner(userId) && exists(/databases/$(database)/documents/users/$(userId));
     }
 
     /**
