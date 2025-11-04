@@ -17,10 +17,10 @@ import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
 const signupSchema = z.object({
-    firstName: z.string().min(1, 'First name is required'),
-    lastName: z.string().min(1, 'Last name is required'),
+    username: z.string().min(1, 'Username is required'),
     email: z.string().email('Invalid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters long'),
+    mobileNumber: z.string().min(10, 'Mobile number must be at least 10 digits').max(15, 'Mobile number is too long'),
 });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
@@ -35,10 +35,10 @@ export default function SignupPage() {
     const form = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
-            firstName: '',
-            lastName: '',
+            username: '',
             email: '',
             password: '',
+            mobileNumber: '',
         },
     });
 
@@ -67,9 +67,9 @@ export default function SignupPage() {
                 const userDocRef = doc(firestore, 'users', userCredential.user.uid);
                 const userData = {
                     id: userCredential.user.uid,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
+                    username: data.username,
                     email: data.email,
+                    mobileNumber: data.mobileNumber,
                 };
                 setDocumentNonBlocking(userDocRef, userData, { merge: false });
             }
@@ -104,34 +104,19 @@ export default function SignupPage() {
             <CardContent>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField
-                                control={form.control}
-                                name="firstName"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>First Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="John" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="lastName"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Last Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Doe" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+                        <FormField
+                            control={form.control}
+                            name="username"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Username</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="email"
@@ -139,7 +124,7 @@ export default function SignupPage() {
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input type="email" placeholder="you@example.com" {...field} />
+                                        <Input type="email" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -152,13 +137,26 @@ export default function SignupPage() {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input type="password" placeholder="••••••••" {...field} />
+                                        <Input type="password" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full" disabled={isSubmitting}>
+                         <FormField
+                            control={form.control}
+                            name="mobileNumber"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Mobile Number</FormLabel>
+                                    <FormControl>
+                                        <Input type="tel" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="submit" className="w-full bg-foreground text-background hover:bg-foreground/90" disabled={isSubmitting}>
                             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Sign Up
                         </Button>

@@ -56,25 +56,25 @@
           "type": "string",
           "description": "Unique identifier for the user."
         },
-        "firstName": {
+        "username": {
           "type": "string",
-          "description": "First name of the user."
-        },
-        "lastName": {
-          "type": "string",
-          "description": "Last name of the user."
+          "description": "Username of the user."
         },
         "email": {
           "type": "string",
           "description": "Email address of the user.",
           "format": "email"
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number of the user."
         }
       },
       "required": [
         "id",
-        "firstName",
-        "lastName",
-        "email"
+        "username",
+        "email",
+        "mobileNumber"
       ]
     },
     "Order": {
