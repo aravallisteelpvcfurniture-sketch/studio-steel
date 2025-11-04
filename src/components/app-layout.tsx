@@ -1,3 +1,5 @@
+'use client';
+
 import type { ReactNode } from 'react';
 import BottomNav from './bottom-nav';
 import { usePathname } from 'next/navigation';
