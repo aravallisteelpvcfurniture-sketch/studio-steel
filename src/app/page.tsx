@@ -33,19 +33,7 @@ export default function DashboardPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col items-center justify-center text-center">
-         <div className="w-20 h-20 rounded-full bg-white/30 flex items-center justify-center mb-2">
-                 <NextImage 
-                    src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
-                    alt="Aravalli Logo"
-                    width={128}
-                    height={128}
-                    className="rounded-full"
-                />
-            </div>
-            <h1 className="text-3xl font-bungee">
-              <span className="font-bold text-destructive">Aravalli</span><span className="font-bold text-foreground">Steel</span>
-            </h1>
+      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-center">
         <div className="absolute top-6 right-6">
             <Link href="/profile">
                 <Avatar className="h-12 w-12 border-2 border-white/50">
@@ -53,6 +41,10 @@ export default function DashboardPage() {
                     <AvatarFallback>{user?.displayName?.charAt(0) || 'A'}</AvatarFallback>
                 </Avatar>
             </Link>
+        </div>
+        <div className="text-left">
+            <h1 className="text-3xl font-bold">Welcome,</h1>
+            <p className="text-lg">{getFirstName()}</p>
         </div>
         <Wave className="text-background" />
       </header>
