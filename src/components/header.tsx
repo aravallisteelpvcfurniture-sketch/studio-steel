@@ -44,6 +44,10 @@ export default function Header() {
 
   const isAuthPage = AUTH_PATHNAMES.includes(pathname);
 
+  if (isAuthPage) {
+    return null;
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center bg-background/95 backdrop-blur-sm px-4 border-b">
         <div className="flex items-center space-x-2">
@@ -63,7 +67,7 @@ export default function Header() {
           </Link>
         </div>
 
-        <div className={cn("flex flex-1 items-center justify-end space-x-2", isAuthPage && "hidden")}>
+        <div className={cn("flex flex-1 items-center justify-end space-x-2")}>
             {user && (
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
