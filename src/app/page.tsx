@@ -5,7 +5,7 @@ import { useUser } from '@/firebase';
 import { Card, CardContent } from "@/components/ui/card";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Mailbox, Map, MessageSquare, BarChart, Calendar, BookOpen, Settings, MoreHorizontal, Search } from 'lucide-react';
+import { Mailbox, Map, MessageSquare, BarChart, Calendar, BookOpen, Settings, MoreHorizontal, Search, Bell } from 'lucide-react';
 import NextImage from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Wave } from '@/components/ui/wave';
@@ -28,12 +28,7 @@ export default function DashboardPage() {
     <div className="bg-background min-h-screen">
       <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-start pt-6">
         <div className="absolute top-6 right-6">
-            <Link href="/profile">
-                <Avatar className="h-12 w-12 border-2 border-white/50">
-                    <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
-                    <AvatarFallback>{user?.displayName?.charAt(0) || 'A'}</AvatarFallback>
-                </Avatar>
-            </Link>
+            <Bell className="h-8 w-8 text-foreground" />
         </div>
         <div>
             <h1 className="text-3xl font-archivo-black font-bold text-foreground">Welcome</h1>
