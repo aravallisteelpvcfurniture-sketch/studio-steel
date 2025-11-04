@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useFirestore, useUser, useDoc, setDocument, useMemoFirebase } from '@/firebase';
+import { useFirestore, useUser, useDoc, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Settings, Building, Phone, Mail, Image as ImageIcon } from 'lucide-react';
@@ -61,9 +61,9 @@ export default function SettingsPage() {
         setIsLoading(true);
 
         try {
-            // We use setDocument with merge:true to update or create the companyInfo sub-object
+            // We use setDocumentNonBlocking with merge:true to update or create the companyInfo sub-object
             // without overwriting other user profile fields.
-            await setDocument(userProfileRef, { companyInfo }, { merge: true });
+            await setDocumentNonBlocking(userProfileRef, { companyInfo }, { merge: true });
             toast({
                 title: "Settings Saved!",
                 description: "Your company information has been updated.",

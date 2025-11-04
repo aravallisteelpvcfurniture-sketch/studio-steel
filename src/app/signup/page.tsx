@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth, useUser, setDocument } from "@/firebase";
+import { useAuth, useUser, setDocumentNonBlocking } from "@/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp } from "firebase/firestore";
 import { useFirestore } from "@/firebase/provider";
@@ -66,7 +66,7 @@ export default function SignupPage() {
           dateOfBirth: dateOfBirth,
           signUpDate: serverTimestamp(),
         };
-        await setDocument(userDocRef, userData, { merge: true });
+        await setDocumentNonBlocking(userDocRef, userData, { merge: true });
         toast({
           title: "Signup Successful",
           description: "Welcome! You are now logged in.",
