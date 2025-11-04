@@ -24,13 +24,6 @@ const featureButtons = [
 export default function DashboardPage() {
   const { user } = useUser();
 
-  const getFirstName = () => {
-    if (user?.displayName) {
-      return user.displayName.split(' ')[0];
-    }
-    return 'User';
-  }
-
   return (
     <div className="bg-background min-h-screen">
       <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-start pt-6">
@@ -42,9 +35,8 @@ export default function DashboardPage() {
                 </Avatar>
             </Link>
         </div>
-        <div className="text-center">
-            <h1 className="text-3xl font-bold text-foreground">Welcome,</h1>
-            <p className="text-lg text-foreground">{getFirstName()}</p>
+        <div>
+            <h1 className="text-3xl font-bold text-foreground">Welcome</h1>
         </div>
         <Wave className="text-background" />
       </header>
