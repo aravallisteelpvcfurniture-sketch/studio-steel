@@ -10,11 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useFirestore, useUser, useDoc, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Settings, Building, Phone, Mail, Image as ImageIcon, Palette, Bell, User, ChevronRight, ArrowLeft, Banknote, Landmark, QrCode, Hash, UserSquare, MapPin } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import { ThemeSwitcher } from '@/components/theme-switcher';
-import { Switch } from '@/components/ui/switch';
-import Link from 'next/link';
+import { Loader2, ArrowLeft, Building, Phone, Mail, Image as ImageIcon, MapPin, Landmark, UserSquare, Hash, Banknote, QrCode } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 type CompanyInfo = {
@@ -110,7 +106,6 @@ export default function SettingsPage() {
                 </div>
                 
                 <form onSubmit={handleSaveChanges} className="space-y-6">
-                    {/* Company Info Settings */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
@@ -166,7 +161,6 @@ export default function SettingsPage() {
                         )}
                     </Card>
 
-                    {/* Bank Details */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-3"><Landmark /> Bank Details</CardTitle>
@@ -196,7 +190,6 @@ export default function SettingsPage() {
                         </CardContent>
                     </Card>
 
-                    {/* UPI Details */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-3"><QrCode /> UPI Payment Details</CardTitle>
@@ -226,40 +219,6 @@ export default function SettingsPage() {
                         </Button>
                     </CardFooter>
                 </form>
-
-                {/* Other Settings */}
-                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3"><Settings /> General Settings</CardTitle>
-                        <CardDescription>Manage your personal and app preferences.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="divide-y">
-                         <Link href="/profile/edit" className="block">
-                            <div className="flex items-center p-3 -mx-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
-                                <User className="h-5 w-5 mr-4 text-primary" />
-                                <div className="flex-1">
-                                    <p className="font-semibold">Edit Profile</p>
-                                    <p className="text-sm text-muted-foreground">Update your name, and mobile number.</p>
-                                </div>
-                                <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                            </div>
-                        </Link>
-                         <div className="flex items-center justify-between p-3 -mx-3">
-                            <div>
-                                <p className="font-semibold flex items-center gap-3"><Palette /> Theme</p>
-                                <p className="text-sm text-muted-foreground">Switch between light and dark mode.</p>
-                            </div>
-                            <ThemeSwitcher />
-                        </div>
-                        <div className="flex items-center justify-between p-3 -mx-3">
-                            <div>
-                                <p className="font-semibold flex items-center gap-3"><Bell/> Push Notifications</p>
-                                <p className="text-sm text-muted-foreground">Receive updates and alerts from the app.</p>
-                            </div>
-                            <Switch id="notifications-switch" />
-                        </div>
-                    </CardContent>
-                </Card>
             </div>
         </AppLayout>
     );
