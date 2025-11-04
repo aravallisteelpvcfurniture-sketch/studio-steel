@@ -20,7 +20,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 />
             </div>
             <h1 className="text-3xl font-bold">
-              Aravalli<span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-300">Steel</span>
+              Aravalli<span className="font-extrabold text-cyan-200">Steel</span>
             </h1>
             <Wave className="text-background" />
         </header>

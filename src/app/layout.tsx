@@ -27,8 +27,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
        <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#3B82F6" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#3B82F6" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#00FFFF" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#00FFFF" media="(prefers-color-scheme: dark)" />
       </head>
       <body className={cn('min-h-screen font-sans antialiased', inter.className)}>
         <ThemeProvider

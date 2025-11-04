@@ -31,7 +31,7 @@ export default function DashboardPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="relative bg-gradient-to-r from-blue-500 to-indigo-500 h-40 text-primary-foreground p-6">
+      <header className="relative bg-primary h-40 text-primary-foreground p-6">
         <div className="flex justify-between items-center pt-4">
             <div className='flex flex-col'>
                 <h1 className="text-2xl font-bold">Good morning {getFirstName()}</h1>
@@ -47,11 +47,11 @@ export default function DashboardPage() {
       
       <main className="p-6 space-y-6">
           <Card className='-mt-20 shadow-lg border-none'>
-            <CardContent className='p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg flex items-center justify-between'>
+            <CardContent className='p-4 bg-cyan-100 rounded-lg flex items-center justify-between'>
                 <div>
-                    <p className='text-sm font-medium text-blue-800'>Until 20 April - 30 May</p>
-                    <p className='text-3xl font-bold text-blue-900'>30%</p>
-                    <p className='text-lg font-semibold text-blue-800'>Discount</p>
+                    <p className='text-sm font-medium text-cyan-800'>Until 20 April - 30 May</p>
+                    <p className='text-3xl font-bold text-cyan-900'>30%</p>
+                    <p className='text-lg font-semibold text-cyan-800'>Discount</p>
                 </div>
                  <div className="w-24 h-24 relative">
                      <NextImage
@@ -78,8 +78,8 @@ export default function DashboardPage() {
             <div className="grid grid-cols-4 gap-4">
               {featureButtons.map((feature) => (
                 <Link href={feature.href} key={feature.label} className="flex flex-col items-center gap-2 text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
-                         <feature.icon className="h-8 w-8 text-blue-600" strokeWidth={1.5} />
+                    <div className="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center">
+                         <feature.icon className="h-8 w-8 text-cyan-600" strokeWidth={1.5} />
                     </div>
                   <span className="text-sm font-medium text-muted-foreground">{feature.label}</span>
                 </Link>
