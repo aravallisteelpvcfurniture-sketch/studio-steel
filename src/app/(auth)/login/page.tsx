@@ -83,7 +83,7 @@ export default function LoginPage() {
                     <div className="space-y-2">
                         <div className="flex justify-between">
                              <Label htmlFor="password">Password</Label>
-                             <Link href="#" className="text-xs text-primary hover:underline">Forgot password?</Link>
+                             <Link href="#" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">Forgot password?</Link>
                         </div>
                         <Input 
                             id="password" 
@@ -118,7 +118,7 @@ export default function LoginPage() {
 
             </CardContent>
             <CardFooter className="justify-center text-sm">
-                <p>Don't have an account? <Link href="/signup" className="text-primary font-semibold hover:underline">Sign Up</Link></p>
+                <p>Don't have an account? <Link href="/signup" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Sign Up</Link></p>
             </CardFooter>
         </Card>
     );
