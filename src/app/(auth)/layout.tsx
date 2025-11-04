@@ -22,7 +22,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             <h1 className="text-xl font-bold">Aravalli</h1>
             <Wave className="text-background" />
         </header>
-        <main className="flex-grow px-6 pb-8 z-10 -mt-24">
+        <main className="flex-grow px-6 pb-8 z-10">
             {children}
         </main>
     </div>
