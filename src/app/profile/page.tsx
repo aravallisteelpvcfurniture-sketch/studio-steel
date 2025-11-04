@@ -185,7 +185,7 @@ export default function ProfilePage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="companyName">Company Name</Label>
-                                <Input id="companyName" placeholder="Your Company Name" value={companyInfo.companyName || ''} onChange={(e) => setCompanyInfo(p => ({...p, companyName: e.target.value}))} />
+                                <Input id="companyName" value={companyInfo.companyName || ''} onChange={(e) => setCompanyInfo(p => ({...p, companyName: e.target.value}))} />
                             </div>
                              <div className="space-y-2">
                                 <Label>Company Logo</Label>
@@ -199,15 +199,15 @@ export default function ProfilePage() {
                             </div>
                              <div className="space-y-2">
                                 <Label htmlFor="mobile">Mobile Number</Label>
-                                <Input id="mobile" placeholder="+91 12345 67890" value={companyInfo.mobile || ''} onChange={(e) => setCompanyInfo(p => ({...p, mobile: e.target.value}))} />
+                                <Input id="mobile" value={companyInfo.mobile || ''} onChange={(e) => setCompanyInfo(p => ({...p, mobile: e.target.value}))} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email Address</Label>
-                                <Input id="email" type="email" placeholder="contact@example.com" value={companyInfo.email || ''} onChange={(e) => setCompanyInfo(p => ({...p, email: e.target.value}))} />
+                                <Input id="email" type="email" value={companyInfo.email || ''} onChange={(e) => setCompanyInfo(p => ({...p, email: e.target.value}))} />
                             </div>
                             <div className="space-y-2 md:col-span-2">
                                 <Label htmlFor="address">Company Address</Label>
-                                <Input id="address" placeholder="123 Business St, City, Country" value={companyInfo.address || ''} onChange={(e) => setCompanyInfo(p => ({...p, address: e.target.value}))} />
+                                <Input id="address" value={companyInfo.address || ''} onChange={(e) => setCompanyInfo(p => ({...p, address: e.target.value}))} />
                             </div>
                         </div>
                     </CardContent>
@@ -220,15 +220,15 @@ export default function ProfilePage() {
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2 md:col-span-2">
                             <Label htmlFor="holderName">Account Holder Name</Label>
-                            <Input id="holderName" placeholder="e.g., John Doe" value={bankDetails.holderName || ''} onChange={(e) => setBankDetails(p => ({...p, holderName: e.target.value}))} />
+                            <Input id="holderName" value={bankDetails.holderName || ''} onChange={(e) => setBankDetails(p => ({...p, holderName: e.target.value}))} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="accountNumber">Account Number</Label>
-                             <Input id="accountNumber" placeholder="Enter account number" value={bankDetails.accountNumber || ''} onChange={(e) => setBankDetails(p => ({...p, accountNumber: e.target.value}))} />
+                             <Input id="accountNumber" value={bankDetails.accountNumber || ''} onChange={(e) => setBankDetails(p => ({...p, accountNumber: e.target.value}))} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="ifscCode">IFSC Code</Label>
-                            <Input id="ifscCode" placeholder="Enter IFSC code" value={bankDetails.ifscCode || ''} onChange={(e) => setBankDetails(p => ({...p, ifscCode: e.target.value}))} />
+                            <Input id="ifscCode" value={bankDetails.ifscCode || ''} onChange={(e) => setBankDetails(p => ({...p, ifscCode: e.target.value}))} />
                         </div>
                     </CardContent>
                 </Card>
@@ -240,7 +240,7 @@ export default function ProfilePage() {
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="upiId">UPI ID</Label>
-                            <Input id="upiId" placeholder="your-upi@oksbi" value={upiDetails.upiId || ''} onChange={(e) => setUpiDetails(p => ({...p, upiId: e.target.value}))} />
+                            <Input id="upiId" value={upiDetails.upiId || ''} onChange={(e) => setUpiDetails(p => ({...p, upiId: e.target.value}))} />
                         </div>
                         <div className="space-y-2">
                             <Label>QR Code Image</Label>
