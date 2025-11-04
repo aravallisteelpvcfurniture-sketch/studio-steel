@@ -44,7 +44,7 @@ export default function LoginPage() {
         } catch (error: any) {
             toast({
                 variant: 'destructive',
-                title: 'Sign-in Failed',
+                title: 'Login Failed',
                 description: error.message || 'An unexpected error occurred.',
             });
         }
@@ -65,8 +65,8 @@ export default function LoginPage() {
     return (
         <Card>
             <CardHeader className="text-center">
-                <CardTitle>Sign In</CardTitle>
-                <CardDescription>Welcome back! Please sign in to your account.</CardDescription>
+                <CardTitle>Login</CardTitle>
+                <CardDescription>Welcome back! Please login to your account.</CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleEmailSignIn} className="space-y-4">
@@ -94,7 +94,7 @@ export default function LoginPage() {
                         />
                     </div>
                      <Button type="submit" className="w-full bg-foreground text-background hover:bg-foreground/90">
-                        Sign In
+                        Login
                     </Button>
                 </form>
 

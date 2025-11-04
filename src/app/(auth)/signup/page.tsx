@@ -75,7 +75,7 @@ export default function SignupPage() {
             }
              toast({
                 title: 'Signup Successful',
-                description: 'Welcome! You can now sign in.',
+                description: 'Welcome! You can now log in.',
             });
             router.push('/login');
         } catch (error: any) {
@@ -164,7 +164,7 @@ export default function SignupPage() {
                 </Form>
             </CardContent>
              <CardFooter className="justify-center text-sm">
-                <p>Already have an account? <Link href="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Sign In</Link></p>
+                <p>Already have an account? <Link href="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Login</Link></p>
             </CardFooter>
         </Card>
     );
