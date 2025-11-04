@@ -1,4 +1,3 @@
-
 'use client';
 
 import AppLayout from "@/components/app-layout";
@@ -9,14 +8,13 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2, UserPlus, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useFirestore, addDocumentNonBlocking } from '@/firebase';
+import { useFirestore, addDocumentNonBlocking, useUser } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const DUMMY_USER_ID = 'dummy-user';
-
 export default function AddPartyPage() {
+    const { user, isLoading: isUserLoading } = useUser();
     const [partyName, setPartyName] = useState('');
     const [mobile, setMobile] = useState('');
     const [email, setEmail] = useState('');
@@ -27,8 +25,8 @@ export default function AddPartyPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!firestore) {
-            toast({ variant: "destructive", title: "Error", description: "Firestore is not available." });
+        if (!firestore || !user) {
+            toast({ variant: "destructive", title: "Error", description: "You must be logged in to add a party." });
             return;
         }
         setIsLoading(true);
@@ -37,12 +35,12 @@ export default function AddPartyPage() {
             partyName,
             mobile,
             email,
-            userId: DUMMY_USER_ID,
+            userId: user.uid,
             createdAt: new Date(),
         };
 
         try {
-            await addDocumentNonBlocking(collection(firestore, 'users', DUMMY_USER_ID, 'parties'), newParty);
+            await addDocumentNonBlocking(collection(firestore, 'users', user.uid, 'parties'), newParty);
             toast({
                 title: "Party Added",
                 description: `${partyName} has been added successfully.`,
@@ -78,6 +76,9 @@ export default function AddPartyPage() {
                         </CardTitle>
                         <CardDescription>Enter the details of the new party to create an estimate.</CardDescription>
                     </CardHeader>
+                     {isUserLoading ? (
+                        <div className="flex justify-center items-center p-10"><Loader2 className="h-8 w-8 animate-spin" /></div>
+                    ) : (
                     <form onSubmit={handleSubmit}>
                         <CardContent className="grid gap-6">
                             <div className="grid gap-2">
@@ -118,6 +119,7 @@ export default function AddPartyPage() {
                             </Button>
                         </CardFooter>
                     </form>
+                    )}
                 </Card>
             </div>
         </AppLayout>

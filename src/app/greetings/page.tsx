@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import AppLayout from "@/components/app-layout";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { Card, CardContent } from "@/components/ui/card";
+import { useFirestore, useDoc, useMemoFirebase, useUser } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Loader2, Download } from 'lucide-react';
 import Image from 'next/image';
@@ -25,17 +25,15 @@ type Greeting = {
     imageUrl: string;
 };
 
-const DUMMY_USER_ID = 'dummy-user';
-
 export default function GreetingsPage() {
     const firestore = useFirestore();
     const posterRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const { user, isLoading: isUserLoading } = useUser();
 
     const userProfileRef = useMemoFirebase(() => {
-        if (!firestore) return null;
-        // Using a dummy user ID
-        return doc(firestore, 'users', DUMMY_USER_ID);
-    }, [firestore]);
+        if (!firestore || !user) return null;
+        return doc(firestore, 'users', user.uid);
+    }, [firestore, user]);
 
     const { data: userProfile, isLoading: isLoadingProfile } = useDoc<UserProfile>(userProfileRef);
 
@@ -57,7 +55,7 @@ export default function GreetingsPage() {
         }
     };
     
-    if (isLoadingProfile) {
+    if (isUserLoading || isLoadingProfile) {
         return (
             <AppLayout>
                 <div className="flex flex-1 items-center justify-center">
@@ -80,8 +78,8 @@ export default function GreetingsPage() {
                         <div key={index}>
                             <Card 
                                 className="overflow-hidden group"
-                                ref={el => posterRefs.current[index] = el}
                             >
+                                <div ref={el => posterRefs.current[index] = el}>
                                 <CardContent className="p-0 aspect-square relative">
                                     <Image
                                         src={greeting.imageUrl}
@@ -107,6 +105,7 @@ export default function GreetingsPage() {
                                          </div>
                                     </div>
                                 </CardContent>
+                                </div>
                             </Card>
                             <Button className="w-full mt-4" onClick={() => handleDownload(greeting, index)}>
                                 <Download className="mr-2 h-4 w-4" />

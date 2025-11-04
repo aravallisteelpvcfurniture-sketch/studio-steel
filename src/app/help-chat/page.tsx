@@ -5,11 +5,11 @@ import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Send } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Send, Loader2 } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useFirestore, useCollection, useMemoFirebase, addDocumentNonBlocking } from '@/firebase';
-import { collection, serverTimestamp, query, orderBy, getDocs, limit } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase, addDocumentNonBlocking, useUser } from '@/firebase';
+import { collection, serverTimestamp, query, orderBy, getDocs, limit, addDoc } from 'firebase/firestore';
 import type { WithId } from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -22,19 +22,18 @@ type ChatMessage = {
   isRead: boolean;
 };
 
-const DUMMY_USER_ID = 'dummy-user';
-
 export default function HelpChatPage() {
   const [inputValue, setInputValue] = useState('');
   const [chatSessionId, setChatSessionId] = useState<string | null>(null);
   const firestore = useFirestore();
+  const { user, isLoading: isUserLoading } = useUser();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const findOrCreateChatSession = async () => {
-      if (firestore) {
+      if (firestore && user) {
         try {
-          const chatsRef = collection(firestore, 'users', DUMMY_USER_ID, 'chatSessions');
+          const chatsRef = collection(firestore, 'users', user.uid, 'chatSessions');
           const q = query(chatsRef, limit(1));
           const querySnapshot = await getDocs(q);
           
@@ -42,18 +41,18 @@ export default function HelpChatPage() {
             setChatSessionId(querySnapshot.docs[0].id);
           } else {
             const newSessionData = {
-              userId: DUMMY_USER_ID,
+              userId: user.uid,
               createdAt: serverTimestamp(),
               lastMessage: "",
             };
-            const newSessionDoc = await addDocumentNonBlocking(chatsRef, newSessionData);
+            const newSessionDoc = await addDoc(chatsRef, newSessionData);
             if(newSessionDoc) {
                 setChatSessionId(newSessionDoc.id);
             }
           }
         } catch (e: any) {
             const permissionError = new FirestorePermissionError({
-              path: `users/${DUMMY_USER_ID}/chatSessions`,
+              path: `users/${user.uid}/chatSessions`,
               operation: 'list', 
             });
             errorEmitter.emit('permission-error', permissionError);
@@ -61,19 +60,19 @@ export default function HelpChatPage() {
       }
     };
     findOrCreateChatSession();
-  }, [firestore]);
+  }, [firestore, user]);
 
   const messagesQuery = useMemoFirebase(() => {
-    if (chatSessionId && firestore) {
+    if (chatSessionId && firestore && user) {
       return query(
-        collection(firestore, 'users', DUMMY_USER_ID, 'chatSessions', chatSessionId, 'messages'),
+        collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages'),
         orderBy('timestamp', 'asc')
       );
     }
     return null;
-  }, [chatSessionId, firestore]);
+  }, [chatSessionId, firestore, user]);
 
-  const { data: messages, isLoading } = useCollection<ChatMessage>(messagesQuery);
+  const { data: messages, isLoading: isLoadingMessages } = useCollection<ChatMessage>(messagesQuery);
   
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -87,21 +86,23 @@ export default function HelpChatPage() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim() === '' || !chatSessionId || !firestore) return;
+    if (inputValue.trim() === '' || !chatSessionId || !firestore || !user) return;
 
     const newMessage: Omit<ChatMessage, 'id' | 'timestamp'> & { timestamp: any } = {
       text: inputValue,
-      senderId: DUMMY_USER_ID,
+      senderId: user.uid,
       senderType: 'user',
       timestamp: serverTimestamp(),
       isRead: false,
     };
 
-    const messagesColRef = collection(firestore, 'users', DUMMY_USER_ID, 'chatSessions', chatSessionId, 'messages');
+    const messagesColRef = collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages');
     addDocumentNonBlocking(messagesColRef, newMessage);
 
     setInputValue('');
   };
+  
+  const isLoading = isUserLoading || isLoadingMessages;
 
   return (
     <AppLayout>
@@ -113,34 +114,35 @@ export default function HelpChatPage() {
           <CardContent className="flex-1 overflow-hidden p-0">
             <ScrollArea className="h-full p-6" ref={scrollAreaRef}>
                 <div className="space-y-4">
-                {isLoading && <p>Loading chat...</p>}
-                {messages && messages.map((msg: WithId<ChatMessage>) => (
+                {isLoading && <div className="flex justify-center"><Loader2 className="animate-spin" /></div>}
+                {!isLoading && messages && messages.map((msg: WithId<ChatMessage>) => (
                     <div
                     key={msg.id}
                     className={`flex items-end gap-2 ${
-                        msg.senderType === 'user' ? 'justify-end' : 'justify-start'
+                        msg.senderId === user?.uid ? 'justify-end' : 'justify-start'
                     }`}
                     >
-                    {msg.senderType === 'support' && (
+                    {msg.senderId !== user?.uid && (
                         <Avatar className="h-8 w-8">
                         <AvatarFallback>S</AvatarFallback>
                         </Avatar>
                     )}
                     <div
                         className={`max-w-xs rounded-lg p-3 text-sm md:max-w-md ${
-                        msg.senderType === 'user'
+                        msg.senderId === user?.uid
                             ? 'bg-primary text-primary-foreground'
                             : 'bg-muted'
                         }`}
                     >
                         <p>{msg.text}</p>
-                        <p className={`text-xs mt-1 ${msg.senderType === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground/70'}`}>
+                        <p className={`text-xs mt-1 ${msg.senderId === user?.uid ? 'text-primary-foreground/70' : 'text-muted-foreground/70'}`}>
                            {msg.timestamp?.toDate()?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || 'Sending...'}
                         </p>
                     </div>
-                    {msg.senderType === 'user' && (
+                    {msg.senderId === user?.uid && (
                         <Avatar className="h-8 w-8">
-                        <AvatarFallback>A</AvatarFallback>
+                           <AvatarImage src={user.photoURL || undefined} />
+                           <AvatarFallback>{user.displayName?.charAt(0) || 'A'}</AvatarFallback>
                         </Avatar>
                     )}
                     </div>

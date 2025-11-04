@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, Trash2, Plus, MessageSquare } from "lucide-react";
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { useFirestore, useDoc, useMemoFirebase, useUser } from '@/firebase';
 import { doc } from 'firebase/firestore';
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Separator } from '@/components/ui/separator';
 
@@ -29,21 +29,19 @@ type EstimateItem = {
     total: number;
 };
 
-const DUMMY_USER_ID = 'dummy-user';
-
 export default function CreateEstimatePage() {
     const [items, setItems] = useState<EstimateItem[]>([]);
     const [nextId, setNextId] = useState(1);
     
     const firestore = useFirestore();
+    const { user, isLoading: isUserLoading } = useUser();
     const params = useParams();
     const partyId = params.partyId as string;
 
     const partyDocRef = useMemoFirebase(() => {
-        if (!firestore || !partyId) return null;
-        // Using a dummy user ID
-        return doc(firestore, 'users', DUMMY_USER_ID, 'parties', partyId);
-    }, [firestore, partyId]);
+        if (!firestore || !user || !partyId) return null;
+        return doc(firestore, 'users', user.uid, 'parties', partyId);
+    }, [firestore, user, partyId]);
 
     const { data: party, isLoading: isLoadingParty } = useDoc<Party>(partyDocRef);
 
@@ -125,7 +123,7 @@ export default function CreateEstimatePage() {
                     </Button>
                 </div>
                 
-                {isLoadingParty ? (
+                {isUserLoading || isLoadingParty ? (
                     <div className="flex justify-center"><Loader2 className="animate-spin" /></div>
                 ) : party ? (
                     <Card>
@@ -200,7 +198,7 @@ export default function CreateEstimatePage() {
                             <CardTitle className="text-destructive">Party Not Found</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p>The requested party could not be found. It may have been deleted.</p>
+                            <p>The requested party could not be found or you don't have permission to view it.</p>
                         </CardContent>
                     </Card>
                 )}

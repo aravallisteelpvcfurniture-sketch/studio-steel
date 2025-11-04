@@ -5,22 +5,22 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User as UserIcon } from "lucide-react";
-
-// Dummy user data since authentication is removed
-const dummyUser = {
-    displayName: 'Aravalli User',
-    email: 'contact@aravallistudio.com',
-    photoURL: '',
-    uid: 'dummy-user-123',
-    metadata: {
-        creationTime: new Date().toISOString(),
-    }
-}
+import { User as UserIcon, LogOut, Loader2 } from "lucide-react";
+import { useAuth, useUser } from "@/firebase";
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
-    const user = dummyUser;
+    const { user, isLoading } = useUser();
+    const auth = useAuth();
+    const router = useRouter();
 
+    const handleSignOut = () => {
+        if (auth) {
+            auth.signOut();
+            router.push('/login');
+        }
+    };
+    
     const getInitials = (name: string | null | undefined) => {
         if (!name) return 'U';
         const nameParts = name.split(' ');
@@ -28,6 +28,28 @@ export default function ProfilePage() {
             return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase();
         }
         return name[0].toUpperCase();
+    }
+    
+    if (isLoading) {
+        return (
+             <AppLayout>
+                <div className="flex h-full items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                </div>
+            </AppLayout>
+        );
+    }
+
+    if (!user) {
+        // This should be handled by the useUser hook redirecting, but as a fallback
+        return (
+            <AppLayout>
+                <div className="p-4 md:p-8 text-center">
+                     <p>You must be logged in to view this page.</p>
+                     <Button onClick={() => router.push('/login')} className="mt-4">Go to Login</Button>
+                </div>
+            </AppLayout>
+        )
     }
 
   return (
@@ -65,6 +87,12 @@ export default function ProfilePage() {
                 </div>
             </div>
           </CardContent>
+           <CardFooter>
+                <Button variant="destructive" onClick={handleSignOut} className="w-full">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                </Button>
+            </CardFooter>
         </Card>
       </div>
     </AppLayout>

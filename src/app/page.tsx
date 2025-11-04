@@ -1,8 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useUser } from '@/firebase';
 import { Card, CardContent } from "@/components/ui/card";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,26 +19,27 @@ const featureButtons = [
   { href: "/more", icon: MoreHorizontal, label: "More" },
 ];
 
-const dummyUser = {
-    displayName: 'Aravalli User',
-    photoURL: `https://i.pravatar.cc/150?u=a-user`,
-    uid: 'dummy-user'
-}
-
 export default function DashboardPage() {
-  const user = dummyUser;
+  const { user } = useUser();
+
+  const getFirstName = () => {
+    if (user?.displayName) {
+      return user.displayName.split(' ')[0];
+    }
+    return 'User';
+  }
 
   return (
     <div className="bg-background min-h-screen">
       <header className="relative bg-gradient-to-r from-purple-700 to-fuchsia-600 h-40 text-primary-foreground p-6">
         <div className="flex justify-between items-center pt-4">
             <div className='flex flex-col'>
-                <h1 className="text-2xl font-bold">Good morning {user.displayName?.split(' ')[0] || 'User'}</h1>
+                <h1 className="text-2xl font-bold">Good morning {getFirstName()}</h1>
             </div>
             <Link href="/profile">
                 <Avatar className="h-12 w-12 border-2 border-white/50">
-                    <AvatarImage src={user.photoURL || ''} alt={user.displayName || ''} />
-                    <AvatarFallback>{user.displayName?.charAt(0) || 'A'}</AvatarFallback>
+                    <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
+                    <AvatarFallback>{user?.displayName?.charAt(0) || 'A'}</AvatarFallback>
                 </Avatar>
             </Link>
         </div>
@@ -55,7 +54,6 @@ export default function DashboardPage() {
                     <p className='text-lg font-semibold text-purple-800'>Discount</p>
                 </div>
                  <div className="w-24 h-24 relative">
-                    {/* Placeholder for illustration */}
                      <NextImage
                         src="https://i.ibb.co/RPd7cZ8/undraw-books-re-8ptw-1.png"
                         alt="Discount illustration"

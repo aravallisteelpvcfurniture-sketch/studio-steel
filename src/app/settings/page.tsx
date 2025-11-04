@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useFirestore, useDoc, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
+import { useFirestore, useUser, useDoc, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Settings, Building, Phone, Mail, Image as ImageIcon } from 'lucide-react';
@@ -18,9 +18,8 @@ type CompanyInfo = {
     email?: string;
 };
 
-const DUMMY_USER_ID = 'dummy-user';
-
 export default function SettingsPage() {
+    const { user, isLoading: isUserLoading } = useUser();
     const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
         companyName: '',
         logoUrl: '',
@@ -32,10 +31,9 @@ export default function SettingsPage() {
     const firestore = useFirestore();
 
     const userProfileRef = useMemoFirebase(() => {
-        if (!firestore) return null;
-        // Using a dummy user ID since auth is removed
-        return doc(firestore, 'users', DUMMY_USER_ID);
-    }, [firestore]);
+        if (!firestore || !user) return null;
+        return doc(firestore, 'users', user.uid);
+    }, [firestore, user]);
     
     const { data: userProfile, isLoading: isLoadingProfile } = useDoc<{companyInfo?: CompanyInfo}>(userProfileRef);
 
@@ -55,7 +53,7 @@ export default function SettingsPage() {
             toast({
                 variant: "destructive",
                 title: "Error",
-                description: "Firestore not available.",
+                description: "Firestore not available or user not logged in.",
             });
             return;
         }
@@ -79,7 +77,7 @@ export default function SettingsPage() {
         }
     };
     
-    const showLoader = isLoadingProfile;
+    const showLoader = isUserLoading || isLoadingProfile;
 
     return (
         <AppLayout>

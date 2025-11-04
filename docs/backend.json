@@ -207,7 +207,6 @@
   "auth": {
     "providers": [
       "password",
-      "anonymous",
       "google.com"
     ]
   },
@@ -321,7 +320,6 @@
           ]
         }
       }
-    ],
-    "reasoning": "The Firestore structure is designed to provide a secure, scalable, and easily maintainable backend for the Aravalli Home Studio application. The structure prioritizes authorization independence through denormalization and structural segregation to ensure security and simplify rules. Path-based ownership is used where appropriate, and membership maps are utilized for collaborative data access.\n\n*   **Authorization Independence:** User ownership is enforced using hierarchical paths (e.g., `/users/{userId}/orders/{orderId}`). No `get()` calls are needed in security rules to validate ownership.\n\n*   **Structural Segregation:** Each top-level collection serves a specific purpose, ensuring documents within a collection have similar access control requirements.\n\n*   **QAPs (Rules are not Filters):**  The structure enables secure `list` operations. For example, only the user who owns an order can list their orders by querying the `/users/{userId}/orders` collection. Publicly accessible data, such as products and visitor greetings, resides in separate collections that can be read by anyone.\n\n*   **DBAC (No Custom Claims):** User roles are managed through the Firebase Authentication system and user IDs (`request.auth.uid`) are used to validate access in the security rules.\n\nThe error reported in the console `FirebaseError: Firebase: Error (auth/operation-not-allowed)` suggests an issue with Firebase Authentication configuration. Ensure that the 'password' and 'anonymous' providers are enabled in the Firebase Console under Authentication > Sign-in method. Also, verify that there are no restrictions enabled that are preventing the operation."
+    ]
   }
 }
