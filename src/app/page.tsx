@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Mailbox, Map, MessageSquare, BarChart, Calendar, BookOpen, Settings, MoreHorizontal, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import NextImage from 'next/image';
 
 const featureButtons = [
   { href: "#", icon: Mailbox, label: "Inbox" },
@@ -65,7 +66,7 @@ export default function DashboardPage() {
                 </div>
                  <div className="w-24 h-24 relative">
                     {/* Placeholder for illustration */}
-                     <Image
+                     <NextImage
                         src="https://i.ibb.co/RPd7cZ8/undraw-books-re-8ptw-1.png"
                         alt="Discount illustration"
                         width={96}
