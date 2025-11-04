@@ -18,6 +18,7 @@ export default {
     extend: {
       fontFamily: {
         bungee: ['Bungee', 'sans-serif'],
+        'archivo-black': ['"Archivo Black"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

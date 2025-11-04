@@ -36,7 +36,7 @@ export default function DashboardPage() {
             </Link>
         </div>
         <div>
-            <h1 className="text-3xl font-bold text-foreground">Welcome</h1>
+            <h1 className="text-3xl font-archivo-black font-bold text-foreground">Welcome</h1>
         </div>
         <Wave className="text-background" />
       </header>

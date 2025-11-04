@@ -31,7 +31,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#00FFFF" media="(prefers-color-scheme: dark)" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bungee&display=swap" rel="stylesheet" />
       </head>
       <body className={cn('min-h-screen font-sans antialiased', inter.className)}>
         <ThemeProvider
