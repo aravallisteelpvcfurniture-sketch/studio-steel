@@ -4,7 +4,6 @@ import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ChevronRight, HelpCircle, Calculator, User, Palette, ClipboardList, BookOpen, Handshake, GalleryVertical, Video, Settings } from 'lucide-react';
 import Link from 'next/link';
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Separator } from "@/components/ui/separator";
 
 const toolsItems = [
@@ -51,16 +50,16 @@ const contentItems = [
 
 const accountItems = [
      {
-        href: "/profile",
+        href: "/profile/edit",
         icon: User,
-        title: "My Profile",
+        title: "Edit Profile",
         description: "View and manage your profile details.",
     },
     {
         href: "/settings",
         icon: Settings,
-        title: "My Settings",
-        description: "Manage company info for posters.",
+        title: "App Settings",
+        description: "Manage theme, notifications & more.",
     },
     {
         href: "/help-chat",
@@ -110,20 +109,11 @@ export default function MorePage() {
         
         <Card>
             <CardHeader>
-                <CardTitle>Account &amp; Settings</CardTitle>
-                 <CardDescription>Manage your account, profile, and app settings.</CardDescription>
+                <CardTitle>Account &amp; Support</CardTitle>
+                 <CardDescription>Manage your account, and get help.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2 p-3">
                  {accountItems.map(renderMenuItem)}
-                 <Separator className="my-2"/>
-                 <div className="flex items-center p-3 rounded-lg">
-                    <Palette className="h-6 w-6 mr-4 text-primary" />
-                    <div className="flex-1">
-                        <p className="font-semibold">Theme</p>
-                        <p className="text-sm text-muted-foreground">Switch between light and dark mode.</p>
-                    </div>
-                    <ThemeSwitcher />
-                </div>
             </CardContent>
         </Card>
 

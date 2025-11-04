@@ -9,7 +9,12 @@ import { Label } from '@/components/ui/label';
 import { useFirestore, useUser, useDoc, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Settings, Building, Phone, Mail, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Settings, Building, Phone, Mail, Image as ImageIcon, Palette, Bell, User, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { ThemeSwitcher } from '@/components/theme-switcher';
+import { Switch } from '@/components/ui/switch';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type CompanyInfo = {
     companyName?: string;
@@ -20,6 +25,7 @@ type CompanyInfo = {
 
 export default function SettingsPage() {
     const { user, isLoading: isUserLoading } = useUser();
+    const router = useRouter();
     const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
         companyName: '',
         logoUrl: '',
@@ -81,12 +87,73 @@ export default function SettingsPage() {
 
     return (
         <AppLayout>
-            <div className="p-4 md:p-8">
-                 <Card>
+            <div className="p-4 md:p-8 space-y-6">
+                <div className="flex items-center gap-4">
+                     <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                        <ArrowLeft className="h-6 w-6" />
+                    </Button>
+                    <h1 className="text-2xl font-bold">Settings</h1>
+                </div>
+
+                {/* Account Settings */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-3"><User /> Account</CardTitle>
+                        <CardDescription>Manage your personal information.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <Link href="/profile/edit" className="block">
+                            <div className="flex items-center p-3 -mx-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
+                                <div className="flex-1">
+                                    <p className="font-semibold">Edit Profile</p>
+                                    <p className="text-sm text-muted-foreground">Update your name, and mobile number.</p>
+                                </div>
+                                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                            </div>
+                        </Link>
+                    </CardContent>
+                </Card>
+
+                {/* Display Settings */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-3"><Palette /> Display</CardTitle>
+                        <CardDescription>Adjust the appearance of the app.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center justify-between p-3 -mx-3">
+                            <div>
+                                <p className="font-semibold">Theme</p>
+                                <p className="text-sm text-muted-foreground">Switch between light and dark mode.</p>
+                            </div>
+                            <ThemeSwitcher />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Notification Settings */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-3"><Bell /> Notifications</CardTitle>
+                        <CardDescription>Manage how you receive notifications.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center justify-between p-3 -mx-3">
+                            <div>
+                                <p className="font-semibold">Push Notifications</p>
+                                <p className="text-sm text-muted-foreground">Receive updates and alerts from the app.</p>
+                            </div>
+                            <Switch id="notifications-switch" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Company Info Settings */}
+                <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                           <Settings className="h-6 w-6" />
-                           My Settings
+                           <Building className="h-6 w-6" />
+                           Company Info
                         </CardTitle>
                         <CardDescription>Manage your company information for greeting posters.</CardDescription>
                     </CardHeader>
