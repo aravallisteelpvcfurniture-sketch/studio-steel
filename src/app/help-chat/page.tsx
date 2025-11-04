@@ -8,12 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Send } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useFirestore, useUser, useCollection, useMemoFirebase, addDocumentNonBlocking } from '@/firebase';
+import { useFirestore, useCollection, useMemoFirebase, addDocumentNonBlocking } from '@/firebase';
 import { collection, serverTimestamp, query, orderBy, getDocs, limit } from 'firebase/firestore';
 import type { WithId } from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
-
 
 type ChatMessage = {
   text: string;
@@ -23,18 +22,19 @@ type ChatMessage = {
   isRead: boolean;
 };
 
+const DUMMY_USER_ID = 'dummy-user';
+
 export default function HelpChatPage() {
   const [inputValue, setInputValue] = useState('');
   const [chatSessionId, setChatSessionId] = useState<string | null>(null);
   const firestore = useFirestore();
-  const { user, isUserLoading } = useUser();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const findOrCreateChatSession = async () => {
-      if (user && firestore) {
+      if (firestore) {
         try {
-          const chatsRef = collection(firestore, 'users', user.uid, 'chatSessions');
+          const chatsRef = collection(firestore, 'users', DUMMY_USER_ID, 'chatSessions');
           const q = query(chatsRef, limit(1));
           const querySnapshot = await getDocs(q);
           
@@ -42,7 +42,7 @@ export default function HelpChatPage() {
             setChatSessionId(querySnapshot.docs[0].id);
           } else {
             const newSessionData = {
-              userId: user.uid,
+              userId: DUMMY_USER_ID,
               createdAt: serverTimestamp(),
               lastMessage: "",
             };
@@ -53,27 +53,25 @@ export default function HelpChatPage() {
           }
         } catch (e: any) {
             const permissionError = new FirestorePermissionError({
-              path: `users/${user.uid}/chatSessions`,
-              operation: 'list', // Assuming getDocs is a list operation
+              path: `users/${DUMMY_USER_ID}/chatSessions`,
+              operation: 'list', 
             });
             errorEmitter.emit('permission-error', permissionError);
         }
       }
     };
-    if(!isUserLoading) {
-      findOrCreateChatSession();
-    }
-  }, [user, firestore, isUserLoading]);
+    findOrCreateChatSession();
+  }, [firestore]);
 
   const messagesQuery = useMemoFirebase(() => {
-    if (user && chatSessionId && firestore) {
+    if (chatSessionId && firestore) {
       return query(
-        collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages'),
+        collection(firestore, 'users', DUMMY_USER_ID, 'chatSessions', chatSessionId, 'messages'),
         orderBy('timestamp', 'asc')
       );
     }
     return null;
-  }, [user, chatSessionId, firestore]);
+  }, [chatSessionId, firestore]);
 
   const { data: messages, isLoading } = useCollection<ChatMessage>(messagesQuery);
   
@@ -89,17 +87,17 @@ export default function HelpChatPage() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim() === '' || !user || !chatSessionId || !firestore) return;
+    if (inputValue.trim() === '' || !chatSessionId || !firestore) return;
 
     const newMessage: Omit<ChatMessage, 'id' | 'timestamp'> & { timestamp: any } = {
       text: inputValue,
-      senderId: user.uid,
+      senderId: DUMMY_USER_ID,
       senderType: 'user',
       timestamp: serverTimestamp(),
       isRead: false,
     };
 
-    const messagesColRef = collection(firestore, 'users', user.uid, 'chatSessions', chatSessionId, 'messages');
+    const messagesColRef = collection(firestore, 'users', DUMMY_USER_ID, 'chatSessions', chatSessionId, 'messages');
     addDocumentNonBlocking(messagesColRef, newMessage);
 
     setInputValue('');
@@ -142,7 +140,7 @@ export default function HelpChatPage() {
                     </div>
                     {msg.senderType === 'user' && (
                         <Avatar className="h-8 w-8">
-                        <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+                        <AvatarFallback>A</AvatarFallback>
                         </Avatar>
                     )}
                     </div>

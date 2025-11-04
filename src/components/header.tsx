@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuth, useUser } from '@/firebase';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import { Bell, Search } from 'lucide-react';
@@ -17,18 +16,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+const dummyUser = {
+    displayName: 'Aravalli User',
+    email: 'contact@aravallistudio.com',
+    photoURL: '',
+}
 
 export default function Header() {
-  const { user } = useUser();
-  const auth = useAuth();
+  const user = dummyUser;
   const router = useRouter();
-
-  const handleSignOut = () => {
-    if (auth) {
-      auth.signOut();
-      router.push('/auth');
-    }
-  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center bg-primary px-4 text-primary-foreground shadow-lg">

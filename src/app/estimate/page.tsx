@@ -4,7 +4,7 @@ import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, UserPlus, Users } from "lucide-react";
-import { useFirestore, useUser, useCollection, useMemoFirebase } from '@/firebase';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import type { WithId } from '@/firebase';
 import Link from "next/link";
@@ -18,15 +18,17 @@ type Party = {
     createdAt: any;
 };
 
+const DUMMY_USER_ID = 'dummy-user';
+
 export default function EstimatePage() {
     const firestore = useFirestore();
-    const { user } = useUser();
     const router = useRouter();
 
     const partiesQuery = useMemoFirebase(() => {
-        if (!firestore || !user) return null;
-        return query(collection(firestore, 'users', user.uid, 'parties'), orderBy('createdAt', 'desc'));
-    }, [firestore, user]);
+        if (!firestore) return null;
+        // Using a dummy user ID for the query
+        return query(collection(firestore, 'users', DUMMY_USER_ID, 'parties'), orderBy('createdAt', 'desc'));
+    }, [firestore]);
 
     const { data: parties, isLoading: isLoadingParties } = useCollection<Party>(partiesQuery);
 

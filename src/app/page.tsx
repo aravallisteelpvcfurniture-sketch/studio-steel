@@ -2,14 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useUser } from '@/firebase';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from "@/components/ui/card";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Mailbox, Map, MessageSquare, BarChart, Calendar, BookOpen, Settings, MoreHorizontal, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import NextImage from 'next/image';
+import { Input } from '@/components/ui/input';
 
 const featureButtons = [
   { href: "#", icon: Mailbox, label: "Inbox" },
@@ -22,23 +21,14 @@ const featureButtons = [
   { href: "/more", icon: MoreHorizontal, label: "More" },
 ];
 
+const dummyUser = {
+    displayName: 'Aravalli User',
+    photoURL: `https://i.pravatar.cc/150?u=a-user`,
+    uid: 'dummy-user'
+}
+
 export default function DashboardPage() {
-  const { user, isUserLoading } = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.push('/login');
-    }
-  }, [user, isUserLoading, router]);
-
-  if (isUserLoading || !user) {
-    return (
-      <div className="flex flex-1 items-center justify-center min-h-screen bg-background">
-          <Skeleton className="h-screen w-full" />
-      </div>
-    );
-  }
+  const user = dummyUser;
 
   return (
     <div className="bg-background min-h-screen">
@@ -49,7 +39,7 @@ export default function DashboardPage() {
             </div>
             <Link href="/profile">
                 <Avatar className="h-12 w-12 border-2 border-white/50">
-                    <AvatarImage src={user.photoURL || `https://i.pravatar.cc/150?u=${user.uid}`} alt={user.displayName || ''} />
+                    <AvatarImage src={user.photoURL || ''} alt={user.displayName || ''} />
                     <AvatarFallback>{user.displayName?.charAt(0) || 'A'}</AvatarFallback>
                 </Avatar>
             </Link>

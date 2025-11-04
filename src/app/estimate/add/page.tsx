@@ -9,10 +9,12 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2, UserPlus, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useFirestore, useUser, addDocumentNonBlocking } from '@/firebase';
+import { useFirestore, addDocumentNonBlocking } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
+const DUMMY_USER_ID = 'dummy-user';
 
 export default function AddPartyPage() {
     const [partyName, setPartyName] = useState('');
@@ -21,13 +23,12 @@ export default function AddPartyPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const firestore = useFirestore();
-    const { user } = useUser();
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!user || !firestore) {
-            toast({ variant: "destructive", title: "Error", description: "You must be logged in to add a party." });
+        if (!firestore) {
+            toast({ variant: "destructive", title: "Error", description: "Firestore is not available." });
             return;
         }
         setIsLoading(true);
@@ -36,12 +37,12 @@ export default function AddPartyPage() {
             partyName,
             mobile,
             email,
-            userId: user.uid,
+            userId: DUMMY_USER_ID,
             createdAt: new Date(),
         };
 
         try {
-            await addDocumentNonBlocking(collection(firestore, 'users', user.uid, 'parties'), newParty);
+            await addDocumentNonBlocking(collection(firestore, 'users', DUMMY_USER_ID, 'parties'), newParty);
             toast({
                 title: "Party Added",
                 description: `${partyName} has been added successfully.`,

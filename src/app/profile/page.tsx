@@ -5,21 +5,21 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useUser, useAuth } from "@/firebase";
-import { useRouter } from "next/navigation";
-import { Loader2, LogOut, User as UserIcon } from "lucide-react";
+import { User as UserIcon } from "lucide-react";
+
+// Dummy user data since authentication is removed
+const dummyUser = {
+    displayName: 'Aravalli User',
+    email: 'contact@aravallistudio.com',
+    photoURL: '',
+    uid: 'dummy-user-123',
+    metadata: {
+        creationTime: new Date().toISOString(),
+    }
+}
 
 export default function ProfilePage() {
-    const { user, isUserLoading } = useUser();
-    const auth = useAuth();
-    const router = useRouter();
-
-    const handleSignOut = () => {
-        if (auth) {
-            auth.signOut();
-            router.push('/auth');
-        }
-    };
+    const user = dummyUser;
 
     const getInitials = (name: string | null | undefined) => {
         if (!name) return 'U';
@@ -29,36 +29,6 @@ export default function ProfilePage() {
         }
         return name[0].toUpperCase();
     }
-    
-    if (isUserLoading) {
-        return (
-             <AppLayout>
-                <div className="flex flex-1 items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-            </AppLayout>
-        )
-    }
-
-    if (!user) {
-        // This case should ideally not be hit if AppLayout handles redirection, but it's good practice.
-        return (
-            <AppLayout>
-                <div className="p-4 md:p-8">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Profile</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p>You are not logged in. Please log in to view your profile.</p>
-                            <Button onClick={() => router.push('/login')} className="mt-4">Login</Button>
-                        </CardContent>
-                    </Card>
-                </div>
-            </AppLayout>
-        )
-    }
-
 
   return (
     <AppLayout>
@@ -95,12 +65,6 @@ export default function ProfilePage() {
                 </div>
             </div>
           </CardContent>
-          <CardFooter className="border-t pt-6">
-             <Button variant="destructive" onClick={handleSignOut} className="w-full sm:w-auto ml-auto">
-                <LogOut className="mr-2 h-4 w-4"/>
-                Log Out
-            </Button>
-          </CardFooter>
         </Card>
       </div>
     </AppLayout>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useFirestore, useUser, useDoc, useMemoFirebase } from '@/firebase';
+import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Loader2, Download } from 'lucide-react';
 import Image from 'next/image';
@@ -25,15 +25,17 @@ type Greeting = {
     imageUrl: string;
 };
 
+const DUMMY_USER_ID = 'dummy-user';
+
 export default function GreetingsPage() {
     const firestore = useFirestore();
-    const { user } = useUser();
     const posterRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const userProfileRef = useMemoFirebase(() => {
-        if (!user || !firestore) return null;
-        return doc(firestore, 'users', user.uid);
-    }, [user, firestore]);
+        if (!firestore) return null;
+        // Using a dummy user ID
+        return doc(firestore, 'users', DUMMY_USER_ID);
+    }, [firestore]);
 
     const { data: userProfile, isLoading: isLoadingProfile } = useDoc<UserProfile>(userProfileRef);
 

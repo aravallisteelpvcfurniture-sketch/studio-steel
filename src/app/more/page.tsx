@@ -2,10 +2,8 @@
 
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ChevronRight, HelpCircle, Calculator, LogOut, User, Palette, ClipboardList, BookOpen, Handshake, GalleryVertical, Video, Settings } from 'lucide-react';
+import { ChevronRight, HelpCircle, Calculator, User, Palette, ClipboardList, BookOpen, Handshake, GalleryVertical, Video, Settings } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/firebase';
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Separator } from "@/components/ui/separator";
 
@@ -73,15 +71,6 @@ const accountItems = [
 ]
 
 export default function MorePage() {
-    const auth = useAuth();
-    const router = useRouter();
-
-    const handleSignOut = () => {
-        if (auth) {
-            auth.signOut();
-            router.push('/auth');
-        }
-    };
 
     const renderMenuItem = (item: { href: string, icon: React.ElementType, title: string, description: string }) => (
         <Link href={item.href} key={item.title} className="block">
@@ -134,18 +123,6 @@ export default function MorePage() {
                         <p className="text-sm text-muted-foreground">Switch between light and dark mode.</p>
                     </div>
                     <ThemeSwitcher />
-                </div>
-                <Separator className="my-2"/>
-                <div 
-                    className="flex items-center p-3 rounded-lg hover:bg-destructive/10 cursor-pointer transition-colors"
-                    onClick={handleSignOut}
-                    role="button"
-                >
-                    <LogOut className="h-6 w-6 mr-4 text-destructive" />
-                    <div className="flex-1">
-                        <p className="font-semibold text-destructive">Log Out</p>
-                    </div>
-                     <ChevronRight className="h-5 w-5 text-destructive/70" />
                 </div>
             </CardContent>
         </Card>

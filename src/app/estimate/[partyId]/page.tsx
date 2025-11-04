@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, Trash2, Plus, MessageSquare } from "lucide-react";
-import { useFirestore, useUser, useDoc, useMemoFirebase } from '@/firebase';
+import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -29,19 +29,21 @@ type EstimateItem = {
     total: number;
 };
 
+const DUMMY_USER_ID = 'dummy-user';
+
 export default function CreateEstimatePage() {
     const [items, setItems] = useState<EstimateItem[]>([]);
     const [nextId, setNextId] = useState(1);
     
     const firestore = useFirestore();
-    const { user } = useUser();
     const params = useParams();
     const partyId = params.partyId as string;
 
     const partyDocRef = useMemoFirebase(() => {
-        if (!firestore || !user || !partyId) return null;
-        return doc(firestore, 'users', user.uid, 'parties', partyId);
-    }, [firestore, user, partyId]);
+        if (!firestore || !partyId) return null;
+        // Using a dummy user ID
+        return doc(firestore, 'users', DUMMY_USER_ID, 'parties', partyId);
+    }, [firestore, partyId]);
 
     const { data: party, isLoading: isLoadingParty } = useDoc<Party>(partyDocRef);
 

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useFirestore, useUser, useDoc, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
+import { useFirestore, useDoc, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Settings, Building, Phone, Mail, Image as ImageIcon } from 'lucide-react';
@@ -18,6 +18,8 @@ type CompanyInfo = {
     email?: string;
 };
 
+const DUMMY_USER_ID = 'dummy-user';
+
 export default function SettingsPage() {
     const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
         companyName: '',
@@ -28,12 +30,12 @@ export default function SettingsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const firestore = useFirestore();
-    const { user, isUserLoading } = useUser();
 
     const userProfileRef = useMemoFirebase(() => {
-        if (!user || !firestore) return null;
-        return doc(firestore, 'users', user.uid);
-    }, [user, firestore]);
+        if (!firestore) return null;
+        // Using a dummy user ID since auth is removed
+        return doc(firestore, 'users', DUMMY_USER_ID);
+    }, [firestore]);
     
     const { data: userProfile, isLoading: isLoadingProfile } = useDoc<{companyInfo?: CompanyInfo}>(userProfileRef);
 
@@ -49,11 +51,11 @@ export default function SettingsPage() {
 
     const handleSaveChanges = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!user || !firestore || !userProfileRef) {
+        if (!firestore || !userProfileRef) {
             toast({
                 variant: "destructive",
                 title: "Error",
-                description: "You must be logged in to save settings.",
+                description: "Firestore not available.",
             });
             return;
         }
@@ -61,8 +63,6 @@ export default function SettingsPage() {
         setIsLoading(true);
 
         try {
-            // We use setDocumentNonBlocking with merge:true to update or create the companyInfo sub-object
-            // without overwriting other user profile fields.
             await setDocumentNonBlocking(userProfileRef, { companyInfo }, { merge: true });
             toast({
                 title: "Settings Saved!",
@@ -79,7 +79,7 @@ export default function SettingsPage() {
         }
     };
     
-    const showLoader = isUserLoading || isLoadingProfile;
+    const showLoader = isLoadingProfile;
 
     return (
         <AppLayout>
