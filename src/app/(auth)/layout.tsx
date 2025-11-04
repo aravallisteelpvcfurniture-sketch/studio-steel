@@ -19,7 +19,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                     className="rounded-full"
                 />
             </div>
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-3xl font-bungee text-foreground">
               Aravalli<span className="font-extrabold">Steel</span>
             </h1>
             <Wave className="text-background" />

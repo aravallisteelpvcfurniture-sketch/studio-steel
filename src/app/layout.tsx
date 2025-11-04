@@ -29,6 +29,9 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#00FFFF" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#00FFFF" media="(prefers-color-scheme: dark)" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
       </head>
       <body className={cn('min-h-screen font-sans antialiased', inter.className)}>
         <ThemeProvider
