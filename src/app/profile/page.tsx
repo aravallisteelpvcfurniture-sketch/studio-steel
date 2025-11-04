@@ -1,13 +1,22 @@
 'use client';
 
 import AppLayout from "@/components/app-layout";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User as UserIcon, LogOut, Loader2 } from "lucide-react";
+import { User as UserIcon, LogOut, Loader2, Settings, CreditCard, Users, Info, ChevronRight, ArrowLeft } from "lucide-react";
 import { useAuth, useUser } from "@/firebase";
 import { useRouter } from 'next/navigation';
+import { Wave } from "@/components/ui/wave";
+import Link from "next/link";
+
+const menuItems = [
+    { icon: Settings, label: "Settings" },
+    { icon: CreditCard, label: "Billing Details" },
+    { icon: Users, label: "User Management" },
+    { icon: Info, label: "Information" },
+];
 
 export default function ProfilePage() {
     const { user, isLoading } = useUser();
@@ -41,7 +50,6 @@ export default function ProfilePage() {
     }
 
     if (!user) {
-        // This should be handled by the useUser hook redirecting, but as a fallback
         return (
             <AppLayout>
                 <div className="p-4 md:p-8 text-center">
@@ -54,46 +62,59 @@ export default function ProfilePage() {
 
   return (
     <AppLayout>
-      <div className="p-4 md:p-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-                <UserIcon className="h-6 w-6" />
-                My Profile
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex flex-col items-center space-y-4">
-                <Avatar className="h-24 w-24 border-4 border-primary/20">
+      <div className="bg-background min-h-screen">
+        <header className="relative bg-primary h-48 text-primary-foreground p-6 flex flex-col justify-start">
+            <div className="flex items-center justify-between z-10">
+                <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                    <ArrowLeft className="h-6 w-6" />
+                </Button>
+                <h1 className="text-xl font-bold">Profile</h1>
+                <Button variant="ghost" size="icon">
+                    {/* Placeholder for menu icon */}
+                </Button>
+            </div>
+            <Wave className="text-background" />
+        </header>
+
+        <main className="p-6 space-y-6 -mt-32 z-10 relative">
+            <div className="flex flex-col items-center space-y-2">
+                 <Avatar className="h-28 w-28 border-4 border-background shadow-lg">
                     <AvatarImage src={user.photoURL || ''} alt={user.displayName || user.email || ''} />
-                    <AvatarFallback className="text-3xl bg-muted">
+                    <AvatarFallback className="text-4xl bg-muted">
                         {getInitials(user.displayName) || getInitials(user.email)}
                     </AvatarFallback>
                 </Avatar>
                 <div className="text-center">
                     <h2 className="text-2xl font-bold">{user.displayName || 'User'}</h2>
-                    <p className="text-muted-foreground">{user.email}</p>
+                    <p className="text-muted-foreground">@{user.email?.split('@')[0] || 'username'}</p>
                 </div>
+                 <Button className="rounded-full mt-2">Edit Profile</Button>
             </div>
-            <Separator />
-            <div className="grid gap-4">
-                <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">User ID</span>
-                    <span className="font-mono text-sm bg-muted px-2 py-1 rounded">{user.uid}</span>
-                </div>
-                 <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Account Created</span>
-                    <span className="font-medium">{user.metadata.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString() : 'N/A'}</span>
-                </div>
-            </div>
-          </CardContent>
-           <CardFooter>
-                <Button variant="destructive" onClick={handleSignOut} className="w-full">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                </Button>
-            </CardFooter>
-        </Card>
+            
+            <Card>
+              <CardContent className="p-2">
+                <ul className="space-y-1">
+                    {menuItems.map((item) => (
+                        <li key={item.label}>
+                            <Link href="#" className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
+                                <item.icon className="h-5 w-5 mr-4 text-primary" />
+                                <span className="flex-1 font-medium">{item.label}</span>
+                                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                            </Link>
+                        </li>
+                    ))}
+                     <Separator />
+                     <li>
+                        <button onClick={handleSignOut} className="w-full flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors text-destructive">
+                            <LogOut className="h-5 w-5 mr-4" />
+                            <span className="flex-1 font-medium text-left">Log out</span>
+                            <ChevronRight className="h-5 w-5" />
+                        </button>
+                    </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </main>
       </div>
     </AppLayout>
   );
