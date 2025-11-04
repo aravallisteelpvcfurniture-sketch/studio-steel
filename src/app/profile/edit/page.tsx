@@ -10,7 +10,7 @@ import { doc } from 'firebase/firestore';
 import { useAuth, useUser, useFirestore, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft } from 'lucide-react';
@@ -197,4 +197,3 @@ export default function EditProfilePage() {
         </AppLayout>
     );
 }
-
