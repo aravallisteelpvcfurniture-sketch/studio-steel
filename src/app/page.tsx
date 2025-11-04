@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useUser } from '@/firebase';
@@ -7,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Mailbox, Map, MessageSquare, BarChart, Calendar, BookOpen, Settings, MoreHorizontal, Search } from 'lucide-react';
 import NextImage from 'next/image';
 import { Input } from '@/components/ui/input';
+import { Wave } from '@/components/ui/wave';
 
 const featureButtons = [
   { href: "#", icon: Mailbox, label: "Inbox" },
@@ -31,11 +33,20 @@ export default function DashboardPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="relative bg-primary h-40 text-primary-foreground p-6">
-        <div className="flex justify-between items-center pt-4">
-            <div className='flex flex-col'>
-                <h1 className="text-2xl font-bold">Good morning {getFirstName()}</h1>
+      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col items-center justify-center text-center">
+         <div className="w-20 h-20 rounded-full bg-white/30 flex items-center justify-center mb-2">
+                 <NextImage 
+                    src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
+                    alt="Aravalli Logo"
+                    width={128}
+                    height={128}
+                    className="rounded-full"
+                />
             </div>
+            <h1 className="text-3xl font-bungee">
+              <span className="font-bold text-destructive">Aravalli</span><span className="font-bold text-foreground">Steel</span>
+            </h1>
+        <div className="absolute top-6 right-6">
             <Link href="/profile">
                 <Avatar className="h-12 w-12 border-2 border-white/50">
                     <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
@@ -43,15 +54,16 @@ export default function DashboardPage() {
                 </Avatar>
             </Link>
         </div>
+        <Wave className="text-background" />
       </header>
       
-      <main className="p-6 space-y-6">
-          <Card className='-mt-20 shadow-lg border-none'>
-            <CardContent className='p-4 bg-cyan-100 rounded-lg flex items-center justify-between'>
+      <main className="p-6 space-y-6 -mt-16 z-10 relative">
+          <Card className='shadow-lg border-none'>
+            <CardContent className='p-4 bg-cyan-100 dark:bg-cyan-900/50 rounded-lg flex items-center justify-between'>
                 <div>
-                    <p className='text-sm font-medium text-cyan-800'>Until 20 April - 30 May</p>
-                    <p className='text-3xl font-bold text-cyan-900'>30%</p>
-                    <p className='text-lg font-semibold text-cyan-800'>Discount</p>
+                    <p className='text-sm font-medium text-cyan-800 dark:text-cyan-200'>Until 20 April - 30 May</p>
+                    <p className='text-3xl font-bold text-cyan-900 dark:text-cyan-100'>30%</p>
+                    <p className='text-lg font-semibold text-cyan-800 dark:text-cyan-200'>Discount</p>
                 </div>
                  <div className="w-24 h-24 relative">
                      <NextImage
@@ -78,8 +90,8 @@ export default function DashboardPage() {
             <div className="grid grid-cols-4 gap-4">
               {featureButtons.map((feature) => (
                 <Link href={feature.href} key={feature.label} className="flex flex-col items-center gap-2 text-center">
-                    <div className="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center">
-                         <feature.icon className="h-8 w-8 text-cyan-600" strokeWidth={1.5} />
+                    <div className="w-16 h-16 bg-cyan-100 dark:bg-cyan-900/50 rounded-2xl flex items-center justify-center">
+                         <feature.icon className="h-8 w-8 text-cyan-600 dark:text-cyan-400" strokeWidth={1.5} />
                     </div>
                   <span className="text-sm font-medium text-muted-foreground">{feature.label}</span>
                 </Link>
