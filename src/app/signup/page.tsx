@@ -71,7 +71,6 @@ export default function SignupPage() {
           signUpDate: serverTimestamp(),
         };
         await setDocumentNonBlocking(userDocRef, userData, { merge: true });
-        // The useEffect will handle the redirect on user state change
       }
     } catch (error: any) {
       toast({
@@ -157,7 +156,7 @@ export default function SignupPage() {
             </Button>
           </form>
           <p className="mt-8 text-center text-sm text-muted-foreground">
-            Don't have account?{' '}
+            Already have an account?{' '}
             <Link href="/login" className="font-bold text-primary hover:underline">
               Sign In
             </Link>

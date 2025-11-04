@@ -41,12 +41,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     initiateEmailSignIn(auth, email, password);
-    // The non-blocking function doesn't throw client-side errors for failed login
-    // We rely on the onAuthStateChanged listener to redirect
-    // For user feedback on failure, Firebase might require handling differently,
-    // as catching errors here won't work for invalid credentials with this setup.
-    // For now, we assume the user will be redirected on success.
-    // A timeout can be added to handle cases where login doesn't complete.
+    
     setTimeout(() => {
         if (!auth.currentUser) {
             setIsLoading(false);
