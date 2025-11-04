@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, useUser, setDocumentNonBlocking } from "@/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp } from "firebase/firestore";
 import { useFirestore } from "@/firebase/provider";
 import { Button } from "@/components/ui/button";
@@ -11,13 +11,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import AuthLayout from "@/components/auth-layout";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const auth = useAuth();
@@ -41,6 +44,14 @@ export default function SignupPage() {
         });
         return;
     }
+    if (password !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Signup Failed",
+        description: "Passwords do not match.",
+      });
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -48,16 +59,18 @@ export default function SignupPage() {
       const newUser = userCredential.user;
       
       if (newUser) {
+        await updateProfile(newUser, { displayName: fullName });
         const userDocRef = doc(firestore, "users", newUser.uid);
         const [firstName, ...lastName] = fullName.split(' ');
         const userData = {
           id: newUser.uid,
           email: newUser.email,
+          displayName: fullName,
           firstName: firstName || '',
           lastName: lastName.join(' ') || '',
           signUpDate: serverTimestamp(),
         };
-        setDocumentNonBlocking(userDocRef, userData, { merge: true });
+        await setDocumentNonBlocking(userDocRef, userData, { merge: true });
         // The useEffect will handle the redirect on user state change
       }
     } catch (error: any) {
@@ -66,6 +79,7 @@ export default function SignupPage() {
         title: "Signup Failed",
         description: error.message || "An unexpected error occurred.",
       });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -79,51 +93,75 @@ export default function SignupPage() {
   }
 
   return (
-    <AuthLayout>
-        <div className="flex flex-col justify-center h-full w-full max-w-sm mx-auto px-4">
-           <div className="text-left mb-10">
-            <h2 className="text-4xl font-bold tracking-tight text-primary">
-              Register
-            </h2>
-          </div>
-          <form onSubmit={handleSignup} className="grid gap-6">
-            <div className="grid gap-2">
-                <Label htmlFor="full-name">Full Name</Label>
-                <Input id="full-name" value={fullName} onChange={(e) => setFullName(e.target.value)} required className="h-12 text-base rounded-full px-6"/>
+    <AuthLayout title="Create Your" subtitle="Account">
+        <form onSubmit={handleSignup} className="space-y-6">
+            <div className="space-y-2">
+                <Label htmlFor="full-name" className="text-primary font-semibold">Full Name</Label>
+                <Input 
+                  id="full-name" 
+                  value={fullName} 
+                  onChange={(e) => setFullName(e.target.value)} 
+                  required 
+                  placeholder="John Smith"
+                  className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-primary font-semibold">Phone or Gmail</Label>
               <Input 
                 id="email" 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-12 text-base rounded-full px-6"
+                placeholder="joydeo@gmail.com"
+                className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input 
-                id="password" 
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="h-12 text-base rounded-full px-6"
-              />
+            <div className="space-y-2">
+              <Label htmlFor="password"  className="text-primary font-semibold">Password</Label>
+              <div className="relative">
+                <Input 
+                  id="password" 
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0 pr-10"
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
             </div>
-            <Button className="w-full h-12 text-base rounded-full mt-6" type="submit" disabled={isLoading}>
-              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Register'}
+             <div className="space-y-2">
+              <Label htmlFor="confirm-password"  className="text-primary font-semibold">Confirm Password</Label>
+              <div className="relative">
+                <Input 
+                  id="confirm-password" 
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0 pr-10"
+                />
+                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
+                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+            </div>
+            <Button className="w-full h-12 text-lg rounded-full font-bold bg-gradient-to-r from-red-600 via-red-700 to-purple-800 text-white mt-8" type="submit" disabled={isLoading}>
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'SIGN UP'}
             </Button>
           </form>
           <p className="mt-8 text-center text-sm text-muted-foreground">
-            Already Member?{' '}
-            <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
-              Login
+            Don't have account?{' '}
+            <Link href="/login" className="font-bold text-primary hover:underline">
+              Sign In
             </Link>
           </p>
-        </div>
     </AuthLayout>
   );
 }

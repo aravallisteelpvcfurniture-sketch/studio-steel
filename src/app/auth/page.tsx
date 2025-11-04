@@ -1,29 +1,32 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { Dumbbell, Instagram, Twitter, Facebook } from 'lucide-react';
 
 export default function AuthPage() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background overflow-hidden p-4">
-        <div className="absolute inset-0 bg-primary opacity-80"></div>
-         <div className="relative z-10 flex flex-col items-center text-center">
-            <Image
-            src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
-            alt="Aravalli Steel PVC"
-            width={120}
-            height={120}
-            className="rounded-full mb-6 border-4 border-white shadow-lg"
-            />
-            <h1 className="text-4xl font-bold tracking-tighter text-white">Aravalli Home Studio</h1>
-            <p className="mt-4 text-lg text-white/90">
-            Crafting steel and PVC furniture for modern living.
-            </p>
-            <div className="mt-12 w-full max-w-xs">
-            <Button asChild size="lg" className="w-full bg-white text-primary h-12 text-lg font-bold hover:bg-white/90">
-                <Link href="/login">Get Started</Link>
-            </Button>
-            </div>
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-red-900 text-white p-4">
+      <div className="flex flex-col items-center justify-center flex-1 text-center">
+        <Dumbbell className="h-16 w-16 mb-4" />
+        <h1 className="text-2xl font-bold tracking-wider">FITNESS CLUB</h1>
+        <p className="mt-8 text-3xl font-bold">Welcome Back</p>
+
+        <div className="w-full max-w-xs mt-12 space-y-4">
+          <Button asChild className="w-full h-12 text-lg font-bold bg-gradient-to-r from-red-600 to-red-800 text-white rounded-full">
+            <Link href="/login">SIGN IN</Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full h-12 text-lg font-bold bg-white text-black rounded-full border-transparent">
+            <Link href="/signup">SIGN UP</Link>
+          </Button>
         </div>
+      </div>
+      <div className="pb-8">
+        <p className="text-sm text-gray-400 mb-4">Login with Social Media</p>
+        <div className="flex justify-center space-x-6">
+          <button className="p-3 bg-white/10 rounded-full"><Instagram className="h-6 w-6" /></button>
+          <button className="p-3 bg-white/10 rounded-full"><Twitter className="h-6 w-6" /></button>
+          <button className="p-3 bg-white/10 rounded-full"><Facebook className="h-6 w-6" /></button>
+        </div>
+      </div>
     </div>
   );
 }

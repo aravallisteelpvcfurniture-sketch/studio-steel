@@ -9,12 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import AuthLayout from '@/components/auth-layout';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const auth = useAuth();
@@ -27,7 +28,7 @@ export default function LoginPage() {
     }
   }, [user, isUserLoading, router]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
         toast({
@@ -39,16 +40,23 @@ export default function LoginPage() {
     }
     setIsLoading(true);
 
-    try {
-      initiateEmailSignIn(auth, email, password);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: error.message || "An unexpected error occurred.",
-      });
-      setIsLoading(false);
-    }
+    initiateEmailSignIn(auth, email, password);
+    // The non-blocking function doesn't throw client-side errors for failed login
+    // We rely on the onAuthStateChanged listener to redirect
+    // For user feedback on failure, Firebase might require handling differently,
+    // as catching errors here won't work for invalid credentials with this setup.
+    // For now, we assume the user will be redirected on success.
+    // A timeout can be added to handle cases where login doesn't complete.
+    setTimeout(() => {
+        if (!auth.currentUser) {
+            setIsLoading(false);
+            toast({
+                variant: "destructive",
+                title: "Login Failed",
+                description: "Invalid email or password. Please try again.",
+            });
+        }
+    }, 3000);
   };
   
   if (isUserLoading || user) {
@@ -60,52 +68,52 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthLayout>
-      <div className="flex flex-col justify-center h-full w-full max-w-sm mx-auto px-4">
-        <div className="text-left mb-10">
-          <h2 className="text-4xl font-bold tracking-tight text-primary">
-            Login
-          </h2>
+    <AuthLayout title="Hello" subtitle="Sign in!">
+      <form onSubmit={handleLogin} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-primary font-semibold">Gmail</Label>
+          <Input 
+            id="email" 
+            type="email" 
+            placeholder="joydeo@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
         </div>
-        <form onSubmit={handleLogin} className="grid gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="h-12 text-base rounded-full px-6"
-            />
-          </div>
-          <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+        <div className="space-y-2">
+          <Label htmlFor="password"  className="text-primary font-semibold">Password</Label>
+          <div className="relative">
             <Input 
               id="password" 
-              type="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="h-12 text-base rounded-full px-6"
+              className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0 pr-10"
             />
-             <div className="flex items-center justify-end mt-1">
-                <Link href="#" className="text-sm font-medium text-primary hover:underline">
-                    Forgot password?
-                </Link>
-            </div>
+            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
           </div>
-          <Button className="w-full h-12 text-base rounded-full mt-6" type="submit" disabled={isLoading}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Login'}
-          </Button>
-        </form>
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          New Here?{' '}
-          <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
-            Register
-          </Link>
-        </p>
-      </div>
+          <div className="flex items-center justify-end text-sm mt-2">
+              <Link href="#" className="font-medium text-muted-foreground hover:text-primary">
+                  Forgot password?
+              </Link>
+          </div>
+        </div>
+        <Button className="w-full h-12 text-lg rounded-full font-bold bg-gradient-to-r from-red-600 via-red-700 to-purple-800 text-white" type="submit" disabled={isLoading}>
+          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'SIGN IN'}
+        </Button>
+      </form>
+      <p className="mt-8 text-center text-sm text-muted-foreground">
+        Don't have account?{' '}
+        <Link href="/signup" className="font-bold text-primary hover:underline">
+          Sign up
+        </Link>
+      </p>
     </AuthLayout>
   );
 }
