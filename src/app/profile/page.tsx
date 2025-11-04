@@ -13,10 +13,10 @@ import { Wave } from "@/components/ui/wave";
 import Link from "next/link";
 
 const menuItems = [
-    { icon: Settings, label: "Settings" },
-    { icon: CreditCard, label: "Billing Details" },
-    { icon: Users, label: "User Management" },
-    { icon: Info, label: "Information" },
+    { icon: Settings, label: "App Settings", href: "/settings" },
+    { icon: CreditCard, label: "Billing Details", href: "/settings" },
+    { icon: Users, label: "User Management", href: "#" },
+    { icon: Info, label: "Information", href: "#" },
 ];
 
 export default function ProfilePage() {
@@ -97,7 +97,7 @@ export default function ProfilePage() {
                 <ul className="space-y-1">
                     {menuItems.map((item) => (
                         <li key={item.label}>
-                            <Link href="#" className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
+                            <Link href={item.href} className="flex items-center p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors">
                                 <item.icon className="h-5 w-5 mr-4 text-primary" />
                                 <span className="flex-1 font-medium">{item.label}</span>
                                 <ChevronRight className="h-5 w-5 text-muted-foreground" />
