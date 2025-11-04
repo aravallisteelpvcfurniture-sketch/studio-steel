@@ -1,22 +1,22 @@
 import type { ReactNode } from 'react';
+import { Wave } from './ui/wave';
 
 type AuthLayoutProps = {
   children: ReactNode;
-  title: string;
-  subtitle: string;
 };
 
-export default function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
+export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-gray-900 via-purple-900 to-red-900 text-white">
-        <div className="flex-shrink-0 px-8 pt-16">
-            <h1 className="text-4xl font-bold">{title}</h1>
-            <h2 className="text-4xl font-bold">{subtitle}</h2>
-        </div>
-        <main className="flex-grow flex flex-col justify-end">
-            <div className="bg-white text-black rounded-t-3xl p-8 mt-8">
-                {children}
+    <div className="relative min-h-screen flex flex-col bg-background">
+        <header className="relative h-56 bg-gradient-to-r from-purple-700 to-fuchsia-600 text-white flex flex-col items-center justify-center text-center p-4">
+            <div className="w-20 h-20 rounded-full bg-white/30 flex items-center justify-center mb-2">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
             </div>
+            <h1 className="text-xl font-bold">UiLover</h1>
+            <Wave className="text-background" />
+        </header>
+        <main className="flex-grow px-6 pb-8">
+            {children}
         </main>
     </div>
   );

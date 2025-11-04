@@ -11,16 +11,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import AuthLayout from "@/components/auth-layout";
 
 export default function SignupPage() {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [dateOfBirth, setDateOfBirth] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const auth = useAuth();
@@ -36,7 +36,7 @@ export default function SignupPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !email || !password) {
+    if (!firstName || !lastName || !userName || !password || !dateOfBirth) {
         toast({
             variant: "destructive",
             title: "Signup Failed",
@@ -44,33 +44,32 @@ export default function SignupPage() {
         });
         return;
     }
-    if (password !== confirmPassword) {
-      toast({
-        variant: "destructive",
-        title: "Signup Failed",
-        description: "Passwords do not match.",
-      });
-      return;
-    }
     setIsLoading(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const fullName = `${firstName} ${lastName}`;
+      const userCredential = await createUserWithEmailAndPassword(auth, `${userName}@example.com`, password); // Using username as email part
       const newUser = userCredential.user;
       
       if (newUser) {
         await updateProfile(newUser, { displayName: fullName });
         const userDocRef = doc(firestore, "users", newUser.uid);
-        const [firstName, ...lastName] = fullName.split(' ');
+        
         const userData = {
           id: newUser.uid,
           email: newUser.email,
           displayName: fullName,
-          firstName: firstName || '',
-          lastName: lastName.join(' ') || '',
+          firstName: firstName,
+          lastName: lastName,
+          userName: userName,
+          dateOfBirth: dateOfBirth,
           signUpDate: serverTimestamp(),
         };
         await setDocumentNonBlocking(userDocRef, userData, { merge: true });
+        toast({
+          title: "Signup Successful",
+          description: "Welcome! You are now logged in.",
+        })
       }
     } catch (error: any) {
       toast({
@@ -92,73 +91,76 @@ export default function SignupPage() {
   }
 
   return (
-    <AuthLayout title="Create Your" subtitle="Account">
-        <form onSubmit={handleSignup} className="space-y-6">
+    <AuthLayout>
+        <h2 className="text-3xl font-bold text-center mb-8">Sign up</h2>
+        <form onSubmit={handleSignup} className="space-y-4">
+            <div className="flex gap-4">
+                <div className="space-y-2 w-1/2">
+                    <Label htmlFor="first-name" className="font-semibold">First Name</Label>
+                    <Input 
+                      id="first-name" 
+                      value={firstName} 
+                      onChange={(e) => setFirstName(e.target.value)} 
+                      required 
+                      placeholder="your FirstName"
+                      className="bg-secondary rounded-lg h-12"
+                    />
+                </div>
+                 <div className="space-y-2 w-1/2">
+                    <Label htmlFor="last-name" className="font-semibold">Last Name</Label>
+                    <Input 
+                      id="last-name" 
+                      value={lastName} 
+                      onChange={(e) => setLastName(e.target.value)} 
+                      required 
+                      placeholder="your lastName"
+                      className="bg-secondary rounded-lg h-12"
+                    />
+                </div>
+            </div>
             <div className="space-y-2">
-                <Label htmlFor="full-name" className="text-primary font-semibold">Full Name</Label>
+                <Label htmlFor="username" className="font-semibold">UserName</Label>
                 <Input 
-                  id="full-name" 
-                  value={fullName} 
-                  onChange={(e) => setFullName(e.target.value)} 
-                  required 
-                  placeholder="John Smith"
-                  className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  id="username"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  required
+                  placeholder="Enter your Username"
+                  className="bg-secondary rounded-lg h-12"
                 />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-primary font-semibold">Phone or Gmail</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="joydeo@gmail.com"
-                className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password"  className="text-primary font-semibold">Password</Label>
-              <div className="relative">
-                <Input 
+              <Label htmlFor="password"  className="font-semibold">Password</Label>
+               <Input 
                   id="password" 
-                  type={showPassword ? 'text' : 'password'}
+                  type='password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="••••••••"
-                  className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0 pr-10"
+                  placeholder="Enter your Password"
+                  className="bg-secondary rounded-lg h-12"
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
             </div>
              <div className="space-y-2">
-              <Label htmlFor="confirm-password"  className="text-primary font-semibold">Confirm Password</Label>
-              <div className="relative">
-                <Input 
-                  id="confirm-password" 
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+              <Label htmlFor="dob" className="font-semibold">Date of birth</Label>
+              <Input 
+                  id="dob" 
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
                   required
-                  placeholder="••••••••"
-                  className="bg-transparent border-0 border-b rounded-none px-1 focus-visible:ring-0 focus-visible:ring-offset-0 pr-10"
+                  placeholder="Enter your date"
+                  className="bg-secondary rounded-lg h-12"
                 />
-                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
-                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
             </div>
-            <Button className="w-full h-12 text-lg rounded-full font-bold bg-gradient-to-r from-red-600 via-red-700 to-purple-800 text-white mt-8" type="submit" disabled={isLoading}>
-              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'SIGN UP'}
+            <Button className="w-full h-12 text-lg rounded-full font-bold bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white mt-4" type="submit" disabled={isLoading}>
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Sign up'}
             </Button>
           </form>
-          <p className="mt-8 text-center text-sm text-muted-foreground">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?{' '}
             <Link href="/login" className="font-bold text-primary hover:underline">
-              Sign In
+              Login
             </Link>
           </p>
     </AuthLayout>
