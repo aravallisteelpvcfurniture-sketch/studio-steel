@@ -33,8 +33,8 @@ async function handleSocialSignIn(auth: Auth, firestore: Firestore, user: User) 
   const userData = {
       id: user.uid,
       email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
+      username: user.displayName, // Using displayName as username
+      mobileNumber: user.phoneNumber, // phoneNumber might be null
   };
   setDocumentNonBlocking(userDocRef, userData, { merge: true });
 }
