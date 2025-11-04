@@ -15,6 +15,7 @@ import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Image from 'next/image';
 
 type CompanyInfo = {
     companyName?: string;
@@ -248,6 +249,7 @@ export default function ProfilePage() {
                                 <Button type="button" variant="outline" onClick={() => qrInputRef.current?.click()}>
                                     <Upload className="mr-2 h-4 w-4" /> Upload
                                 </Button>
+
                                 <Input type="file" ref={qrInputRef} className="hidden" onChange={(e) => handleFileChange(e, 'qrCodeUrl')} accept="image/*" />
                             </div>
                         </div>
@@ -266,3 +268,5 @@ export default function ProfilePage() {
     </AppLayout>
   );
 }
+
+    
