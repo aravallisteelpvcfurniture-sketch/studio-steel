@@ -1,71 +1,10 @@
 {
   "entities": {
-    "User": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "User",
-      "type": "object",
-      "description": "Represents a user account within the Aravalli Home Studio application.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the user, matches Firebase Auth UID."
-        },
-        "email": {
-          "type": "string",
-          "description": "User's email address.",
-          "format": "email"
-        },
-        "firstName": {
-          "type": "string",
-          "description": "User's first name."
-        },
-        "lastName": {
-          "type": "string",
-          "description": "User's last name."
-        },
-        "signUpDate": {
-          "type": "string",
-          "description": "Date and time when the user signed up.",
-          "format": "date-time"
-        },
-        "companyInfo": {
-          "type": "object",
-          "description": "Company information for use in greetings posters.",
-          "properties": {
-             "companyName": {
-              "type": "string",
-              "description": "Company name to display on the poster."
-            },
-            "logoUrl": {
-              "type": "string",
-              "description": "URL for the company logo to be displayed on the poster.",
-              "format": "uri"
-            },
-            "mobile": {
-              "type": "string",
-              "description": "Contact mobile number."
-            },
-            "email": {
-              "type": "string",
-              "description": "Contact email address.",
-              "format": "email"
-            }
-          }
-        }
-      },
-      "required": [
-        "id",
-        "email",
-        "firstName",
-        "lastName",
-        "signUpDate"
-      ]
-    },
     "Product": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Product",
       "type": "object",
-      "description": "Represents a product offered by Aravalli Steel PVC Furniture.",
+      "description": "Represents a furniture product offered by Aravalli Home Studio.",
       "properties": {
         "id": {
           "type": "string",
@@ -88,6 +27,10 @@
           "description": "URL of the product image.",
           "format": "uri"
         },
+        "material": {
+          "type": "string",
+          "description": "The material the product is made of (e.g., steel, PVC)."
+        },
         "category": {
           "type": "string",
           "description": "Category of the product (e.g., chair, table)."
@@ -99,14 +42,46 @@
         "description",
         "price",
         "imageUrl",
+        "material",
         "category"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the Aravalli Home Studio application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user.",
+          "format": "email"
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email"
       ]
     },
     "Order": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Order",
       "type": "object",
-      "description": "Represents a customer order.",
+      "description": "Represents an order placed by a user.",
       "properties": {
         "id": {
           "type": "string",
@@ -118,7 +93,7 @@
         },
         "orderDate": {
           "type": "string",
-          "description": "Date and time when the order was placed.",
+          "description": "Date when the order was placed.",
           "format": "date-time"
         },
         "totalAmount": {
@@ -127,7 +102,7 @@
         },
         "status": {
           "type": "string",
-          "description": "Status of the order (e.g., pending, processing, completed)."
+          "description": "Status of the order (e.g., pending, processing, shipped, delivered)."
         }
       },
       "required": [
@@ -160,9 +135,9 @@
           "type": "number",
           "description": "Quantity of the product in the order item."
         },
-        "itemPrice": {
+        "price": {
           "type": "number",
-          "description": "Price of the item at the time of the order."
+          "description": "Price of the product for this order item."
         }
       },
       "required": [
@@ -170,204 +145,101 @@
         "orderId",
         "productId",
         "quantity",
-        "itemPrice"
+        "price"
       ]
     },
-    "ProductCustomization": {
+    "VisitorGreeting": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ProductCustomization",
+      "title": "VisitorGreeting",
       "type": "object",
-      "description": "Stores user-defined customizations for a product",
+      "description": "Represents a greeting message for visitors.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the customization."
+          "description": "Unique identifier for the visitor greeting."
+        },
+        "message": {
+          "type": "string",
+          "description": "The greeting message to display."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of visitor greeting (e.g., new visitor, returning visitor)."
+        }
+      },
+      "required": [
+        "id",
+        "message",
+        "type"
+      ]
+    },
+    "Recommendation": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Recommendation",
+      "type": "object",
+      "description": "Represents a product recommendation for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the recommendation."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Recommendation)"
         },
         "productId": {
           "type": "string",
-          "description": "Reference to the Product being customized."
+          "description": "Reference to Product. (Relationship: Product 1:N Recommendation)"
         },
-        "userId": {
+        "reason": {
           "type": "string",
-          "description": "Reference to the User that created the customization."
-        },
-        "material": {
-          "type": "string",
-          "description": "Chosen material for the product (e.g., steel, PVC)."
-        },
-        "color": {
-          "type": "string",
-          "description": "Chosen color for the product."
-        },
-        "dimensions": {
-          "type": "string",
-          "description": "Chosen dimensions for the product."
+          "description": "The reason for the product recommendation."
         }
       },
       "required": [
         "id",
+        "userId",
         "productId",
-        "userId",
-        "material",
-        "color",
-        "dimensions"
-      ]
-    },
-    "ChatSession": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ChatSession",
-      "type": "object",
-      "description": "Represents a single chat conversation between a user and support.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the chat session."
-        },
-        "userId": {
-          "type": "string",
-          "description": "The ID of the user who initiated the chat."
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp when the chat session was created."
-        },
-        "lastMessage": {
-          "type": "string",
-          "description": "The text of the last message sent in the session."
-        }
-      },
-      "required": [
-        "id",
-        "userId",
-        "createdAt"
-      ]
-    },
-    "ChatMessage": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ChatMessage",
-      "type": "object",
-      "description": "Represents a single message within a chat session.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the message."
-        },
-        "sessionId": {
-          "type": "string",
-          "description": "The ID of the chat session this message belongs to."
-        },
-        "senderId": {
-          "type": "string",
-          "description": "The ID of the user or support agent who sent the message."
-        },
-        "senderType": {
-          "type": "string",
-          "enum": [
-            "user",
-            "support"
-          ],
-          "description": "Indicates if the sender is a user or a support agent."
-        },
-        "text": {
-          "type": "string",
-          "description": "The content of the chat message."
-        },
-        "timestamp": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp when the message was sent."
-        }
-      },
-      "required": [
-        "id",
-        "sessionId",
-        "senderId",
-        "senderType",
-        "text",
-        "timestamp"
-      ]
-    },
-    "Party": {
-      "title": "Party",
-      "type": "object",
-      "description": "Represents a party or client for estimates.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the party."
-        },
-        "userId": {
-          "type": "string",
-          "description": "The ID of the user who added this party."
-        },
-        "partyName": {
-          "type": "string",
-          "description": "Name of the party."
-        },
-        "mobile": {
-          "type": "string",
-          "description": "Mobile number of the party."
-        },
-        "email": {
-          "type": "string",
-          "description": "Email address of the party.",
-          "format": "email"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp when the party was added."
-        }
-      },
-      "required": [
-        "id",
-        "userId",
-        "partyName",
-        "mobile",
-        "createdAt"
+        "reason"
       ]
     }
   },
   "auth": {
     "providers": [
       "password",
-      "anonymous",
-      "google",
-      "twitter",
-      "facebook"
+      "anonymous"
     ]
   },
   "firestore": {
     "structure": [
       {
-        "path": "/users/{userId}",
+        "path": "/products/{productId}",
         "definition": {
-          "entityName": "User",
+          "entityName": "Product",
           "schema": {
-            "$ref": "#/entities/User"
+            "$ref": "#/backend/entities/Product"
           },
-          "description": "Stores user profile information. Accessible only by the user themselves.",
+          "description": "Stores product information. Accessible to all users for reading.",
           "params": [
             {
-              "name": "userId",
-              "description": "The unique identifier for the user."
+              "name": "productId",
+              "description": "Unique identifier for the product."
             }
           ]
         }
       },
       {
-        "path": "/products/{productId}",
+        "path": "/users/{userId}",
         "definition": {
-          "entityName": "Product",
+          "entityName": "User",
           "schema": {
-            "$ref": "#/entities/Product"
+            "$ref": "#/backend/entities/User"
           },
-          "description": "Stores product details. Publicly accessible for reading.",
+          "description": "Stores user profile data. Only the user can read/write their own data.",
           "params": [
             {
-              "name": "productId",
-              "description": "The unique identifier for the product."
+              "name": "userId",
+              "description": "Unique identifier for the user, matching Firebase auth UID."
             }
           ]
         }
@@ -377,131 +249,78 @@
         "definition": {
           "entityName": "Order",
           "schema": {
-            "$ref": "#/entities/Order"
+            "$ref": "#/backend/entities/Order"
           },
-          "description": "Stores order information for a specific user. Accessible only by the user themselves.",
+          "description": "Stores orders placed by a user. Only the user can access their own orders.",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier for the user."
+              "description": "Unique identifier for the user, matching Firebase auth UID."
             },
             {
               "name": "orderId",
-              "description": "The unique identifier for the order."
+              "description": "Unique identifier for the order."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/orders/{orderId}/order_items/{orderItemId}",
+        "path": "/orders/{orderId}/orderItems/{orderItemId}",
         "definition": {
           "entityName": "OrderItem",
           "schema": {
-            "$ref": "#/entities/OrderItem"
+            "$ref": "#/backend/entities/OrderItem"
           },
-          "description": "Stores order items within a specific order for a user. Accessible only by the user themselves.",
+          "description": "Stores order items associated with a specific order. Accessible only with a valid orderId.",
           "params": [
             {
-              "name": "userId",
-              "description": "The unique identifier for the user."
-            },
-            {
               "name": "orderId",
-              "description": "The unique identifier for the order."
+              "description": "Unique identifier for the order."
             },
             {
               "name": "orderItemId",
-              "description": "The unique identifier for the order item."
+              "description": "Unique identifier for the order item."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/product_customizations/{productCustomizationId}",
+        "path": "/visitorGreetings/{greetingId}",
         "definition": {
-          "entityName": "ProductCustomization",
+          "entityName": "VisitorGreeting",
           "schema": {
-            "$ref": "#/entities/ProductCustomization"
+            "$ref": "#/backend/entities/VisitorGreeting"
           },
-          "description": "Stores product customizations made by a specific user. Accessible only by the user themselves.",
+          "description": "Stores greeting messages for visitors. Accessible to all users for reading.",
           "params": [
             {
-              "name": "userId",
-              "description": "The unique identifier for the user."
-            },
-            {
-              "name": "productCustomizationId",
-              "description": "The unique identifier for the product customization."
+              "name": "greetingId",
+              "description": "Unique identifier for the visitor greeting."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/chatSessions/{chatSessionId}",
+        "path": "/users/{userId}/recommendations/{recommendationId}",
         "definition": {
-          "entityName": "ChatSession",
+          "entityName": "Recommendation",
           "schema": {
-            "$ref": "#/entities/ChatSession"
+            "$ref": "#/backend/entities/Recommendation"
           },
-          "description": "Stores chat sessions for a specific user.",
+          "description": "Stores product recommendations for a user. Only the user can access their own recommendations.",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier for the user."
+              "description": "Unique identifier for the user."
             },
             {
-              "name": "chatSessionId",
-              "description": "The unique identifier for the chat session."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/chatSessions/{chatSessionId}/messages/{messageId}",
-        "definition": {
-          "entityName": "ChatMessage",
-          "schema": {
-            "$ref": "#/entities/ChatMessage"
-          },
-          "description": "Stores messages within a specific chat session for a user.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier for the user."
-            },
-            {
-              "name": "chatSessionId",
-              "description": "The unique identifier for the chat session."
-            },
-            {
-              "name": "messageId",
-              "description": "The unique identifier for the chat message."
-            }
-          ]
-        }
-      },
-       {
-        "path": "/users/{userId}/parties/{partyId}",
-        "definition": {
-          "entityName": "Party",
-          "schema": {
-            "$ref": "#/entities/Party"
-          },
-          "description": "Stores party details for a specific user.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier for the user."
-            },
-            {
-              "name": "partyId",
-              "description": "The unique identifier for the party."
+              "name": "recommendationId",
+              "description": "Unique identifier for the recommendation."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and support secure list operations (QAPs). User data is stored under `/users/{userId}`. Products are stored in a top-level `/products` collection. Orders are stored in `/users/{userId}/orders/{orderId}`, reflecting the user-order relationship. Order items are stored in `/users/{userId}/orders/{orderId}/order_items/{orderItemId}` to maintain hierarchy. ProductCustomization is stored under `/users/{userId}/product_customizations/{productCustomizationId}`. Visitor greetings are stored in a global `/visitor_greetings` collection. Chat sessions and messages are nested under the user to ensure only the user and authorized support can access them. Parties are stored under `/users/{userId}/parties/{partyId}` so each user can only access their own parties. This design uses path-based ownership for user-related data and segregates data with different access needs into separate collections."
+    "reasoning": "The Firestore structure is designed to provide a secure, scalable, and easily maintainable backend for the Aravalli Home Studio application. The structure prioritizes authorization independence through denormalization and structural segregation to ensure security and simplify rules. Path-based ownership is used where appropriate, and membership maps are utilized for collaborative data access.\n\n*   **Authorization Independence:** User ownership is enforced using hierarchical paths (e.g., `/users/{userId}/orders/{orderId}`). No `get()` calls are needed in security rules to validate ownership.\n\n*   **Structural Segregation:** Each top-level collection serves a specific purpose, ensuring documents within a collection have similar access control requirements.\n\n*   **QAPs (Rules are not Filters):**  The structure enables secure `list` operations. For example, only the user who owns an order can list their orders by querying the `/users/{userId}/orders` collection. Publicly accessible data, such as products and visitor greetings, resides in separate collections that can be read by anyone.\n\n*   **DBAC (No Custom Claims):** User roles are managed through the Firebase Authentication system and user IDs (`request.auth.uid`) are used to validate access in the security rules.\n\nThe error reported in the console `FirebaseError: Firebase: Error (auth/operation-not-allowed)` suggests an issue with Firebase Authentication configuration. Ensure that the 'password' and 'anonymous' providers are enabled in the Firebase Console under Authentication > Sign-in method. Also, verify that there are no restrictions enabled that are preventing the operation."
   }
 }
-    
