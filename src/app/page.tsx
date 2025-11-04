@@ -9,6 +9,7 @@ import { Mailbox, Map, MessageSquare, BarChart, Calendar, BookOpen, Settings, Mo
 import NextImage from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Wave } from '@/components/ui/wave';
+import AppLayout from '@/components/app-layout';
 
 const featureButtons = [
   { href: "#", icon: Mailbox, label: "Inbox" },
@@ -25,59 +26,61 @@ export default function DashboardPage() {
   const { user } = useUser();
 
   return (
-    <div className="bg-background min-h-screen">
-      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-start pt-6">
-        <div className="absolute top-6 right-6">
-            <Bell className="h-8 w-8 text-foreground" />
-        </div>
-        <div>
-            <h1 className="text-3xl font-archivo-black font-bold text-foreground">Welcome</h1>
-        </div>
-        <Wave className="text-background" />
-      </header>
-      
-      <main className="p-6 space-y-6 -mt-24 z-10 relative">
-          <Card className='shadow-lg border-none'>
-            <CardContent className='p-4 bg-cyan-100 dark:bg-cyan-900/50 rounded-lg flex items-center justify-between'>
-                <div>
-                    <p className='text-sm font-medium text-cyan-800 dark:text-cyan-200'>Until 20 April - 30 May</p>
-                    <p className='text-3xl font-bold text-cyan-900 dark:text-cyan-100'>30%</p>
-                    <p className='text-lg font-semibold text-cyan-800 dark:text-cyan-200'>Discount</p>
-                </div>
-                 <div className="w-24 h-24 relative">
-                     <NextImage
-                        src="https://i.ibb.co/RPd7cZ8/undraw-books-re-8ptw-1.png"
-                        alt="Discount illustration"
-                        width={96}
-                        height={96}
-                        className="object-contain"
-                    />
-                 </div>
-            </CardContent>
-          </Card>
-          
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input 
-                placeholder="Search For..."
-                className="w-full rounded-full bg-card pl-10 h-12 shadow-sm border"
-            />
+    <AppLayout>
+      <div className="bg-background min-h-screen">
+        <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-start pt-6">
+          <div className="absolute top-6 right-6">
+              <Bell className="h-8 w-8 text-foreground" />
           </div>
-
           <div>
-            <h2 className="text-xl font-bold text-foreground mb-4">What do you need?</h2>
-            <div className="grid grid-cols-4 gap-4">
-              {featureButtons.map((feature) => (
-                <Link href={feature.href} key={feature.label} className="flex flex-col items-center gap-2 text-center">
-                    <div className="w-16 h-16 bg-cyan-100 dark:bg-cyan-900/50 rounded-2xl flex items-center justify-center">
-                         <feature.icon className="h-8 w-8 text-cyan-600 dark:text-cyan-400" strokeWidth={1.5} />
-                    </div>
-                  <span className="text-sm font-medium text-muted-foreground">{feature.label}</span>
-                </Link>
-              ))}
-            </div>
+              <h1 className="text-3xl font-archivo-black font-bold text-foreground">Welcome</h1>
           </div>
-      </main>
-    </div>
+          <Wave className="text-background" />
+        </header>
+        
+        <main className="p-6 space-y-6 -mt-24 z-10 relative">
+            <Card className='shadow-lg border-none'>
+              <CardContent className='p-4 bg-cyan-100 dark:bg-cyan-900/50 rounded-lg flex items-center justify-between'>
+                  <div>
+                      <p className='text-sm font-medium text-cyan-800 dark:text-cyan-200'>Until 20 April - 30 May</p>
+                      <p className='text-3xl font-bold text-cyan-900 dark:text-cyan-100'>30%</p>
+                      <p className='text-lg font-semibold text-cyan-800 dark:text-cyan-200'>Discount</p>
+                  </div>
+                   <div className="w-24 h-24 relative">
+                       <NextImage
+                          src="https://i.ibb.co/RPd7cZ8/undraw-books-re-8ptw-1.png"
+                          alt="Discount illustration"
+                          width={96}
+                          height={96}
+                          className="object-contain"
+                      />
+                   </div>
+              </CardContent>
+            </Card>
+            
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                  placeholder="Search For..."
+                  className="w-full rounded-full bg-card pl-10 h-12 shadow-sm border"
+              />
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-4">What do you need?</h2>
+              <div className="grid grid-cols-4 gap-4">
+                {featureButtons.map((feature) => (
+                  <Link href={feature.href} key={feature.label} className="flex flex-col items-center gap-2 text-center">
+                      <div className="w-16 h-16 bg-cyan-100 dark:bg-cyan-900/50 rounded-2xl flex items-center justify-center">
+                           <feature.icon className="h-8 w-8 text-cyan-600 dark:text-cyan-400" strokeWidth={1.5} />
+                      </div>
+                    <span className="text-sm font-medium text-muted-foreground">{feature.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+        </main>
+      </div>
+    </AppLayout>
   );
 }

@@ -30,10 +30,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
     );
   }
   
-  // Don't render the main layout on the dashboard page
-  if (pathname === '/') {
-    return <>{children}</>;
-  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
