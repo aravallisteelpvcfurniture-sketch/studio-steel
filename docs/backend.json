@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Product": {
@@ -59,6 +60,10 @@
         "username": {
           "type": "string",
           "description": "Username of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the user."
         },
         "email": {
           "type": "string",

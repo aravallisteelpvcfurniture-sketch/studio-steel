@@ -2,11 +2,11 @@
 'use client';
 
 import AppLayout from "@/components/app-layout";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User as UserIcon, LogOut, Loader2, Settings, CreditCard, Users, Info, ChevronRight, ArrowLeft } from "lucide-react";
+import { LogOut, Loader2, Settings, CreditCard, Users, Info, ChevronRight, ArrowLeft } from "lucide-react";
 import { useAuth, useUser } from "@/firebase";
 import { useRouter } from 'next/navigation';
 import { Wave } from "@/components/ui/wave";
@@ -66,13 +66,11 @@ export default function ProfilePage() {
       <div className="bg-background min-h-screen">
         <header className="relative bg-primary h-48 text-primary-foreground p-6 flex flex-col justify-start">
             <div className="flex items-center justify-between z-10">
-                <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                <Button variant="ghost" size="icon" onClick={() => router.back()} className="hover:bg-primary/80">
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
-                <h1 className="text-xl font-bold">Profile</h1>
-                <Button variant="ghost" size="icon">
-                    {/* Placeholder for menu icon */}
-                </Button>
+                <h1 className="text-xl font-bold text-foreground">Profile</h1>
+                <div className="w-9 h-9"></div>
             </div>
             <Wave className="text-background" />
         </header>
@@ -82,14 +80,16 @@ export default function ProfilePage() {
                  <Avatar className="h-28 w-28 border-4 border-background shadow-lg">
                     <AvatarImage src={user.photoURL || ''} alt={user.displayName || user.email || ''} />
                     <AvatarFallback className="text-4xl bg-muted">
-                        {getInitials(user.displayName) || getInitials(user.email)}
+                        {getInitials(user.displayName)}
                     </AvatarFallback>
                 </Avatar>
                 <div className="text-center">
                     <h2 className="text-2xl font-bold">{user.displayName || 'User'}</h2>
                     <p className="text-muted-foreground">@{user.email?.split('@')[0] || 'username'}</p>
                 </div>
-                 <Button className="rounded-full mt-2">Edit Profile</Button>
+                 <Button asChild className="rounded-full mt-2">
+                    <Link href="/profile/edit">Edit Profile</Link>
+                </Button>
             </div>
             
             <Card>
