@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-start pt-12">
+      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-start pt-6">
         <div className="absolute top-6 right-6">
             <Link href="/profile">
                 <Avatar className="h-12 w-12 border-2 border-white/50">
@@ -42,14 +42,14 @@ export default function DashboardPage() {
                 </Avatar>
             </Link>
         </div>
-        <div className="text-left">
-            <h1 className="text-3xl font-bold">Welcome,</h1>
-            <p className="text-lg">{getFirstName()}</p>
+        <div className="text-center">
+            <h1 className="text-3xl font-bold text-foreground">Welcome,</h1>
+            <p className="text-lg text-foreground">{getFirstName()}</p>
         </div>
         <Wave className="text-background" />
       </header>
       
-      <main className="p-6 space-y-6 -mt-16 z-10 relative">
+      <main className="p-6 space-y-6 -mt-24 z-10 relative">
           <Card className='shadow-lg border-none'>
             <CardContent className='p-4 bg-cyan-100 dark:bg-cyan-900/50 rounded-lg flex items-center justify-between'>
                 <div>
