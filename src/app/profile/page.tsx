@@ -9,7 +9,7 @@ import { useAuth, useUser, setDocumentNonBlocking, useMemoFirebase, useFirestore
 import { uploadFile } from '@/firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Loader2, Building, Upload, QrCode, Landmark } from 'lucide-react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -63,23 +63,6 @@ export default function ProfilePage() {
         return doc(firestore, 'users', user.uid);
     }, [firestore, user]);
     
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (userProfileRef) {
-                setIsLoadingData(true);
-                const docSnap = await getDoc(userProfileRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data() as UserProfileData;
-                    setCompanyInfo(data.companyInfo || {});
-                    setBankDetails(data.bankDetails || {});
-                    setUpiDetails(data.upiDetails || {});
-                }
-                setIsLoadingData(false);
-            }
-        };
-        fetchUserData();
-    }, [userProfileRef]);
-
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>, field: 'logoUrl' | 'qrCodeUrl') => {
         if (!storage || !user) return;
@@ -123,9 +106,9 @@ export default function ProfilePage() {
         }
     }
     
-    if (isUserLoading || isLoadingData) {
+    if (isUserLoading) {
         return (
-            <div className="flex h-full items-center justify-center">
+            <div className="flex h-full items-center justify-center pt-24">
                 <Loader2 className="h-8 w-8 animate-spin" />
             </div>
         );
@@ -133,7 +116,7 @@ export default function ProfilePage() {
 
     if (!user) {
         return (
-            <div className="p-4 md:p-8 text-center">
+            <div className="p-4 md:p-8 text-center pt-24">
                  <p>You must be logged in to view this page.</p>
                  <Button onClick={() => router.push('/login')} className="mt-4">Go to Login</Button>
             </div>

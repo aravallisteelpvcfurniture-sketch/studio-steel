@@ -12,6 +12,7 @@ import { Wave } from './ui/wave';
 import { Skeleton } from './ui/skeleton';
 
 const AUTH_PATHNAMES = ['/login', '/signup'];
+const GRADIENT_HEADER_PAGES = ['/', '/profile'];
 
 const MainAppHeader = () => {
     const { user, isUserLoading } = useUser({ disableRedirect: true });
@@ -34,7 +35,7 @@ const MainAppHeader = () => {
     return (
         <div className="p-6 flex justify-between items-center">
             <div>
-                <p className="text-muted-foreground font-medium">Good morning</p>
+                <p className="text-muted-foreground font-medium">Welcome</p>
                 <h1 className="text-2xl font-bold text-foreground truncate max-w-[200px]">{user.displayName || 'User'}</h1>
             </div>
              <Avatar className="h-14 w-14 border-2 border-background shadow-md" onClick={() => router.push('/profile')}>
@@ -55,7 +56,7 @@ export default function Header() {
   const pathname = usePathname();
 
   const isAuthPage = AUTH_PATHNAMES.includes(pathname);
-  const isHomePage = pathname === '/';
+  const isGradientHeaderPage = GRADIENT_HEADER_PAGES.includes(pathname);
 
   if (isAuthPage) {
     return null;
@@ -64,9 +65,9 @@ export default function Header() {
   return (
     <header className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-all",
-        isHomePage ? 'bg-gradient-to-r from-purple-600 to-fuchsia-500 text-primary-foreground' : 'bg-background/95 backdrop-blur-sm border-b'
+        isGradientHeaderPage ? 'bg-gradient-to-r from-purple-600 to-fuchsia-500 text-primary-foreground' : 'bg-background/95 backdrop-blur-sm border-b'
     )}>
-        {isHomePage ? (
+        {isGradientHeaderPage ? (
             <div className="relative">
                 <MainAppHeader />
                 <Wave className="text-background" />
