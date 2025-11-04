@@ -95,7 +95,7 @@ export default function LoginPage() {
                             required 
                         />
                     </div>
-                     <Button type="submit" className="w-full bg-gradient-to-r from-red-500 to-purple-600 text-white">
+                     <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
                         Sign In
                     </Button>
                 </form>

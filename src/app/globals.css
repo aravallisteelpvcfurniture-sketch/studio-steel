@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 220 20% 96%; /* Light grey background */
+    --background: 220 30% 98%; /* Lighter grey-blue background */
     --foreground: 240 10% 3.9%;
     
     --card: 0 0% 100%;
@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 300 50% 45%; /* Purple/Magenta */
+    --primary: 220 80% 50%; /* Deep Blue */
     --primary-foreground: 0 0% 98%;
     
     --secondary: 220 9% 91%;
@@ -30,7 +30,7 @@
     
     --border: 220 13% 89%;
     --input: 220 13% 89%;
-    --ring: 300 50% 45%;
+    --ring: 220 80% 50%;
     --radius: 0.75rem;
   }
  
@@ -44,7 +44,7 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
     
-    --primary: 300 50% 55%;
+    --primary: 220 80% 60%;
     --primary-foreground: 0 0% 98%;
     
     --secondary: 240 3.7% 15.9%;
@@ -61,7 +61,7 @@
     
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 300 50% 55%;
+    --ring: 220 80% 60%;
   }
 }
 
