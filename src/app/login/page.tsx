@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth, useUser } from '@/firebase';
-import { initiateEmailSignIn } from '@/firebase/non-blocking-login';
+import { useAuth, useUser, useFirestore } from '@/firebase';
+import { initiateEmailSignIn, initiateGoogleSignIn, initiateTwitterSignIn, initiateFacebookSignIn } from '@/firebase/non-blocking-login';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,6 @@ import Link from "next/link";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Facebook, Twitter } from 'lucide-react';
 import AuthLayout from '@/components/auth-layout';
-import Image from 'next/image';
 
 const GoogleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
@@ -28,6 +27,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
 
@@ -51,6 +51,7 @@ export default function LoginPage() {
 
     initiateEmailSignIn(auth, email, password);
     
+    // This is a fallback for displaying an error if Firebase takes too long or fails silently
     setTimeout(() => {
         if (!auth?.currentUser) {
             setIsLoading(false);
@@ -61,6 +62,16 @@ export default function LoginPage() {
             });
         }
     }, 3000);
+  };
+
+  const handleGoogleLogin = () => {
+    if (auth && firestore) initiateGoogleSignIn(auth, firestore);
+  };
+  const handleTwitterLogin = () => {
+    if (auth && firestore) initiateTwitterSignIn(auth, firestore);
+  };
+  const handleFacebookLogin = () => {
+    if (auth && firestore) initiateFacebookSignIn(auth, firestore);
   };
   
   if (isUserLoading || user) {
@@ -109,9 +120,9 @@ export default function LoginPage() {
         </div>
 
         <div className="flex justify-center space-x-4">
-            <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2"><GoogleIcon /></Button>
-            <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2"><Twitter className="text-sky-500" /></Button>
-            <Button variant="outline" size-="icon" className="rounded-full h-12 w-12 border-2"><Facebook className="text-blue-600" /></Button>
+            <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2" onClick={handleGoogleLogin}><GoogleIcon /></Button>
+            <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2" onClick={handleTwitterLogin}><Twitter className="text-sky-500" /></Button>
+            <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2" onClick={handleFacebookLogin}><Facebook className="text-blue-600" /></Button>
         </div>
         
         <p className="mt-8 text-center text-sm text-muted-foreground">

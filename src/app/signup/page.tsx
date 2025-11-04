@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth, useUser, setDocumentNonBlocking } from "@/firebase";
+import { useAuth, useUser, setDocument } from "@/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp } from "firebase/firestore";
 import { useFirestore } from "@/firebase/provider";
@@ -36,6 +36,8 @@ export default function SignupPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!auth || !firestore) return;
+    
     if (!firstName || !lastName || !userName || !password || !dateOfBirth) {
         toast({
             variant: "destructive",
@@ -48,7 +50,9 @@ export default function SignupPage() {
 
     try {
       const fullName = `${firstName} ${lastName}`;
-      const userCredential = await createUserWithEmailAndPassword(auth, `${userName}@example.com`, password); // Using username as email part
+      // Note: Using a dummy domain for email because Firebase Auth requires a valid email format.
+      // The actual unique identifier for login will be the username via your app logic.
+      const userCredential = await createUserWithEmailAndPassword(auth, `${userName}@example.com`, password); 
       const newUser = userCredential.user;
       
       if (newUser) {
@@ -65,17 +69,26 @@ export default function SignupPage() {
           dateOfBirth: dateOfBirth,
           signUpDate: serverTimestamp(),
         };
-        await setDocumentNonBlocking(userDocRef, userData, { merge: true });
+        await setDocument(userDocRef, userData, { merge: true });
         toast({
           title: "Signup Successful",
           description: "Welcome! You are now logged in.",
         })
+        router.push('/');
       }
     } catch (error: any) {
+      let errorMessage = "An unexpected error occurred.";
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = "This username is already taken. Please choose another one.";
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = "Password is too weak. It should be at least 6 characters long.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
       toast({
         variant: "destructive",
         title: "Signup Failed",
-        description: error.message || "An unexpected error occurred.",
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
