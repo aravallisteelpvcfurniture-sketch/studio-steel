@@ -5,25 +5,30 @@ import { useEffect } from 'react';
 import { useUser } from '@/firebase';
 import AppLayout from "@/components/app-layout";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import placeholderImages from '@/lib/placeholder-images.json';
-import Autoplay from "embla-carousel-autoplay";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ClipboardList, Handshake, Users, ClipboardCheck, Calculator, Video, GalleryVertical, Tag, BookOpen, Megaphone, ArrowRight } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Search, Mailbox, Map, MessageSquare, BarChart2, Calendar, Book, Settings, Grid } from 'lucide-react';
+import { Wave } from '@/components/ui/wave';
+import { Input } from '@/components/ui/input';
+
+const featureButtons = [
+  { href: "/estimate", icon: Mailbox, label: "Inbox", color: "bg-pink-100 dark:bg-pink-900/50", textColor: "text-pink-600 dark:text-pink-300" },
+  { href: "/gallery", icon: Map, label: "Maps", color: "bg-blue-100 dark:bg-blue-900/50", textColor: "text-blue-600 dark:text-blue-300" },
+  { href: "/help-chat", icon: MessageSquare, label: "Chats", color: "bg-green-100 dark:bg-green-900/50", textColor: "text-green-600 dark:text-green-300" },
+  { href: "#", icon: BarChart2, label: "Report", color: "bg-yellow-100 dark:bg-yellow-900/50", textColor: "text-yellow-600 dark:text-yellow-300" },
+  { href: "#", icon: Calendar, label: "Calendar", color: "bg-purple-100 dark:bg-purple-900/50", textColor: "text-purple-600 dark:text-purple-300" },
+  { href: "#", icon: Book, label: "Tips", color: "bg-indigo-100 dark:bg-indigo-900/50", textColor: "text-indigo-600 dark:text-indigo-300" },
+  { href: "/settings", icon: Settings, label: "Settings", color: "bg-red-100 dark:bg-red-900/50", textColor: "text-red-600 dark:text-red-300" },
+  { href: "/more", icon: Grid, label: "More", color: "bg-teal-100 dark:bg-teal-900/50", textColor: "text-teal-600 dark:text-teal-300" },
+];
 
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
   const router = useRouter();
-
-  const sliderImages = [
-    placeholderImages.heroSlider1,
-    placeholderImages.heroSlider2,
-    placeholderImages.heroSlider3,
-  ];
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -33,130 +38,72 @@ export default function DashboardPage() {
 
   if (isUserLoading || !user) {
     return (
-      <AppLayout>
-        <div className="flex-1 p-4 md:p-6">
+      <div className="flex flex-1 items-center justify-center min-h-screen bg-background">
           <Skeleton className="h-full w-full" />
-        </div>
-      </AppLayout>
+      </div>
     );
   }
 
   return (
-    <AppLayout>
-      <div className="flex-1 p-4 md:p-6 space-y-6 pb-24">
-        <Carousel
-          className="w-full"
-          plugins={[
-            Autoplay({
-              delay: 4000,
-              stopOnInteraction: true,
-            }),
-          ]}
-          opts={{
-            loop: true,
-          }}
-        >
-          <CarouselContent>
-            {sliderImages.map((image, index) => (
-              <CarouselItem key={index}>
-                <Card>
-                  <CardContent className="flex aspect-[16/7] items-center justify-center p-0 overflow-hidden rounded-lg">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      width={image.width}
-                      height={image.height}
-                      className="w-full h-full object-cover"
-                      data-ai-hint={image['data-ai-hint']}
-                      priority={index === 0}
-                    />
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="ml-16" />
-          <CarouselNext className="mr-16" />
-        </Carousel>
-
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-            <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#2563EB' }}>
-                <Link href="/estimate">
-                    <ClipboardList className="h-6 w-6" />
-                    <span>Estimate</span>
-                </Link>
-            </Button>
-             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#D97706' }}>
-                <Link href="/greetings">
-                    <Handshake className="h-6 w-6" />
-                    <span>Greetings</span>
-                </Link>
-            </Button>
-             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#059669' }}>
-                <Link href="#">
-                    <Users className="h-6 w-6" />
-                    <span>Visitors</span>
-                </Link>
-            </Button>
-            <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#be123c' }}>
-                <Link href="#">
-                    <ClipboardCheck className="h-6 w-6" />
-                    <span>Order Confirm</span>
-                </Link>
-            </Button>
-            <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#8b5cf6' }}>
-                <Link href="/stairs-estimate">
-                    <Calculator className="h-6 w-6" />
-                    <span>Stairs Est</span>
-                </Link>
-            </Button>
-            <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#db2777' }}>
-                <Link href="/reels">
-                    <Video className="h-6 w-6" />
-                    <span>Video/Reels</span>
-                </Link>
-            </Button>
-             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#4f46e5' }}>
-                <Link href="/gallery">
-                    <GalleryVertical className="h-6 w-6" />
-                    <span>Gallery</span>
-                </Link>
-            </Button>
-             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#e11d48' }}>
-                <Link href="#">
-                    <Tag className="h-6 w-6" />
-                    <span>Offer</span>
-                </Link>
-            </Button>
-             <Button asChild className="h-24 flex-col gap-2 text-sm font-semibold" style={{ backgroundColor: '#2563eb' }}>
-                <Link href="/products">
-                    <BookOpen className="h-6 w-6" />
-                    <span>Catalog</span>
-                </Link>
-            </Button>
+    <div className="bg-muted min-h-screen">
+      <header className="relative bg-primary h-48 text-primary-foreground p-6">
+        <div className="flex justify-between items-start">
+            <div className="space-y-1">
+                <h1 className="text-2xl font-bold">Good morning {user.displayName?.split(' ')[0] || 'Alex'}</h1>
+            </div>
+            <Avatar className="h-12 w-12 border-2 border-white">
+                <AvatarImage src={user.photoURL || `https://i.pravatar.cc/150?u=${user.uid}`} alt={user.displayName || ''} />
+                <AvatarFallback>{user.displayName?.charAt(0) || 'A'}</AvatarFallback>
+            </Avatar>
         </div>
-
-        <Card className="relative overflow-hidden rounded-lg">
-          <Image
-            src="https://picsum.photos/seed/feature-banner/1200/350"
-            alt="New feature announcement banner"
-            width={1200}
-            height={350}
-            className="w-full h-auto object-cover"
-            data-ai-hint="abstract background"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent p-8 flex flex-col justify-center">
-            <h3 className="font-bold text-2xl md:text-3xl text-white">New Feature: Stairs Estimator!</h3>
-            <p className="text-base text-white/80 mt-2 max-w-md">Quickly calculate estimates for staircase projects with our new powerful tool.</p>
-            <Button asChild variant="link" className="px-0 h-auto mt-4 text-white font-bold justify-start w-fit text-base">
-              <Link href="/stairs-estimate">
-                Check it out <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </div>
+        <Wave className="absolute bottom-0 left-0 w-full h-auto text-muted" />
+      </header>
+      
+      <main className="-mt-12 p-4 pb-24 space-y-6">
+        <Card className="rounded-2xl shadow-lg border-none overflow-hidden">
+          <CardContent className="p-0 flex items-center bg-purple-500 text-white">
+            <div className="p-6 space-y-2 flex-1">
+              <p className="text-sm font-light">Until 20 April - 30 May</p>
+              <p className="text-4xl font-bold">30%</p>
+              <p className="font-semibold">Discount</p>
+            </div>
+            <div className="relative w-32 h-32 mr-4">
+              <Image 
+                src="https://res.cloudinary.com/dsgirle5v/image/upload/v1761066914/reading-book_1_kmb3cr.png" 
+                alt="Discount illustration" 
+                width={128}
+                height={128}
+                className="object-contain"
+              />
+            </div>
+          </CardContent>
         </Card>
 
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Input 
+            placeholder="Search For..." 
+            className="w-full h-14 rounded-full pl-12 pr-4 text-base bg-background shadow-sm"
+          />
+        </div>
+
+        <div className="space-y-3">
+          <h2 className="text-xl font-bold text-foreground">What do you need?</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {featureButtons.map((feature) => (
+              <Link href={feature.href} key={feature.label} className="flex flex-col items-center space-y-2 text-center">
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${feature.color}`}>
+                      <feature.icon className={`h-8 w-8 ${feature.textColor}`} />
+                  </div>
+                  <span className="text-xs font-medium text-muted-foreground">{feature.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </main>
+      <div className="fixed bottom-0 left-0 right-0 h-20">
+        <AppLayout><></></AppLayout>
       </div>
-    </AppLayout>
+    </div>
   );
 }

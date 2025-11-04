@@ -13,24 +13,24 @@
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
     
-    --primary: 221 83% 48%; /* Vibrant Blue - Darker */
+    --primary: 300 60% 40%;
     --primary-foreground: 0 0% 100%;
     
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 220 9.1% 43.1%;
     
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
     
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220 9.1% 43.1%;
+    --accent: 330 80% 96%;
+    --accent-foreground: 330 70% 50%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
     
     --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --input: 0 0% 100%;
+    --ring: 300 60% 50%;
     --radius: 0.75rem;
   }
  
@@ -41,7 +41,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
+    --primary: 300 70% 50%;
     --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -53,7 +53,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 217.2 91.2% 59.8%;
+    --ring: 300 70% 60%;
   }
 }
 
