@@ -1,15 +1,15 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import AppLayout from "@/components/app-layout";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useAuth, useUser, useDoc, setDocumentNonBlocking, useMemoFirebase, useFirestore, useStorage } from "@/firebase";
+import { useAuth, useUser, setDocumentNonBlocking, useMemoFirebase, useFirestore, useStorage } from "@/firebase";
 import { uploadFile } from '@/firebase/storage';
 import { useRouter } from 'next/navigation';
-import { LogOut, Loader2, ArrowLeft, Building, Phone, Mail, Image as ImageIcon, MapPin, Landmark, UserSquare, Hash, Banknote, QrCode, Upload } from 'lucide-react';
+import { LogOut, Loader2, ArrowLeft, Building, Upload, QrCode, Landmark } from 'lucide-react';
 import { Wave } from "@/components/ui/wave";
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
@@ -63,16 +63,6 @@ export default function ProfilePage() {
         return doc(firestore, 'users', user.uid);
     }, [firestore, user]);
     
-    const { data: userProfile, isLoading: isLoadingProfile } = useDoc<UserProfileData>(userProfileRef);
-
-    useEffect(() => {
-        if (userProfile) {
-            setCompanyInfo(userProfile.companyInfo || {});
-            setBankDetails(userProfile.bankDetails || {});
-            setUpiDetails(userProfile.upiDetails || {});
-        }
-    }, [userProfile]);
-
     const handleSignOut = () => {
         if (auth) {
             auth.signOut();
@@ -131,7 +121,7 @@ export default function ProfilePage() {
         }
     }
     
-    if (isUserLoading || isLoadingProfile) {
+    if (isUserLoading) {
         return (
              <AppLayout>
                 <div className="flex h-full items-center justify-center">
