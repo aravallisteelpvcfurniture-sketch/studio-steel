@@ -67,7 +67,7 @@ export default function ProfilePage() {
         <header className="relative bg-primary h-48 text-primary-foreground p-6 flex flex-col justify-start">
             <div className="flex items-center justify-between z-10">
                 <Button variant="ghost" size="icon" onClick={() => router.back()} className="hover:bg-primary/80">
-                    <ArrowLeft className="h-6 w-6" />
+                    <ArrowLeft className="h-6 w-6 text-foreground" />
                 </Button>
                 <h1 className="text-xl font-bold text-foreground">Profile</h1>
                 <div className="w-9 h-9"></div>

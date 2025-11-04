@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { updateProfile } from 'firebase/auth';
-import { doc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { useAuth, useUser, useFirestore, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -60,13 +60,13 @@ export default function EditProfilePage() {
     // Fetch mobileNumber separately from firestore
     useEffect(() => {
         if (firestore && userDocRef) {
-            const unsub = firestore.onSnapshot(userDocRef, (doc) => {
+            const unsub = onSnapshot(userDocRef, (doc) => {
                 const data = doc.data();
                 if (data && data.mobileNumber) {
                     form.setValue('mobileNumber', data.mobileNumber);
                 }
             });
-            // return () => unsub(); // This causes issues, needs a proper useDoc implementation
+            return () => unsub();
         }
     }, [firestore, userDocRef, form])
 
@@ -88,8 +88,10 @@ export default function EditProfilePage() {
             }
 
             // Update Firestore document
-            const firestoreData: { displayName: string; mobileNumber?: string } = {
-                displayName: data.displayName
+            const firestoreData: { displayName: string; mobileNumber?: string; username?: string; email: string; } = {
+                displayName: data.displayName,
+                email: data.email,
+                username: data.displayName,
             };
             if(data.mobileNumber){
                 firestoreData.mobileNumber = data.mobileNumber;

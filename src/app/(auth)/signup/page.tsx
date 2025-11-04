@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -15,9 +16,10 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { updateProfile } from 'firebase/auth';
 
 const signupSchema = z.object({
-    username: z.string().min(1, 'Username is required'),
+    displayName: z.string().min(1, 'Username is required'),
     email: z.string().email('Invalid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters long'),
     mobileNumber: z.string().min(10, 'Mobile number must be at least 10 digits').max(15, 'Mobile number is too long'),
@@ -35,7 +37,7 @@ export default function SignupPage() {
     const form = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
-            username: '',
+            displayName: '',
             email: '',
             password: '',
             mobileNumber: '',
@@ -64,10 +66,16 @@ export default function SignupPage() {
             const userCredential = await initiateEmailSignUp(auth, data.email, data.password);
             
             if (userCredential && userCredential.user) {
-                const userDocRef = doc(firestore, 'users', userCredential.user.uid);
+                const user = userCredential.user;
+                // Update Firebase Auth profile
+                await updateProfile(user, { displayName: data.displayName });
+                
+                // Then, save user data to Firestore
+                const userDocRef = doc(firestore, 'users', user.uid);
                 const userData = {
-                    id: userCredential.user.uid,
-                    username: data.username,
+                    id: user.uid,
+                    username: data.displayName, // Use displayName for username as well
+                    displayName: data.displayName,
                     email: data.email,
                     mobileNumber: data.mobileNumber,
                 };
@@ -106,10 +114,10 @@ export default function SignupPage() {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
                             control={form.control}
-                            name="username"
+                            name="displayName"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>Full Name</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
