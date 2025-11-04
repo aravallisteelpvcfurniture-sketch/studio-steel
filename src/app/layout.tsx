@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
 import { ThemeProvider } from '@/components/theme-provider';
+import Header from '@/components/header';
+import BottomNav from '@/components/bottom-nav';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -41,7 +43,11 @@ export default function RootLayout({
             disableTransitionOnChange
         >
           <FirebaseClientProvider>
-            {children}
+            <div className="flex min-h-screen flex-col bg-background">
+              <Header />
+              <main className="flex flex-1 flex-col pt-16 pb-20">{children}</main>
+              <BottomNav />
+            </div>
           </FirebaseClientProvider>
           <Toaster />
         </ThemeProvider>

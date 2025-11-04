@@ -20,20 +20,23 @@ const AUTH_PAGES: string[] = ['/login', '/signup'];
  * It is intended to be used in top-level components like `AppLayout` or individual
  * pages to ensure consistent authentication checks across the application.
  *
+ * @param {object} [options] - Optional configuration.
+ * @param {boolean} [options.disableRedirect=false] - If true, disables automatic redirection.
  * @returns {UserAuthServices} An object containing:
  *  - `user`: The authenticated user object, or `null` if not authenticated.
  *  - `isUserLoading`: A boolean indicating if the authentication state is being loaded.
  *  - `userError`: An error object if authentication fails, otherwise `null`.
  */
-export function useUser(): UserAuthServices {
+export function useUser(options: { disableRedirect?: boolean } = {}): UserAuthServices {
+  const { disableRedirect = false } = options;
   const userAuth = useUserAuth();
   const { user, isUserLoading } = userAuth;
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    if (isUserLoading) {
-      // Do nothing while loading.
+    if (disableRedirect || isUserLoading) {
+      // Do nothing while loading or if redirection is disabled.
       return;
     }
 
@@ -49,7 +52,7 @@ export function useUser(): UserAuthServices {
       // redirect to the home page.
       router.push('/');
     }
-  }, [user, isUserLoading, pathname, router]);
+  }, [user, isUserLoading, pathname, router, disableRedirect]);
 
   return userAuth;
 }

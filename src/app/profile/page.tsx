@@ -1,17 +1,15 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
-import AppLayout from "@/components/app-layout";
+import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth, useUser, setDocumentNonBlocking, useMemoFirebase, useFirestore, useStorage } from "@/firebase";
 import { uploadFile } from '@/firebase/storage';
 import { useRouter } from 'next/navigation';
-import { LogOut, Loader2, ArrowLeft, Building, Upload, QrCode, Landmark } from 'lucide-react';
-import { Wave } from "@/components/ui/wave";
-import { doc } from 'firebase/firestore';
+import { Loader2, Building, Upload, QrCode, Landmark } from 'lucide-react';
+import { doc, getDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -55,6 +53,7 @@ export default function ProfilePage() {
     const [bankDetails, setBankDetails] = useState<BankDetails>({});
     const [upiDetails, setUpiDetails] = useState<UpiDetails>({});
     const [isSaving, setIsSaving] = useState(false);
+    const [isLoadingData, setIsLoadingData] = useState(true);
 
     const logoInputRef = useRef<HTMLInputElement>(null);
     const qrInputRef = useRef<HTMLInputElement>(null);
@@ -64,21 +63,23 @@ export default function ProfilePage() {
         return doc(firestore, 'users', user.uid);
     }, [firestore, user]);
     
-    const handleSignOut = () => {
-        if (auth) {
-            auth.signOut();
-            router.push('/login');
-        }
-    };
-    
-    const getInitials = (name: string | null | undefined) => {
-        if (!name) return 'U';
-        const nameParts = name.split(' ');
-        if (nameParts.length > 1 && nameParts[1]) {
-            return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase();
-        }
-        return name[0].toUpperCase();
-    }
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (userProfileRef) {
+                setIsLoadingData(true);
+                const docSnap = await getDoc(userProfileRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data() as UserProfileData;
+                    setCompanyInfo(data.companyInfo || {});
+                    setBankDetails(data.bankDetails || {});
+                    setUpiDetails(data.upiDetails || {});
+                }
+                setIsLoadingData(false);
+            }
+        };
+        fetchUserData();
+    }, [userProfileRef]);
+
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>, field: 'logoUrl' | 'qrCodeUrl') => {
         if (!storage || !user) return;
@@ -122,58 +123,27 @@ export default function ProfilePage() {
         }
     }
     
-    if (isUserLoading) {
+    if (isUserLoading || isLoadingData) {
         return (
-             <AppLayout>
-                <div className="flex h-full items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-            </AppLayout>
+            <div className="flex h-full items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
         );
     }
 
     if (!user) {
         return (
-            <AppLayout>
-                <div className="p-4 md:p-8 text-center">
-                     <p>You must be logged in to view this page.</p>
-                     <Button onClick={() => router.push('/login')} className="mt-4">Go to Login</Button>
-                </div>
-            </AppLayout>
+            <div className="p-4 md:p-8 text-center">
+                 <p>You must be logged in to view this page.</p>
+                 <Button onClick={() => router.push('/login')} className="mt-4">Go to Login</Button>
+            </div>
         )
     }
 
   return (
-    <AppLayout>
-      <div className="bg-background min-h-screen">
-        <header className="relative bg-primary h-48 text-primary-foreground p-6 flex flex-col justify-start">
-            <div className="flex items-center justify-between z-10">
-                <Button variant="ghost" size="icon" onClick={() => router.back()} className="hover:bg-primary/80">
-                    <ArrowLeft className="h-6 w-6 text-foreground" />
-                </Button>
-                <h1 className="text-xl font-bold text-foreground">Profile & Settings</h1>
-                <Button variant="ghost" size="icon" onClick={handleSignOut} className="hover:bg-primary/80">
-                    <LogOut className="h-6 w-6 text-destructive" />
-                </Button>
-            </div>
-            <Wave className="text-background" />
-        </header>
-
+    <div className="bg-background min-h-full">
         <form onSubmit={handleSaveChanges}>
-            <main className="p-6 space-y-6 -mt-32 z-10 relative">
-                <div className="flex flex-col items-center space-y-2">
-                    <Avatar className="h-28 w-28 border-4 border-background shadow-lg">
-                        <AvatarImage src={user.photoURL || companyInfo.logoUrl || ''} alt={user.displayName || user.email || ''} />
-                        <AvatarFallback className="text-4xl bg-muted">
-                            {getInitials(user.displayName)}
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className="text-center">
-                        <h2 className="text-2xl font-bold">{user.displayName || 'User'}</h2>
-                        <p className="text-muted-foreground">{user.email}</p>
-                    </div>
-                </div>
-
+            <main className="p-6 space-y-6 z-10 relative">
                  <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -264,9 +234,6 @@ export default function ProfilePage() {
 
             </main>
         </form>
-      </div>
-    </AppLayout>
+    </div>
   );
 }
-
-    

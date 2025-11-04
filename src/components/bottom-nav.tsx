@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Folder, User, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useUser } from '@/firebase';
 
 const ScanIcon = () => (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -24,8 +25,15 @@ const navItems = [
   { href: '/more', label: 'More', icon: MoreHorizontal },
 ];
 
+const AUTH_PATHNAMES = ['/login', '/signup'];
+
 export default function BottomNav() {
   const pathname = usePathname();
+  const { user, isUserLoading } = useUser({ disableRedirect: true });
+
+  if (isUserLoading || !user || AUTH_PATHNAMES.includes(pathname)) {
+    return null;
+  }
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 w-full">
