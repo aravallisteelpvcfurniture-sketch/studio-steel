@@ -17,7 +17,7 @@ import AuthLayout from "@/components/auth-layout";
 export default function SignupPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
 
@@ -38,7 +38,7 @@ export default function SignupPage() {
     e.preventDefault();
     if (!auth || !firestore) return;
     
-    if (!firstName || !lastName || !userName || !password || !dateOfBirth) {
+    if (!firstName || !lastName || !email || !password || !dateOfBirth) {
         toast({
             variant: "destructive",
             title: "Signup Failed",
@@ -50,9 +50,7 @@ export default function SignupPage() {
 
     try {
       const fullName = `${firstName} ${lastName}`;
-      // Note: Using a dummy domain for email because Firebase Auth requires a valid email format.
-      // The actual unique identifier for login will be the username via your app logic.
-      const userCredential = await createUserWithEmailAndPassword(auth, `${userName}@example.com`, password); 
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password); 
       const newUser = userCredential.user;
       
       if (newUser) {
@@ -65,7 +63,6 @@ export default function SignupPage() {
           displayName: fullName,
           firstName: firstName,
           lastName: lastName,
-          userName: userName,
           dateOfBirth: dateOfBirth,
           signUpDate: serverTimestamp(),
         };
@@ -79,7 +76,7 @@ export default function SignupPage() {
     } catch (error: any) {
       let errorMessage = "An unexpected error occurred.";
       if (error.code === 'auth/email-already-in-use') {
-        errorMessage = "This username is already taken. Please choose another one.";
+        errorMessage = "This email is already in use. Please use another one.";
       } else if (error.code === 'auth/weak-password') {
         errorMessage = "Password is too weak. It should be at least 6 characters long.";
       } else if (error.message) {
@@ -132,13 +129,14 @@ export default function SignupPage() {
                 </div>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="username" className="font-semibold">UserName</Label>
+                <Label htmlFor="email" className="font-semibold">Email</Label>
                 <Input 
-                  id="username"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="Enter your Username"
+                  placeholder="Enter your Email"
                   className="bg-secondary rounded-lg h-12"
                 />
             </div>
