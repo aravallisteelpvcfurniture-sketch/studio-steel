@@ -158,7 +158,7 @@ export default function SignupPage() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white" disabled={isSubmitting}>
+                        <Button type="submit" className="w-full" disabled={isSubmitting}>
                             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Sign Up
                         </Button>

@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 220 80% 50%; /* Deep Blue */
+    --primary: 220 80% 55%; /* Lighter, more vibrant Blue */
     --primary-foreground: 0 0% 98%;
     
     --secondary: 220 9% 91%;
@@ -30,7 +30,7 @@
     
     --border: 220 13% 89%;
     --input: 220 13% 89%;
-    --ring: 220 80% 50%;
+    --ring: 220 80% 55%;
     --radius: 0.75rem;
   }
  
