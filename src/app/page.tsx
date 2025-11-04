@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-center">
+      <header className="relative bg-primary h-56 text-primary-foreground p-6 flex flex-col justify-start pt-12">
         <div className="absolute top-6 right-6">
             <Link href="/profile">
                 <Avatar className="h-12 w-12 border-2 border-white/50">
