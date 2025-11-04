@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser, useFirestore } from '@/firebase';
-import { initiateEmailSignIn, initiateGoogleSignIn, initiateTwitterSignIn, initiateFacebookSignIn } from '@/firebase/non-blocking-login';
+import { initiateEmailSignIn, initiateGoogleSignIn } from '@/firebase/non-blocking-login';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Facebook, Twitter } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import AuthLayout from '@/components/auth-layout';
 
 const GoogleIcon = () => (
@@ -67,12 +67,6 @@ export default function LoginPage() {
   const handleGoogleLogin = () => {
     if (auth && firestore) initiateGoogleSignIn(auth, firestore);
   };
-  const handleTwitterLogin = () => {
-    if (auth && firestore) initiateTwitterSignIn(auth, firestore);
-  };
-  const handleFacebookLogin = () => {
-    if (auth && firestore) initiateFacebookSignIn(auth, firestore);
-  };
   
   if (isUserLoading || user) {
     return (
@@ -84,34 +78,41 @@ export default function LoginPage() {
 
   return (
     <AuthLayout>
-        <h2 className="text-3xl font-bold text-center mb-8">Login</h2>
+        <h2 className="text-3xl font-bold text-center mb-1">Hello</h2>
+        <p className="text-muted-foreground text-center mb-8">Sign in!</p>
+        
         <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-                <Label htmlFor="email" className="font-semibold">UserName</Label>
+            <div className="space-y-2 relative">
+                <Label htmlFor="email" className="font-semibold absolute -top-2 left-4 text-xs bg-card px-1 text-muted-foreground">Gmail</Label>
                 <Input 
                     id="email" 
                     type="email" 
-                    placeholder="Enter your Username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="bg-secondary rounded-lg h-12"
+                    className="bg-transparent rounded-lg h-12 border-2 focus-visible:ring-primary/50 focus-visible:ring-1"
                 />
             </div>
-            <div className="space-y-2">
-                <Label htmlFor="password"  className="font-semibold">Password</Label>
+            <div className="space-y-2 relative">
+                <Label htmlFor="password"  className="font-semibold absolute -top-2 left-4 text-xs bg-card px-1 text-muted-foreground">Password</Label>
                 <Input 
                     id="password" 
                     type='password'
-                    placeholder="Enter your Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-secondary rounded-lg h-12"
+                    className="bg-transparent rounded-lg h-12 border-2 focus-visible:ring-primary/50 focus-visible:ring-1"
                 />
             </div>
-            <Button className="w-full h-12 text-lg rounded-full font-bold bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white" type="submit" disabled={isLoading}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Login'}
+
+            <div className="text-right">
+                <Link href="#" className="text-sm font-medium text-primary hover:underline">
+                    Forgot Password?
+                </Link>
+            </div>
+
+            <Button className="w-full h-12 text-lg rounded-full font-bold bg-gradient-to-r from-red-500 to-purple-600 text-white" type="submit" disabled={isLoading}>
+            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'SIGN IN'}
             </Button>
         </form>
 
@@ -121,14 +122,12 @@ export default function LoginPage() {
 
         <div className="flex justify-center space-x-4">
             <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2" onClick={handleGoogleLogin}><GoogleIcon /></Button>
-            <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2" onClick={handleTwitterLogin}><Twitter className="text-sky-500" /></Button>
-            <Button variant="outline" size="icon" className="rounded-full h-12 w-12 border-2" onClick={handleFacebookLogin}><Facebook className="text-blue-600" /></Button>
         </div>
         
         <p className="mt-8 text-center text-sm text-muted-foreground">
             Don't have an account?{' '}
             <Link href="/signup" className="font-bold text-primary hover:underline">
-            signup
+            Sign up
             </Link>
         </p>
     </AuthLayout>
