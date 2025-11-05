@@ -15,22 +15,32 @@ export default function WelcomePage() {
         <div className="mb-8">
           <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
-              className="w-16 h-16 text-primary"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M19.333 10.3333H2.66667C2.48986 10.3333 2.32029 10.263 2.19526 10.138C2.07024 10.013 2 9.84347 2 9.66667C2 8.56 2.89543 7.66667 4 7.66667H20C21.1046 7.66667 22 8.56 22 9.66667C22 9.84347 21.9298 10.013 21.8047 10.138C21.6797 10.263 21.5101 10.3333 21.3333 10.3333H20M6 13.6667H4V12H6V13.6667ZM9 13.6667H7V12H9V13.6667ZM12 13.6667H10V12H12V13.6667ZM19.3333 10.3333L18 17.6667H6L4.66667 10.3333H19.3333Z"
+                className="w-16 h-16 text-primary"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
                 stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+                strokeWidth="1.5"
+              >
+                <path
+                  d="M9.17157 14.8284C10.7337 16.3905 13.2663 16.3905 14.8284 14.8284L17.6569 12L12 6.34315L6.34315 12L9.17157 14.8284Z"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M2 12H4.5M19.5 12H22"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 2V3.5M12 20.5V22"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
           </div>
-          <h1 className="text-4xl font-bold tracking-wider">FOODCORT</h1>
-          <p className="text-sm tracking-widest">FOOD DELIVER SERVICE</p>
+          <h1 className="text-4xl font-bold tracking-wider">Aravalli Steel</h1>
+          <p className="text-sm tracking-widest">PVC Furniture</p>
         </div>
       </main>
 
