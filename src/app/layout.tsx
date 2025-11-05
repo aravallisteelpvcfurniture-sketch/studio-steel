@@ -8,7 +8,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Aravalli Steel PVC Furniture",
   description: "Modern furniture for your home",
-  themeColor: "#FF00FF",
 };
 
 export default function RootLayout({
@@ -18,6 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#FF00FF" />
+      </head>
       <body className={inter.className}>
         <FirebaseClientProvider>{children}</FirebaseClientProvider>
       </body>
