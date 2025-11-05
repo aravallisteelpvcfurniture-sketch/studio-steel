@@ -6,7 +6,6 @@ import { useUser, useAuth } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Bell, LogOut, Search, SlidersHorizontal } from 'lucide-react';
 import { signOut } from 'firebase/auth';
-import BottomNav from '@/components/BottomNav';
 import { Input } from '@/components/ui/input';
 
 export default function DashboardPage() {
@@ -65,7 +64,6 @@ export default function DashboardPage() {
           <p className="text-muted-foreground">Here's your dashboard content.</p>
         </div>
       </div>
-      <BottomNav />
     </div>
   );
 }
