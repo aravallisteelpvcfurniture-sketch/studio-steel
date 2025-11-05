@@ -89,6 +89,9 @@ export default function SignupPage() {
                     mobileNumber: '',
                 };
                 setDocumentNonBlocking(userDocRef, userData, { merge: false });
+
+                 // Reload user state to get the new display name
+                await user.reload();
             }
              toast({
                 title: 'Signup Successful',

@@ -33,8 +33,9 @@ async function handleSocialSignIn(auth: Auth, firestore: Firestore, user: User) 
   const userData = {
       id: user.uid,
       email: user.email,
+      displayName: user.displayName,
       username: user.displayName, // Using displayName as username
-      mobileNumber: user.phoneNumber, // phoneNumber might be null
+      mobileNumber: user.phoneNumber || '', // Ensure mobile number is not null
   };
   setDocumentNonBlocking(userDocRef, userData, { merge: true });
 }
@@ -45,5 +46,8 @@ export function initiateGoogleSignIn(auth: Auth, firestore: Firestore): void {
       handleSocialSignIn(auth, firestore, result.user);
   }).catch(error => {
       console.error("Google Sign-In Error:", error);
+      // Optionally, you can use the toast to show an error to the user
+      // const { toast } = useToast();
+      // toast({ variant: 'destructive', title: 'Google Sign-In Failed', description: error.message });
   });
 }
