@@ -7,7 +7,7 @@ type AuthLayoutProps = {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="flex flex-col h-screen bg-primary overflow-hidden">
+    <div className="h-screen overflow-hidden flex flex-col bg-primary">
       {/* Top Section (Header) */}
       <header className="flex-shrink-0 h-[35vh] flex flex-col items-center justify-center text-primary-foreground p-4 space-y-4">
         <div className="w-24 h-24 rounded-full bg-white/90 shadow-lg flex items-center justify-center backdrop-blur-sm">
