@@ -65,15 +65,17 @@ export default function Header() {
   return (
     <header className={cn(
         "fixed top-0 left-0 right-0 z-40 transition-all",
-        isGradientHeaderPage ? 'bg-gradient-to-r from-purple-600 to-fuchsia-500 text-primary-foreground' : 'bg-background/95 backdrop-blur-sm border-b'
+        isGradientHeaderPage 
+            ? 'bg-gradient-to-r from-purple-600 to-fuchsia-500 text-primary-foreground' 
+            : 'bg-background/95 backdrop-blur-sm border-b'
     )}>
         {isGradientHeaderPage ? (
-            <div className="relative">
+            <div className="relative pt-safe-top">
                 <MainAppHeader />
                 <Wave className="text-background" />
             </div>
         ) : (
-            <div className="flex h-16 items-center px-4">
+             <div className="flex h-16 items-center px-4 pt-safe-top">
                  <div className="flex items-center space-x-2">
                     <Link href="/" className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
