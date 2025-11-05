@@ -27,29 +27,29 @@ export default function DashboardPage() {
 
   if (isUserLoading || !user) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-primary">
-        <p className="text-white">Loading...</p>
+      <div className="flex justify-center items-center min-h-screen bg-background">
+        <p className="text-foreground">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col bg-primary">
-      <header className="bg-primary text-primary-foreground p-4 h-28 sticky top-0 z-10">
+    <div className="h-screen flex flex-col bg-background">
+      <header className="bg-background text-foreground p-4 h-28 sticky top-0 z-10">
         <div className="flex justify-between items-center pt-4">
           <h1 className="text-2xl font-bold">Welcome</h1>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="hover:bg-primary/80">
+            <Button variant="ghost" size="icon" className="hover:bg-muted">
               <Bell />
             </Button>
-            <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:bg-primary/80">
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:bg-muted">
               <LogOut />
             </Button>
           </div>
         </div>
       </header>
       <main className="flex-grow overflow-y-auto">
-        <div className="bg-background rounded-t-[4rem] p-8 -mt-8 text-foreground min-h-full">
+        <div className="p-8 text-foreground min-h-full">
           <div className="grid grid-cols-3 gap-4 text-center my-8">
             <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
               <div className="bg-accent/20 p-3 rounded-full">
