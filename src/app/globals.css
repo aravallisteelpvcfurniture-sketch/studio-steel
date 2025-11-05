@@ -47,11 +47,12 @@
     --input: 210 20% 20%;
     --ring: 206 84% 44%;
   }
+}
 
+@layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
