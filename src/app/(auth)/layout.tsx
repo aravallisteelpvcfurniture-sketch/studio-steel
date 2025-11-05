@@ -31,7 +31,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
       {/* Bottom Section (Form) */}
       <main className="flex-1 bg-card text-card-foreground rounded-t-[2.5rem] overflow-hidden">
-        <div className="p-8 h-full">
+        <div className="p-8 h-full overflow-y-auto">
             {children}
         </div>
       </main>
