@@ -26,8 +26,8 @@ export default function DashboardPage() {
 
   if (isUserLoading || !user) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>Loading...</p>
+      <div className="flex justify-center items-center min-h-screen bg-primary">
+        <p className="text-white">Loading...</p>
       </div>
     );
   }
