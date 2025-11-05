@@ -49,7 +49,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
-      <main className="flex-grow overflow-y-auto bg-primary">
+      <main className="flex-grow overflow-y-auto">
         <div className="bg-background rounded-t-[2rem] p-8 -mt-2 relative text-foreground min-h-full">
           <div className="relative mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
