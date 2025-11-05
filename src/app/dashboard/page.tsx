@@ -81,11 +81,6 @@ export default function DashboardPage() {
             <span className="text-sm font-medium">Order Book</span>
           </Link>
         </div>
-
-        <div className="text-center">
-          <h2 className="text-2xl font-bold">Dashboard</h2>
-          <p className="text-muted-foreground">Here's your dashboard content.</p>
-        </div>
       </div>
     </div>
   );
