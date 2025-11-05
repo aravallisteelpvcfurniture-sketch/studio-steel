@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser, useAuth } from '@/firebase';
 import { Button } from '@/components/ui/button';
-import { Bell, LogOut, Search, SlidersHorizontal, Receipt, BookText, Notebook } from 'lucide-react';
+import { Bell, LogOut, Search, SlidersHorizontal, Receipt, BookText, Notebook, Users, Smile, PackageCheck } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
@@ -79,6 +79,24 @@ export default function DashboardPage() {
                 <Notebook className="h-8 w-8 text-accent" />
             </div>
             <span className="text-sm font-medium">Order Book</span>
+          </Link>
+          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+            <div className="bg-accent/20 p-3 rounded-full">
+                <Users className="h-8 w-8 text-accent" />
+            </div>
+            <span className="text-sm font-medium">Visitors</span>
+          </Link>
+          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+            <div className="bg-accent/20 p-3 rounded-full">
+                <Smile className="h-8 w-8 text-accent" />
+            </div>
+            <span className="text-sm font-medium">Greetings</span>
+          </Link>
+          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+            <div className="bg-accent/20 p-3 rounded-full">
+                <PackageCheck className="h-8 w-8 text-accent" />
+            </div>
+            <span className="text-sm font-medium">Order Confirm</span>
           </Link>
         </div>
       </div>
