@@ -7,8 +7,9 @@ type AuthLayoutProps = {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="relative flex flex-col h-screen overflow-hidden bg-primary">
-      <header className="flex-shrink-0 flex flex-col items-center justify-center text-primary-foreground p-8 space-y-4">
+    <div className="h-screen w-full bg-primary overflow-hidden relative">
+      {/* Top Section (Header) */}
+      <div className="absolute top-0 left-0 right-0 h-[35%] flex flex-col items-center justify-center text-primary-foreground p-4 space-y-4">
         <div className="w-24 h-24 rounded-full bg-white/90 shadow-lg flex items-center justify-center backdrop-blur-sm">
           <Image
             src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
@@ -26,10 +27,12 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             PVC FURNITURE
           </p>
         </div>
-      </header>
-      <main className="absolute bottom-0 left-0 right-0 h-[65%]">
-        <div className="bg-card text-card-foreground rounded-t-[2.5rem] h-full w-full p-8 overflow-y-auto">
-          {children}
+      </div>
+
+      {/* Bottom Section (Form) */}
+      <main className="absolute bottom-0 left-0 right-0 h-[65%] bg-card text-card-foreground rounded-t-[2.5rem] overflow-y-auto">
+        <div className="p-8 h-full">
+            {children}
         </div>
       </main>
     </div>

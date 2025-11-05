@@ -166,7 +166,7 @@ export default function SignupPage() {
                     </div>
                 </div>
                 
-                <div>
+                <div className="pt-2">
                     <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14 mt-6" disabled={isSubmitting}>
                         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         SIGN UP

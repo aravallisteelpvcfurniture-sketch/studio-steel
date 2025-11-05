@@ -118,7 +118,7 @@ export default function LoginPage() {
                     </div>
                 </div>
                 
-                <div>
+                <div className="pt-2">
                     <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14 mt-6">
                         LOGIN
                     </Button>
