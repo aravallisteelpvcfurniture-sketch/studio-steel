@@ -35,9 +35,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground p-4 h-28">
-        <div className="flex justify-between items-center">
+    <div className="h-screen flex flex-col">
+      <header className="bg-primary text-primary-foreground p-4 h-28 sticky top-0 z-10">
+        <div className="flex justify-between items-center pt-4">
           <h1 className="text-2xl font-bold">Welcome</h1>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" className="hover:bg-primary/80">
@@ -49,93 +49,95 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
-      <div className="bg-background rounded-t-[3rem] p-8 -mt-8 relative text-foreground">
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            placeholder="Search..."
-            className="pl-10 h-12 rounded-xl bg-muted border-muted"
-          />
-          <Button variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2">
-            <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
-          </Button>
-        </div>
+      <main className="flex-grow overflow-y-auto bg-primary">
+        <div className="bg-background rounded-t-[2rem] p-8 -mt-2 relative text-foreground min-h-full">
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              placeholder="Search..."
+              className="pl-10 h-12 rounded-xl bg-muted border-muted"
+            />
+            <Button variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2">
+              <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
+            </Button>
+          </div>
 
-        <div className="grid grid-cols-3 gap-4 text-center my-8">
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Receipt className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Invoice Bill</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <BookText className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Roj Mel</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Notebook className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Order Book</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Users className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Visitors</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Smile className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Greetings</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <PackageCheck className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Order Confirm</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Camera className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Railing Photo</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <BookOpen className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Furniture Catalog</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Lightbulb className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Furniture ideas</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <GalleryVertical className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Railing Catalog</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Clapperboard className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Reels video</span>
-          </Link>
-          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
-            <div className="bg-accent/20 p-3 rounded-full">
-                <Calculator className="h-8 w-8 text-accent" />
-            </div>
-            <span className="text-sm font-medium">Railing Estimate</span>
-          </Link>
+          <div className="grid grid-cols-3 gap-4 text-center my-8">
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Receipt className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Invoice Bill</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <BookText className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Roj Mel</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Notebook className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Order Book</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Users className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Visitors</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Smile className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Greetings</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <PackageCheck className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Order Confirm</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Camera className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Railing Photo</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <BookOpen className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Furniture Catalog</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Lightbulb className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Furniture ideas</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <GalleryVertical className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Railing Catalog</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Clapperboard className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Reels video</span>
+            </Link>
+            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+              <div className="bg-accent/20 p-3 rounded-full">
+                  <Calculator className="h-8 w-8 text-accent" />
+              </div>
+              <span className="text-sm font-medium">Railing Estimate</span>
+            </Link>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
