@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="h-screen overflow-hidden flex flex-col bg-primary">
       {/* Top Section (Header) */}
-      <header className="flex-shrink-0 h-[35vh] flex flex-col items-center justify-center text-primary-foreground p-4 space-y-4">
+      <header className="h-[35vh] flex-shrink-0 flex flex-col items-center justify-center text-primary-foreground p-4 space-y-4">
         <div className="w-24 h-24 rounded-full bg-white/90 shadow-lg flex items-center justify-center backdrop-blur-sm">
           <Image
             src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
@@ -31,7 +31,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
       {/* Bottom Section (Form) */}
       <main className="flex-1 bg-card text-card-foreground rounded-t-[2.5rem] overflow-hidden">
-        <div className="p-8 h-full overflow-hidden">
+        <div className="p-8 h-full overflow-y-auto">
             {children}
         </div>
       </main>

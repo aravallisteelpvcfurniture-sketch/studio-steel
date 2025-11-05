@@ -63,13 +63,13 @@ export default function LoginPage() {
     }
     
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full justify-between">
             <div className="text-center">
                 <h2 className="text-2xl font-bold">Let's get something</h2>
                 <p className="text-muted-foreground">Good to see you back.</p>
             </div>
             
-            <div className="flex items-center justify-center gap-4 my-6">
+            <div className="flex items-center justify-center gap-4 my-4">
                 <Button variant="outline" size="icon" className="rounded-full h-12 w-12" onClick={handleGoogleSignIn}>
                     <GoogleIcon />
                 </Button>
@@ -82,7 +82,7 @@ export default function LoginPage() {
                 </Button>
             </div>
             
-            <form onSubmit={handleEmailSignIn} className="space-y-4 flex-grow flex flex-col justify-center">
+            <form onSubmit={handleEmailSignIn} className="space-y-4">
                 <div>
                     <div className="relative">
                         <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -119,7 +119,7 @@ export default function LoginPage() {
                 </div>
                 
                 <div className="pt-2">
-                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14 mt-6">
+                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14">
                         LOGIN
                     </Button>
                     <p className="text-center text-sm text-muted-foreground mt-4">Don't have an account? <Link href="/signup" className="font-semibold text-foreground hover:underline">Sign Up</Link></p>

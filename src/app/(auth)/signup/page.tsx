@@ -116,13 +116,13 @@ export default function SignupPage() {
     }
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full justify-between">
             <div className="text-center">
                 <h2 className="text-2xl font-bold">Getting started</h2>
                 <p className="text-muted-foreground">Create an account to continue!</p>
             </div>
             
-            <div className="flex items-center justify-center gap-4 my-6">
+            <div className="flex items-center justify-center gap-4 my-4">
                 <Button variant="outline" size="icon" className="rounded-full h-12 w-12" onClick={handleGoogleSignIn}>
                     <GoogleIcon />
                 </Button>
@@ -134,7 +134,7 @@ export default function SignupPage() {
                 </Button>
             </div>
             
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex-grow flex flex-col justify-between">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
                     <div className="relative">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -170,7 +170,7 @@ export default function SignupPage() {
                 </div>
                 
                 <div className="pt-2">
-                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14 mt-6" disabled={isSubmitting}>
+                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14" disabled={isSubmitting}>
                         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         SIGN UP
                     </Button>
