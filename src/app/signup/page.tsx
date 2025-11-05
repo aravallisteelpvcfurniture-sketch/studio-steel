@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/firebase';
-import { initiateEmailSignUp, initiateGoogleSignIn } from '@/firebase/non-blocking-login';
+import { initiateEmailSignUp, initiateGoogleSignIn, initiateFacebookSignIn } from '@/firebase/non-blocking-login';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Mail, User, Lock, Facebook, Twitter } from 'lucide-react';
 
@@ -45,6 +45,10 @@ export default function SignUpPage() {
   const handleGoogleSignIn = () => {
     initiateGoogleSignIn(auth);
   };
+  
+  const handleFacebookSignIn = () => {
+    initiateFacebookSignIn(auth);
+  };
 
   return (
     <div className="min-h-screen bg-primary">
@@ -64,7 +68,7 @@ export default function SignUpPage() {
 
         <div className="flex justify-center space-x-4 mb-8">
           <Button variant="outline" size="icon" className="rounded-full h-12 w-12" onClick={handleGoogleSignIn}><GoogleIcon /></Button>
-          <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#3b5998] text-white"><Facebook /></Button>
+          <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#3b5998] text-white" onClick={handleFacebookSignIn}><Facebook /></Button>
           <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#1DA1F2] text-white"><Twitter /></Button>
         </div>
 
