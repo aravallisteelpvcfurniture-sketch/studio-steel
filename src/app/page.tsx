@@ -20,28 +20,16 @@ export default function WelcomePage() {
         <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-white rounded-full animate-pulse-slow delay-1000"></div>
       </div>
 
-      <main className="relative z-10 flex-grow flex flex-col items-center justify-center text-center px-4">
-        <div className="w-24 h-24 relative mb-4">
-          {/* Top Part */}
-          <svg className="absolute w-full h-full animate-slide-from-top" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="1.5">
-            <path d="M9.17157 14.8284C10.7337 16.3905 13.2663 16.3905 14.8284 14.8284L17.6569 12L12 6.34315L6.34315 12L9.17157 14.8284Z" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          {/* Left Part */}
-          <svg className="absolute w-full h-full animate-slide-from-left" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="1.5">
-            <path d="M2 12H4.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-           {/* Right Part */}
-           <svg className="absolute w-full h-full animate-slide-from-right" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="1.5">
-            <path d="M19.5 12H22" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-           {/* Bottom Part */}
-           <svg className="absolute w-full h-full animate-slide-from-bottom" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="1.5">
-            <path d="M12 2V3.5M12 20.5V22" strokeLinecap="round" strokeLinejoin="round" />
+      <main className="relative z-10 flex-grow flex flex-col items-center justify-center text-center px-4 animate-fade-in-up">
+        <div className="w-32 h-32 relative mb-4">
+          <svg className="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 10L10 90H25L50 40L75 90H90L50 10Z" fill="currentColor"/>
+            <path d="M35 70H65" stroke="hsl(var(--primary))" stroke-width="8" stroke-linecap="round"/>
           </svg>
         </div>
         <div className="animate-fade-in-up animation-delay-1000">
-          <h1 className="text-4xl font-bold tracking-wider">Aravalli Steel</h1>
-          <p className="text-sm tracking-widest">PVC Furniture</p>
+          <h1 className="text-4xl font-bold tracking-wider">ARAVALLI</h1>
+          <p className="text-sm tracking-widest">STEEL & PVC FURNITURE</p>
         </div>
       </main>
     </div>
