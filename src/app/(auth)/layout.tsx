@@ -8,7 +8,7 @@ type AuthLayoutProps = {
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="relative flex flex-col h-screen overflow-hidden bg-primary">
-      <header className="flex flex-col items-center justify-center text-primary-foreground p-8 space-y-4">
+      <header className="flex-shrink-0 flex flex-col items-center justify-center text-primary-foreground p-8 space-y-4">
         <div className="w-24 h-24 rounded-full bg-white/90 shadow-lg flex items-center justify-center backdrop-blur-sm">
           <Image
             src="https://res.cloudinary.com/dsgirle5v/image/upload/v1759515808/Generated_Image_October_03_2025_-_11_14PM_ybqz1a.png"
@@ -28,7 +28,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         </div>
       </header>
       <main className="absolute bottom-0 left-0 right-0 h-[65%]">
-        <div className="bg-card text-card-foreground rounded-t-[2.5rem] h-full w-full p-8">
+        <div className="bg-card text-card-foreground rounded-t-[2.5rem] h-full w-full p-8 overflow-y-auto">
           {children}
         </div>
       </main>

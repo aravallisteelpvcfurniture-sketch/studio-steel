@@ -131,46 +131,48 @@ export default function SignupPage() {
                 </Button>
             </div>
             
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex-grow flex flex-col">
-                <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        {...form.register('email')}
-                        type="email" 
-                        placeholder="Email"
-                        className="pl-12 h-14"
-                    />
-                </div>
-                <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        {...form.register('displayName')}
-                        placeholder="Username"
-                        className="pl-12 h-14"
-                    />
-                </div>
-                <div className="relative">
-                    <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        {...form.register('password')}
-                        type="password" 
-                        placeholder="Password"
-                        className="pl-12 h-14"
-                    />
-                </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex-grow flex flex-col justify-between">
+                <div>
+                    <div className="relative">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input 
+                            {...form.register('email')}
+                            type="email" 
+                            placeholder="Email"
+                            className="pl-12 h-14"
+                        />
+                    </div>
+                    <div className="relative mt-4">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input 
+                            {...form.register('displayName')}
+                            placeholder="Username"
+                            className="pl-12 h-14"
+                        />
+                    </div>
+                    <div className="relative mt-4">
+                        <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input 
+                            {...form.register('password')}
+                            type="password" 
+                            placeholder="Password"
+                            className="pl-12 h-14"
+                        />
+                    </div>
 
-                <div className="flex items-center space-x-2">
-                    <Switch id="remember-me" />
-                    <Label htmlFor="remember-me" className="text-muted-foreground">Remember me</Label>
+                    <div className="flex items-center space-x-2 mt-4">
+                        <Switch id="remember-me" />
+                        <Label htmlFor="remember-me" className="text-muted-foreground">Remember me</Label>
+                    </div>
                 </div>
                 
-                <div className="flex-grow"></div>
-
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14" disabled={isSubmitting}>
-                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    SIGN UP
-                </Button>
-                 <p className="text-center text-sm text-muted-foreground">Already have an account? <Link href="/login" className="font-semibold text-foreground hover:underline">Sign in</Link></p>
+                <div>
+                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14 mt-6" disabled={isSubmitting}>
+                        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        SIGN UP
+                    </Button>
+                     <p className="text-center text-sm text-muted-foreground mt-4">Already have an account? <Link href="/login" className="font-semibold text-foreground hover:underline">Sign in</Link></p>
+                </div>
             </form>
         </div>
     );

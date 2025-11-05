@@ -82,46 +82,48 @@ export default function LoginPage() {
                 </Button>
             </div>
             
-            <form onSubmit={handleEmailSignIn} className="space-y-4 flex-grow flex flex-col">
-                <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        id="email" 
-                        type="email" 
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required 
-                        className="pl-12 h-14"
-                    />
-                </div>
-                <div className="relative">
-                     <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        id="password" 
-                        type="password" 
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required 
-                        className="pl-12 h-14"
-                    />
-                </div>
-
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                        <Switch id="remember-me" />
-                        <Label htmlFor="remember-me" className="text-muted-foreground">Remember me</Label>
+            <form onSubmit={handleEmailSignIn} className="space-y-4 flex-grow flex flex-col justify-between">
+                <div>
+                    <div className="relative">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input 
+                            id="email" 
+                            type="email" 
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required 
+                            className="pl-12 h-14"
+                        />
                     </div>
-                     <Link href="#" className="text-sm text-accent-foreground/80 hover:underline">Forgot password?</Link>
+                    <div className="relative mt-4">
+                         <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input 
+                            id="password" 
+                            type="password" 
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required 
+                            className="pl-12 h-14"
+                        />
+                    </div>
+
+                    <div className="flex items-center justify-between mt-4">
+                        <div className="flex items-center space-x-2">
+                            <Switch id="remember-me" />
+                            <Label htmlFor="remember-me" className="text-muted-foreground">Remember me</Label>
+                        </div>
+                         <Link href="#" className="text-sm text-accent-foreground/80 hover:underline">Forgot password?</Link>
+                    </div>
                 </div>
                 
-                <div className="flex-grow"></div>
-
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14">
-                    LOGIN
-                </Button>
-                <p className="text-center text-sm text-muted-foreground">Don't have an account? <Link href="/signup" className="font-semibold text-foreground hover:underline">Sign Up</Link></p>
+                <div>
+                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14 mt-6">
+                        LOGIN
+                    </Button>
+                    <p className="text-center text-sm text-muted-foreground mt-4">Don't have an account? <Link href="/signup" className="font-semibold text-foreground hover:underline">Sign Up</Link></p>
+                </div>
             </form>
         </div>
     );
