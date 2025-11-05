@@ -34,34 +34,35 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-primary text-primary-foreground">
       <div className="p-4 pb-24">
         <header className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Welcome</h1>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:bg-primary/80">
               <Bell />
             </Button>
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:bg-primary/80">
               <LogOut />
             </Button>
           </div>
         </header>
+        <div className="bg-background rounded-t-[3rem] p-8 mt-4 min-h-[calc(100vh-120px)] text-foreground">
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              placeholder="Search..."
+              className="pl-10 h-12 rounded-xl bg-muted border-muted"
+            />
+            <Button variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2">
+              <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
+            </Button>
+          </div>
 
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            placeholder="Search..."
-            className="pl-10 h-12 rounded-xl bg-muted border-muted"
-          />
-          <Button variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2">
-            <SlidersHorizontal className="h-5 w-5 text-muted-foreground" />
-          </Button>
-        </div>
-
-        <div className="text-center">
-          <h2 className="text-2xl font-bold">Dashboard</h2>
-          <p className="text-muted-foreground">Here's your dashboard content.</p>
+          <div className="text-center">
+            <h2 className="text-2xl font-bold">Dashboard</h2>
+            <p className="text-muted-foreground">Here's your dashboard content.</p>
+          </div>
         </div>
       </div>
     </div>
