@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#FF00FF" />
+        <meta name="theme-color" content="#00FFFF" />
       </head>
       <body className={inter.className}>
         <FirebaseClientProvider>{children}</FirebaseClientProvider>
