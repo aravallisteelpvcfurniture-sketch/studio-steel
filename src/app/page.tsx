@@ -1,11 +1,20 @@
 'use client';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function WelcomePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push('/signup');
+    }, 3000); // 3 seconds
+
+    return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+  }, [router]);
+
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-between bg-primary text-white overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-primary text-white overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-10">
         <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-white rounded-full"></div>
         <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-white rounded-full"></div>
@@ -43,18 +52,6 @@ export default function WelcomePage() {
           <p className="text-sm tracking-widest">PVC Furniture</p>
         </div>
       </main>
-
-      <footer className="relative z-10 w-full p-8 flex justify-center">
-        <Link href="/signup" passHref>
-          <Button
-            size="lg"
-            variant="ghost"
-            className="w-16 h-16 rounded-full bg-accent hover:bg-accent/90"
-          >
-            <ChevronDown className="w-8 h-8 text-white" />
-          </Button>
-        </Link>
-      </footer>
     </div>
   );
 }
