@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, LayoutGrid, Search, User } from 'lucide-react';
+import { Home, LayoutGrid, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
   { href: '/dashboard/categories', icon: LayoutGrid, label: 'Categories' },
-  { href: '/dashboard/search', icon: Search, label: 'Search' },
-  { href: '/dashboard/profile', icon: User, label: 'Profile' },
+  { href: '/dashboard/profile', icon: User, label: 'Account' },
 ];
 
 export default function BottomNav() {
