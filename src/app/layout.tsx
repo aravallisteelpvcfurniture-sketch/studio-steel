@@ -5,11 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Aravalli Steel",
-  description: "App for Aravalli Steel",
+  title: "RideCab",
+  description: "Find your dream taxi to start your journey",
   manifest: "/manifest.json",
   icons: { apple: "/icon.png" },
-  themeColor: "#849b5c"
 };
 
 export default function RootLayout({
@@ -19,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-primary`}>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
