@@ -49,7 +49,7 @@ export default function DashboardPage() {
         </div>
       </header>
       <main className="flex-grow overflow-y-auto">
-        <div className="bg-background rounded-t-[4rem] p-8 -mt-8 relative text-foreground min-h-full">
+        <div className="bg-background rounded-t-[4rem] p-8 -mt-8 text-foreground min-h-full">
           <div className="grid grid-cols-3 gap-4 text-center my-8">
             <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
               <div className="bg-accent/20 p-3 rounded-full">
