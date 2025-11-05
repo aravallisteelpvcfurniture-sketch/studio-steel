@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Aravalli Steel PVC Furniture",
   description: "Modern furniture for your home",
-  themeColor: "#5c943f",
+  themeColor: "#FF00FF",
 };
 
 export default function RootLayout({
