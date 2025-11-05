@@ -1,0 +1,382 @@
+{
+  "entities": {
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a furniture product offered by Aravalli Home Studio.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the product."
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the product."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the product image.",
+          "format": "uri"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the product (e.g., chair, table, sofa)."
+        },
+        "material": {
+          "type": "string",
+          "description": "The type of material the product is made of (e.g., Steel, PVC)."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "price",
+        "imageUrl",
+        "category",
+        "material"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the Aravalli Home Studio app.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user.",
+          "format": "email"
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email"
+      ]
+    },
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents an order placed by a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Order)"
+        },
+        "orderDate": {
+          "type": "string",
+          "description": "Date when the order was placed.",
+          "format": "date-time"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total amount of the order."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the order (e.g., pending, processing, shipped, delivered)."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "orderDate",
+        "totalAmount",
+        "status"
+      ]
+    },
+    "OrderItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderItem",
+      "type": "object",
+      "description": "Represents an item within an order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order item."
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Reference to Order. (Relationship: Order 1:N OrderItem)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to Product. (Relationship: Product 1:N OrderItem)"
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity of the product in the order item."
+        },
+        "itemPrice": {
+          "type": "number",
+          "description": "Price of the item (price per unit * quantity)."
+        }
+      },
+      "required": [
+        "id",
+        "orderId",
+        "productId",
+        "quantity",
+        "itemPrice"
+      ]
+    },
+    "Greeting": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Greeting",
+      "type": "object",
+      "description": "Represents a greeting message for visitors.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the greeting."
+        },
+        "message": {
+          "type": "string",
+          "description": "The greeting message to display."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of greeting (e.g., welcome, returning visitor)."
+        }
+      },
+      "required": [
+        "id",
+        "message",
+        "type"
+      ]
+    },
+    "GalleryItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "GalleryItem",
+      "type": "object",
+      "description": "Represents an item in the gallery (image or video).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the gallery item."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the gallery item."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the gallery item."
+        },
+        "url": {
+          "type": "string",
+          "description": "URL of the image or video.",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of gallery item (image or video)."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "url",
+        "type"
+      ]
+    },
+    "Recommendation": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Recommendation",
+      "type": "object",
+      "description": "Represents a product recommendation for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the recommendation."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Recommendation)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to Product. (Relationship: Product 1:N Recommendation)"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason for the recommendation (e.g., browsing history, previous order)."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "productId",
+        "reason"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles. Uses path-based ownership for user data.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores orders placed by users. Path-based ownership ensures only the user can access their orders.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/orders/{orderId}/orderItems/{orderItemId}",
+        "definition": {
+          "entityName": "OrderItem",
+          "schema": {
+            "$ref": "#/backend/entities/OrderItem"
+          },
+          "description": "Stores order items associated with an order.  Path-based ownership inherited from the parent order.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            },
+            {
+              "name": "orderItemId",
+              "description": "The unique identifier for the order item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/recommendations/{recommendationId}",
+        "definition": {
+          "entityName": "Recommendation",
+          "schema": {
+            "$ref": "#/backend/entities/Recommendation"
+          },
+          "description": "Stores product recommendations for users. Path-based ownership ensures only the user can access their recommendations.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "recommendationId",
+              "description": "The unique identifier for the recommendation."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product information. Globally accessible.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier for the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/greetings/{greetingId}",
+        "definition": {
+          "entityName": "Greeting",
+          "schema": {
+            "$ref": "#/backend/entities/Greeting"
+          },
+          "description": "Stores greeting messages. Globally accessible.",
+          "params": [
+            {
+              "name": "greetingId",
+              "description": "The unique identifier for the greeting."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/gallery/{galleryItemId}",
+        "definition": {
+          "entityName": "GalleryItem",
+          "schema": {
+            "$ref": "#/backend/entities/GalleryItem"
+          },
+          "description": "Stores gallery items (images, videos). Globally accessible.",
+          "params": [
+            {
+              "name": "galleryItemId",
+              "description": "The unique identifier for the gallery item."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support Aravalli Home Studio's core features, including product catalogs, order placement, user accounts, and AI-powered recommendations. It prioritizes security, scalability, and ease of debugging.  Authorization independence is achieved through path-based ownership for user-related data (orders, recommendations) and a dedicated collection for globally accessible data (products, greetings, gallery items).  This eliminates the need for `get()` calls in security rules, enabling atomic operations. Structural segregation ensures that each collection has a homogeneous security posture.  This design supports secure `list` operations (QAPs) by avoiding mixed data with different access needs within the same collection.\n\nThe design incorporates the following key aspects:\n\n*   **Users:** User profiles are stored in `/users/{userId}`. Orders and recommendations are stored as subcollections of users to establish clear ownership.\n*   **Products:** Products are stored in a top-level `/products` collection. This allows for easy access and listing of all products.\n*   **Orders:** Orders are stored as subcollections under each user (`/users/{userId}/orders/{orderId}`). This structure enables efficient retrieval of a user's order history.\n*   **Order Items:** Order items are stored as subcollections of orders (`/users/{userId}/orders/{orderId}/orderItems/{orderItemId}`).\n*   **Recommendations:** Recommendations are stored as subcollections under each user (`/users/{userId}/recommendations/{recommendationId}`). This allows for personalized product recommendations.\n*   **Greetings and Gallery Items:** Greetings and gallery items are stored in top-level collections (`/greetings`, `/gallery`). These collections are designed for global access and display to all users.\n\nThe path-based ownership of orders and recommendations ensures that security rules can be easily defined based on the `request.auth.uid`.\n\nRadical consistency and semantic naming conventions improve predictability and maintainability. For example, all user-owned data follows the `/users/{userId}/...` pattern."
+  }
+}
