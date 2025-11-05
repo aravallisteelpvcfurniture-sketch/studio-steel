@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser, useAuth } from '@/firebase';
 import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
+import { Bell, LogOut } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 
 export default function DashboardPage() {
@@ -35,7 +35,10 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-primary">
       <div className="flex justify-between items-center p-4 text-white">
-        <h1 className="text-xl font-bold">Welcome, {user.displayName || user.email}</h1>
+        <Button variant="ghost" size="icon">
+          <Bell />
+        </Button>
+        <h1 className="text-xl font-bold">Welcome</h1>
         <Button variant="ghost" size="icon" onClick={handleLogout}>
           <LogOut />
         </Button>
