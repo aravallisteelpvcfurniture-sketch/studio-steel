@@ -48,10 +48,10 @@ export default function ProfilePage() {
         <h1 className="text-2xl font-bold">Profile</h1>
       </header>
       
-      <main className="flex-grow -mt-8">
+      <main className="flex-grow">
         <div className="bg-background rounded-t-[2rem] p-6 h-full">
-          <div className="flex flex-col items-center pt-4">
-            <div className="relative w-24 h-24 rounded-full overflow-hidden -mt-16 border-4 border-background">
+          <div className="flex flex-col items-center -mt-12">
+            <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-background">
               {user.photoURL ? (
                 <Image
                   src={user.photoURL}
@@ -65,7 +65,7 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
-            <h2 className="text-xl font-semibold text-foreground mt-4">{user.displayName || 'User'}</h2>
+            <h2 className="text-xl font-semibold text-foreground mt-2">{user.displayName || 'User'}</h2>
             <p className="text-sm text-muted-foreground">{user.email}</p>
           </div>
 
