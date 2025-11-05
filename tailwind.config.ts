@@ -80,17 +80,50 @@ const config: Config = {
         "pulse-slow": {
           "0%, 100%": { opacity: '0.5', transform: 'scale(1)' },
           "50%": { opacity: '1', transform: 'scale(1.05)' },
-        }
+        },
+        "slide-from-top": {
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        "slide-from-bottom": {
+          "0%": { transform: "translateY(100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        "slide-from-left": {
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        "slide-from-right": {
+          "0%": { transform: "translateX(100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in-up": "fade-in-up 1s ease-out forwards",
         "pulse-slow": "pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "slide-from-top": "slide-from-top 1s ease-out forwards",
+        "slide-from-bottom": "slide-from-bottom 1s ease-out forwards",
+        "slide-from-left": "slide-from-left 1s ease-out forwards",
+        "slide-from-right": "slide-from-right 1s ease-out forwards",
       },
+      animationDelay: {
+        '1000': '1s',
+      }
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addUtilities, theme }: { addUtilities: any, theme: any }) {
+      const newUtilities = {
+        '.animation-delay-1000': {
+          'animation-delay': theme('animationDelay.1000'),
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 };
 
 export default config;
