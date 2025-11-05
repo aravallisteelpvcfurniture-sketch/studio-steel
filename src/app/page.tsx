@@ -23,10 +23,9 @@ export default function OnboardingPage() {
         <div className="relative w-full h-full">
           <Image
             src="https://picsum.photos/seed/1/800/1200"
-            alt="Yellow Taxi"
-            layout="fill"
-            objectFit="cover"
-            className="translate-x-1/4"
+            alt="Yellow taxi driving through a city"
+            fill
+            className="object-cover translate-x-1/4"
             data-ai-hint="yellow car"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent"></div>
