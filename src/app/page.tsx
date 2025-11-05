@@ -1,37 +1,45 @@
-import { ArrowRight, Lock, User } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
-export default function Home() {
+export default function WelcomePage() {
   return (
-    <div className="bg-white text-black min-h-screen flex flex-col">
-      <header className="p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-yellow-500">aravallisteelpvcfurniture</h1>
-        <div className="flex items-center space-x-2">
-          <User size={20} />
-          <Lock size={20} />
-        </div>
-      </header>
-      <main className="flex-grow flex flex-col justify-center px-6">
-        <div className="max-w-md">
-          <h2 className="text-4xl font-bold leading-tight">
-            Find your dream taxi to start your journey
-          </h2>
-        </div>
-        <div className="mt-8 relative w-full h-64">
-           <Image
-            src="https://picsum.photos/seed/1/800/600"
-            alt="Yellow Taxi"
-            fill
-            className="object-contain"
-            data-ai-hint="yellow car"
-           />
-        </div>
-        <div className="mt-auto pb-8">
-            <button className="w-full bg-yellow-400 text-black font-bold py-4 px-6 rounded-full flex items-center justify-center text-lg">
-                Get Started <ArrowRight className="ml-2" />
-            </button>
+    <div className="relative min-h-screen flex flex-col justify-between bg-black text-white">
+      <Image
+        src="https://picsum.photos/seed/welcome/1200/1800"
+        alt="Modern furniture"
+        fill
+        className="object-cover opacity-50"
+        data-ai-hint="modern furniture"
+      />
+      <div className="relative z-10 p-8 flex justify-between items-center">
+        <h1 className="text-2xl font-bold tracking-tighter">aravallisteelpvcfurniture</h1>
+      </div>
+
+      <main className="relative z-10 flex-grow flex flex-col items-center justify-center text-center px-4">
+        <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6">
+          Find Your <br />
+          Dream Furniture
+        </h2>
+        <p className="max-w-md text-lg text-gray-300 mb-10">
+          We help you find the best furniture for your home, so you can live in comfort and style.
+        </p>
+        <div className="w-full max-w-sm">
+          <Link href="/signup" passHref>
+            <Button size="lg" className="w-full mb-4 bg-accent text-accent-foreground hover:bg-accent/90">
+              Sign Up
+            </Button>
+          </Link>
+          <Link href="/login" passHref>
+            <Button size="lg" variant="outline" className="w-full bg-transparent border-accent text-accent hover:bg-accent/10">
+              Sign In
+            </Button>
+          </Link>
         </div>
       </main>
+      <footer className="relative z-10 p-8 text-center text-gray-500">
+        &copy; {new Date().getFullYear()} aravallisteelpvcfurniture
+      </footer>
     </div>
   );
 }
