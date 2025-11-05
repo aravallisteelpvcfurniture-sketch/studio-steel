@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser, useAuth } from '@/firebase';
 import { Button } from '@/components/ui/button';
-import { Bell, LogOut, Search, SlidersHorizontal, Receipt, BookText, Notebook, Users, Smile, PackageCheck, Camera, BookOpen, Lightbulb } from 'lucide-react';
+import { Bell, LogOut, Search, SlidersHorizontal, Receipt, BookText, Notebook, Users, Smile, PackageCheck, Camera, BookOpen, Lightbulb, GalleryVertical } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
@@ -115,6 +115,12 @@ export default function DashboardPage() {
                 <Lightbulb className="h-8 w-8 text-accent" />
             </div>
             <span className="text-sm font-medium">Furniture ideas</span>
+          </Link>
+          <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+            <div className="bg-accent/20 p-3 rounded-full">
+                <GalleryVertical className="h-8 w-8 text-accent" />
+            </div>
+            <span className="text-sm font-medium">Railing Catalog</span>
           </Link>
         </div>
       </div>
