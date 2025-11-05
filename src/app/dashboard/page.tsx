@@ -35,7 +35,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col bg-primary">
       <header className="bg-primary text-primary-foreground p-4 h-28 sticky top-0 z-10">
         <div className="flex justify-between items-center pt-4">
           <h1 className="text-2xl font-bold">Welcome</h1>
