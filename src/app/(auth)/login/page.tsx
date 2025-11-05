@@ -6,11 +6,11 @@ import { useAuth, useUser, useFirestore } from '@/firebase';
 import { initiateEmailSignIn, initiateGoogleSignIn } from '@/firebase/non-blocking-login';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
+import { Loader2, User, KeyRound } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const GoogleIcon = () => (
     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,70 +56,73 @@ export default function LoginPage() {
 
     if (isLoading || user) {
         return (
-            <div className="flex h-screen items-center justify-center">
+            <div className="flex h-full items-center justify-center">
                 <Loader2 className="h-12 w-12 animate-spin" />
             </div>
         );
     }
     
     return (
-        <Card>
-            <CardHeader className="text-center">
-                <CardTitle>Login</CardTitle>
-                <CardDescription>Welcome back! Please login to your account.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={handleEmailSignIn} className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input 
-                            id="email" 
-                            type="email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required 
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                             <Label htmlFor="password">Password</Label>
-                             <Link href="#" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">Forgot password?</Link>
-                        </div>
-                        <Input 
-                            id="password" 
-                            type="password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required 
-                        />
-                    </div>
-                     <Button type="submit" className="w-full bg-foreground text-background hover:bg-foreground/90">
-                        Login
-                    </Button>
-                </form>
-
-                 <div className="relative my-6">
-                    <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                        </span>
-                    </div>
+        <div className="flex flex-col h-full">
+            <div className="text-center">
+                <h2 className="text-2xl font-bold">Let's get something</h2>
+                <p className="text-muted-foreground">Good to see you back.</p>
+            </div>
+            
+            <div className="flex items-center justify-center gap-4 my-6">
+                <Button variant="outline" size="icon" className="rounded-full h-12 w-12" onClick={handleGoogleSignIn}>
+                    <GoogleIcon />
+                </Button>
+                {/* Placeholder for other social logins */}
+                <Button variant="outline" size="icon" className="rounded-full h-12 w-12" disabled>
+                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v7.9c4.56-.93 8-4.96 8-9.9z"/></svg>
+                </Button>
+                 <Button variant="outline" size="icon" className="rounded-full h-12 w-12" disabled>
+                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.67.88-.53 1.56-1.37 1.88-2.38-.83.49-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98-3.56-.18-6.73-1.89-8.84-4.48-.37.63-.58 1.37-.58 2.15 0 1.49.76 2.81 1.91 3.58-.7-.02-1.36-.21-1.94-.53v.05c0 2.08 1.48 3.82 3.44 4.21-.36.1-.74.15-1.13.15-.28 0-.55-.03-.81-.08.55 1.7 2.14 2.94 4.03 2.97-1.47 1.15-3.32 1.83-5.33 1.83-.35 0-.69-.02-1.03-.06 1.9 1.22 4.16 1.92 6.56 1.92 7.88 0 12.2-6.54 12.2-12.2 0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.22z"/></svg>
+                </Button>
+            </div>
+            
+            <form onSubmit={handleEmailSignIn} className="space-y-4 flex-grow flex flex-col">
+                <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input 
+                        id="email" 
+                        type="email" 
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required 
+                        className="pl-12 h-14"
+                    />
+                </div>
+                <div className="relative">
+                     <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input 
+                        id="password" 
+                        type="password" 
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required 
+                        className="pl-12 h-14"
+                    />
                 </div>
 
-                <div className="grid grid-cols-1 gap-4">
-                    <Button variant="outline" onClick={handleGoogleSignIn}>
-                        <GoogleIcon />
-                        Google
-                    </Button>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                        <Switch id="remember-me" />
+                        <Label htmlFor="remember-me" className="text-muted-foreground">Remember me</Label>
+                    </div>
+                     <Link href="#" className="text-sm text-accent-foreground/80 hover:underline">Forgot password?</Link>
                 </div>
+                
+                <div className="flex-grow"></div>
 
-            </CardContent>
-            <CardFooter className="justify-center text-sm">
-                <p>Don't have an account? <Link href="/signup" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Sign Up</Link></p>
-            </CardFooter>
-        </Card>
+                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-base h-14">
+                    LOGIN
+                </Button>
+                <p className="text-center text-sm text-muted-foreground">Don't have an account? <Link href="/signup" className="font-semibold text-foreground hover:underline">Sign Up</Link></p>
+            </form>
+        </div>
     );
 }

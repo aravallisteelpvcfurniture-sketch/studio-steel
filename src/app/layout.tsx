@@ -29,8 +29,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
        <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#8f33e0" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#ad66ed" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#849b5c" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#8cad6f" media="(prefers-color-scheme: dark)" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bungee&display=swap" rel="stylesheet" />

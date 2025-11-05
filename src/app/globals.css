@@ -13,8 +13,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 280 80% 55%; /* Vibrant Purple */
-    --primary-foreground: 0 0% 98%;
+    --primary: 80 25% 48%; /* Olive Green */
+    --primary-foreground: 20 80% 98%;
     
     --secondary: 240 5% 90%;
     --secondary-foreground: 240 10% 3.9%;
@@ -22,16 +22,16 @@
     --muted: 240 5% 96%;
     --muted-foreground: 240 4% 46%;
     
-    --accent: 240 5% 90%;
+    --accent: 38 94% 56%; /* Orange */
     --accent-foreground: 240 10% 3.9%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     
     --border: 240 5% 85%;
-    --input: 240 5% 85%;
-    --ring: 280 80% 55%; /* Vibrant Purple */
-    --radius: 0.75rem;
+    --input: 240 5% 92%;
+    --ring: 80 25% 48%;
+    --radius: 1.5rem;
   }
  
   .dark {
@@ -44,8 +44,8 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
     
-    --primary: 280 80% 65%; /* Lighter Purple for dark mode */
-    --primary-foreground: 0 0% 98%;
+    --primary: 80 25% 52%;
+    --primary-foreground: 20 80% 98%;
     
     --secondary: 240 4% 16%;
     --secondary-foreground: 0 0% 98%;
@@ -53,15 +53,15 @@
     --muted: 240 4% 16%;
     --muted-foreground: 0 0% 63.9%;
     
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 38 94% 60%;
+    --accent-foreground: 240 10% 3.9%;
     
     --destructive: 0 63% 40%;
     --destructive-foreground: 0 0% 98%;
     
     --border: 240 4% 16%;
     --input: 240 4% 16%;
-    --ring: 280 80% 65%; /* Lighter Purple for dark mode */
+    --ring: 80 25% 52%;
   }
 }
 
