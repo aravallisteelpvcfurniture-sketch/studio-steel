@@ -35,7 +35,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground p-4">
+      <header className="bg-primary text-primary-foreground p-4 h-28">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Welcome</h1>
           <div className="flex items-center gap-2">
@@ -48,7 +48,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
-      <div className="bg-background rounded-t-[3rem] p-8 -mt-12 relative text-foreground">
+      <div className="bg-background rounded-t-[3rem] p-8 -mt-8 relative text-foreground">
         <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
