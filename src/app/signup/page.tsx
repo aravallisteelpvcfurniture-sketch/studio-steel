@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { handleSocialSignIn } from '@/firebase/non-blocking-login';
-import { Building, Lock, Mail } from 'lucide-react';
+import { Building, Lock, Mail, User } from 'lucide-react';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="h-screen w-full bg-primary flex flex-col">
       <header className="flex-shrink-0 h-[35vh] flex flex-col items-center justify-center text-primary-foreground">
@@ -15,9 +15,16 @@ export default function LoginPage() {
         <h1 className="text-4xl font-bold mt-4">Aravalli Steel</h1>
       </header>
       <main className="flex-1 bg-background rounded-t-[2.5rem] p-8 flex flex-col">
-        <div className="flex-grow flex flex-col justify-center">
-          <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+         <div className="flex-grow flex flex-col justify-center">
+          <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
           <form className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input id="name" placeholder="Your Name" className="pl-10" required />
+                </div>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
@@ -45,7 +52,7 @@ export default function LoginPage() {
               </div>
             </div>
             <Button type="submit" className="w-full bg-accent text-accent-foreground h-12 rounded-full font-bold text-lg">
-              Login
+              Sign Up
             </Button>
           </form>
           <div className="relative my-6">
@@ -83,9 +90,9 @@ export default function LoginPage() {
             </Button>
           </div>
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?{' '}
-            <Link href="/signup" className="font-semibold text-accent">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/" className="font-semibold text-accent">
+              Login
             </Link>
           </p>
         </div>
