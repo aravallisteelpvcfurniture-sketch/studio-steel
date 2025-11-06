@@ -1,13 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, MessageCircle } from 'lucide-react';
+import { ChevronLeft, MessageCircle, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-
 
 // Mock data for parties - this would typically come from an API or database
 const parties = [
@@ -28,6 +26,7 @@ const parties = [
 export default function InvoicePage() {
   const router = useRouter();
   const [selectedParty, setSelectedParty] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleShareBill = (partyName: string) => {
     // Placeholder for bill sharing logic
@@ -41,6 +40,10 @@ export default function InvoicePage() {
     }
     router.push(`/dashboard/invoice/generate?partyId=${selectedParty}`);
   };
+
+  const filteredParties = parties.filter((party) =>
+    party.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -56,58 +59,58 @@ export default function InvoicePage() {
         <h1 className="text-xl font-bold">Invoice Bill</h1>
       </header>
       
-      <main className="flex-grow p-4 md:p-6 flex flex-col overflow-hidden">
-        <div className="mb-4 flex-shrink-0">
-            <label
-                htmlFor="party-search"
-                className="block text-sm font-medium text-muted-foreground mb-2"
-            >
-                Party List
-            </label>
-            <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                id="party-search"
-                placeholder="Search party..."
-                className="pl-10"
-                />
-            </div>
-        </div>
+      <div className="p-4 md:p-6 flex-shrink-0">
+          <label
+              htmlFor="party-search"
+              className="block text-sm font-medium text-muted-foreground mb-2"
+          >
+              Party List
+          </label>
+          <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+              id="party-search"
+              placeholder="Search party..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              />
+          </div>
+      </div>
         
-        <div className="flex-grow overflow-y-auto mb-4 border rounded-lg">
-            <div className="space-y-1 p-2">
-            {parties.map((party) => (
-                <div
-                    key={party.id}
-                    onClick={() => setSelectedParty(party.id)}
-                    className={cn(
-                        'w-full flex items-center justify-between p-3 rounded-md transition-colors cursor-pointer',
-                        selectedParty === party.id
-                        ? 'bg-accent text-accent-foreground'
-                        : 'hover:bg-muted'
-                    )}
-                >
-                    <span>{party.name}</span>
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={(e) => {
-                            e.stopPropagation(); // Prevent party selection when clicking the icon
-                            handleShareBill(party.name);
-                        }}
-                        className={cn(
-                            'rounded-full h-8 w-8', 
-                            selectedParty === party.id 
-                                ? 'hover:bg-accent/80' 
-                                : 'hover:bg-muted-foreground/20'
-                        )}
-                    >
-                        <MessageCircle className="h-5 w-5 text-green-500" />
-                    </Button>
-                </div>
-            ))}
-            </div>
-        </div>
+      <main className="flex-grow overflow-y-auto px-4 md:px-6 pb-4">
+          <div className="space-y-1 border rounded-lg p-2">
+          {filteredParties.map((party) => (
+              <div
+                  key={party.id}
+                  onClick={() => setSelectedParty(party.id)}
+                  className={cn(
+                      'w-full flex items-center justify-between p-3 rounded-md transition-colors cursor-pointer',
+                      selectedParty === party.id
+                      ? 'bg-accent text-accent-foreground'
+                      : 'hover:bg-muted'
+                  )}
+              >
+                  <span>{party.name}</span>
+                  <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={(e) => {
+                          e.stopPropagation();
+                          handleShareBill(party.name);
+                      }}
+                      className={cn(
+                          'rounded-full h-8 w-8', 
+                          selectedParty === party.id 
+                              ? 'hover:bg-accent/80' 
+                              : 'hover:bg-muted-foreground/20'
+                      )}
+                  >
+                      <MessageCircle className="h-5 w-5 text-green-500" />
+                  </Button>
+              </div>
+          ))}
+          </div>
       </main>
 
       <footer className="p-4 flex-shrink-0 border-t bg-background">
