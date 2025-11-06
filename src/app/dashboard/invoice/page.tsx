@@ -18,6 +18,11 @@ const parties = [
   { id: '5', name: 'Jain Timbers' },
   { id: '6', name: 'Gupta Hardware' },
   { id: '7', name: 'Royal Furnitures' },
+  { id: '8', name: 'New Party A' },
+  { id: '9', name: 'New Party B' },
+  { id: '10', name: 'New Party C' },
+  { id: '11', name: 'New Party D' },
+  { id: '12', name: 'New Party E' },
 ];
 
 export default function InvoicePage() {
@@ -26,7 +31,7 @@ export default function InvoicePage() {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <header className="bg-primary text-primary-foreground p-4 flex items-center sticky top-0 z-10">
+      <header className="bg-primary text-primary-foreground p-4 flex items-center flex-shrink-0 z-10">
         <Button
           variant="ghost"
           size="icon"
@@ -37,8 +42,9 @@ export default function InvoicePage() {
         </Button>
         <h1 className="text-xl font-bold">Invoice Bill</h1>
       </header>
-      <main className="flex-grow p-4 md:p-6 flex flex-col">
-        <div className="mb-4">
+      
+      <main className="flex-grow p-4 md:p-6 flex flex-col overflow-hidden">
+        <div className="mb-4 flex-shrink-0">
             <label
                 htmlFor="party-search"
                 className="block text-sm font-medium text-muted-foreground mb-2"
@@ -73,13 +79,13 @@ export default function InvoicePage() {
             ))}
             </div>
         </div>
-
-        <div className="pt-4">
-          <Button className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
-            Generate Bill
-          </Button>
-        </div>
       </main>
+
+      <footer className="p-4 flex-shrink-0 border-t bg-background">
+        <Button className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
+          Generate Bill
+        </Button>
+      </footer>
     </div>
   );
 }
