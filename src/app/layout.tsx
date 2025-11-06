@@ -19,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="theme-color" content="#14A3C7" />
+        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
       </head>
       <body className={inter.className}>
         <FirebaseClientProvider>{children}</FirebaseClientProvider>
