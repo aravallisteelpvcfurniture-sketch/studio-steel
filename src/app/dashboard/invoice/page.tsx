@@ -75,12 +75,11 @@ export default function InvoicePage() {
     if(party.mobile) doc.text(party.mobile, 14, 90);
 
     // Items Table
-    const tableColumn = ["#", "Item Name", "Qty", "Rate", "Amount"];
+    const tableColumn = ["Item Name", "Qty", "Rate", "Amount"];
     const tableRows: (string|number)[][] = [];
 
-    party.items.forEach((item, index) => {
+    party.items.forEach((item) => {
       const itemData = [
-        index + 1,
         item.name,
         item.quantity,
         `₹${item.price.toFixed(2)}`,
@@ -93,13 +92,13 @@ export default function InvoicePage() {
         head: [tableColumn],
         body: tableRows,
         startY: 95,
-        theme: 'striped',
+        theme: 'grid',
         headStyles: { fillColor: [20, 163, 199] }, // Corresponds to primary color
-        styles: { halign: 'center' },
+        styles: { halign: 'center', lineColor: [200, 200, 200], lineWidth: 0.1 },
         columnStyles: { 
-            1: { halign: 'left' },
+            0: { halign: 'left' },
+            2: { halign: 'right' },
             3: { halign: 'right' },
-            4: { halign: 'right' },
         }
     });
 
