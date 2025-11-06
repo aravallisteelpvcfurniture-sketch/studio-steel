@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useAuth, useUser } from '@/firebase';
 import { initiateEmailSignUp, initiateGoogleSignIn } from '@/firebase/non-blocking-login';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Mail, User, Lock, Facebook } from 'lucide-react';
+import { ChevronLeft, Mail, User, Lock } from 'lucide-react';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 48 48">
@@ -52,11 +52,6 @@ export default function SignUpPage() {
     initiateGoogleSignIn(auth);
   };
   
-  const handleFacebookSignIn = () => {
-    // initiateFacebookSignIn(auth);
-    console.log("Facebook Sign in not implemented yet")
-  };
-
   return (
     <div className="min-h-screen bg-primary flex flex-col overflow-hidden">
        <div className="flex justify-between items-center p-4 text-white flex-shrink-0">
@@ -75,7 +70,6 @@ export default function SignUpPage() {
 
         <div className="flex justify-center space-x-4 mb-8">
           <Button variant="outline" size="icon" className="rounded-full h-12 w-12" onClick={handleGoogleSignIn}><GoogleIcon /></Button>
-          <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#3b5998] text-white" onClick={handleFacebookSignIn}><Facebook /></Button>
         </div>
 
         <form onSubmit={handleSignUp} className="space-y-6">
@@ -128,3 +122,5 @@ export default function SignUpPage() {
     </div>
   );
 }
+
+    
