@@ -9,7 +9,8 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname();
-  const showBottomNav = pathname !== '/dashboard/invoice';
+  const hideBottomNavOnRoutes = ['/dashboard/invoice', '/dashboard/invoice/generate'];
+  const showBottomNav = !hideBottomNavOnRoutes.includes(pathname);
 
   return (
     <div className="relative min-h-screen">
