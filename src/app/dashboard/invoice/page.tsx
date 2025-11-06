@@ -7,9 +7,26 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 
+interface Item {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+interface Party {
+    id: string;
+    name: string;
+    mobile: string;
+    email: string;
+    address: string;
+    items: Item[];
+    totalAmount: number;
+    date: string;
+}
+
 export default function InvoicePage() {
   const router = useRouter();
-  const [parties, setParties] = useState<any[]>([]);
+  const [parties, setParties] = useState<Party[]>([]);
   const [selectedParty, setSelectedParty] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -19,8 +36,32 @@ export default function InvoicePage() {
     setParties(savedParties.reverse()); // Show newest first
   }, []);
 
-  const handleShareBill = (partyName: string) => {
-    // Placeholder for bill sharing logic - removed alert
+  const handleShareBill = (party: Party) => {
+    if (!party.mobile) {
+      alert("This party doesn't have a mobile number saved.");
+      return;
+    }
+
+    const itemsText = party.items.map(item => 
+      `${item.name} (Qty: ${item.quantity}, Price: ₹${item.price.toFixed(2)}) - ₹${(item.quantity * item.price).toFixed(2)}`
+    ).join('\n');
+
+    const billDetails = `
+Hello ${party.name},
+
+Here is your bill from Aravalli Steel PVC Furniture:
+-----------------------------------
+${itemsText}
+-----------------------------------
+*Total Amount: ₹${party.totalAmount.toFixed(2)}*
+
+Thank you for your business!
+    `;
+
+    const encodedMessage = encodeURIComponent(billDetails.trim());
+    const whatsappUrl = `https://wa.me/${party.mobile}?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, '_blank');
   };
 
   const handleGenerateBill = () => {
@@ -89,7 +130,7 @@ export default function InvoicePage() {
                         size="icon" 
                         onClick={(e) => {
                             e.stopPropagation();
-                            handleShareBill(party.name);
+                            handleShareBill(party);
                         }}
                         className={cn(
                             'rounded-full h-8 w-8', 
