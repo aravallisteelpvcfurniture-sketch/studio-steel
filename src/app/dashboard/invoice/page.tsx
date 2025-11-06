@@ -8,20 +8,7 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 
 // Mock data for parties - this would typically come from an API or database
-const parties = [
-  { id: '1', name: 'Mithun Ray', mobile: '9876543210', email: 'mithun@example.com', address: '123 Tech Park, Bangalore' },
-  { id: '2', name: 'Shree Ram Steel', mobile: '8765432109', email: 'shreeram@example.com', address: '456 Steel Market, Delhi' },
-  { id: '3', name: 'Krishna Plywood', mobile: '7654321098', email: 'krishna@example.com', address: '789 Wood Lane, Mumbai' },
-  { id: '4', name: 'Aravalli Home Studio', mobile: '6543210987', email: 'aravalli@example.com', address: '101 Home Decor, Jaipur' },
-  { id: '5', name: 'Jain Timbers', mobile: '5432109876', email: 'jain@example.com', address: '212 Timber Road, Chennai' },
-  { id: '6', name: 'Gupta Hardware', mobile: '4321098765', email: 'gupta@example.com', address: '333 Hardware Hub, Kolkata' },
-  { id: '7', name: 'Royal Furnitures', mobile: '3210987654', email: 'royal@example.com', address: '444 Furniture Plaza, Hyderabad' },
-  { id: '8', name: 'New Party A', mobile: '2109876543', email: 'partya@example.com', address: '555 New Street, Pune' },
-  { id: '9', name: 'New Party B', mobile: '1098765432', email: 'partyb@example.com', address: '666 Party Ave, Ahmedabad' },
-  { id: '10', name: 'New Party C', mobile: '0987654321', email: 'partyc@example.com', address: '777 Celebration Blvd, Surat' },
-  { id: '11', name: 'New Party D', mobile: '9876543211', email: 'partyd@example.com', address: '888 Gala Rd, Lucknow' },
-  { id: '12', name: 'New Party E', mobile: '8765432110', email: 'partye@example.com', address: '999 Festival Way, Nagpur' },
-];
+const parties: any[] = [];
 
 export default function InvoicePage() {
   const router = useRouter();
@@ -76,36 +63,42 @@ export default function InvoicePage() {
         
       <main className="flex-grow overflow-y-auto px-4 md:px-6 pb-4">
           <div className="space-y-1 border rounded-lg p-2">
-          {filteredParties.map((party) => (
-              <div
-                  key={party.id}
-                  onClick={() => setSelectedParty(party.id)}
-                  className={cn(
-                      'w-full flex items-center justify-between p-3 rounded-md transition-colors cursor-pointer',
-                      selectedParty === party.id
-                      ? 'bg-accent text-accent-foreground'
-                      : 'hover:bg-muted'
-                  )}
-              >
-                  <span>{party.name}</span>
-                  <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={(e) => {
-                          e.stopPropagation();
-                          handleShareBill(party.name);
-                      }}
-                      className={cn(
-                          'rounded-full h-8 w-8', 
-                          selectedParty === party.id 
-                              ? 'hover:bg-accent/80' 
-                              : 'hover:bg-muted-foreground/20'
-                      )}
-                  >
-                      <MessageCircle className="h-5 w-5 text-green-500" />
-                  </Button>
-              </div>
-          ))}
+          {filteredParties.length > 0 ? (
+            filteredParties.map((party) => (
+                <div
+                    key={party.id}
+                    onClick={() => setSelectedParty(party.id)}
+                    className={cn(
+                        'w-full flex items-center justify-between p-3 rounded-md transition-colors cursor-pointer',
+                        selectedParty === party.id
+                        ? 'bg-accent text-accent-foreground'
+                        : 'hover:bg-muted'
+                    )}
+                >
+                    <span>{party.name}</span>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleShareBill(party.name);
+                        }}
+                        className={cn(
+                            'rounded-full h-8 w-8', 
+                            selectedParty === party.id 
+                                ? 'hover:bg-accent/80' 
+                                : 'hover:bg-muted-foreground/20'
+                        )}
+                    >
+                        <MessageCircle className="h-5 w-5 text-green-500" />
+                    </Button>
+                </div>
+            ))
+          ) : (
+            <div className="text-center text-muted-foreground p-4">
+              No parties found.
+            </div>
+          )}
           </div>
       </main>
 
