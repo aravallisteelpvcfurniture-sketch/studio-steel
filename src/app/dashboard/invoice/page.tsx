@@ -11,18 +11,18 @@ import { Search } from 'lucide-react';
 
 // Mock data for parties - this would typically come from an API or database
 const parties = [
-  { id: '1', name: 'Mithun Ray' },
-  { id: '2', name: 'Shree Ram Steel' },
-  { id: '3', name: 'Krishna Plywood' },
-  { id: '4', name: 'Aravalli Home Studio' },
-  { id: '5', name: 'Jain Timbers' },
-  { id: '6', name: 'Gupta Hardware' },
-  { id: '7', name: 'Royal Furnitures' },
-  { id: '8', name: 'New Party A' },
-  { id: '9', name: 'New Party B' },
-  { id: '10', name: 'New Party C' },
-  { id: '11', name: 'New Party D' },
-  { id: '12', name: 'New Party E' },
+  { id: '1', name: 'Mithun Ray', mobile: '9876543210', email: 'mithun@example.com', address: '123 Tech Park, Bangalore' },
+  { id: '2', name: 'Shree Ram Steel', mobile: '8765432109', email: 'shreeram@example.com', address: '456 Steel Market, Delhi' },
+  { id: '3', name: 'Krishna Plywood', mobile: '7654321098', email: 'krishna@example.com', address: '789 Wood Lane, Mumbai' },
+  { id: '4', name: 'Aravalli Home Studio', mobile: '6543210987', email: 'aravalli@example.com', address: '101 Home Decor, Jaipur' },
+  { id: '5', name: 'Jain Timbers', mobile: '5432109876', email: 'jain@example.com', address: '212 Timber Road, Chennai' },
+  { id: '6', name: 'Gupta Hardware', mobile: '4321098765', email: 'gupta@example.com', address: '333 Hardware Hub, Kolkata' },
+  { id: '7', name: 'Royal Furnitures', mobile: '3210987654', email: 'royal@example.com', address: '444 Furniture Plaza, Hyderabad' },
+  { id: '8', name: 'New Party A', mobile: '2109876543', email: 'partya@example.com', address: '555 New Street, Pune' },
+  { id: '9', name: 'New Party B', mobile: '1098765432', email: 'partyb@example.com', address: '666 Party Ave, Ahmedabad' },
+  { id: '10', name: 'New Party C', mobile: '0987654321', email: 'partyc@example.com', address: '777 Celebration Blvd, Surat' },
+  { id: '11', name: 'New Party D', mobile: '9876543211', email: 'partyd@example.com', address: '888 Gala Rd, Lucknow' },
+  { id: '12', name: 'New Party E', mobile: '8765432110', email: 'partye@example.com', address: '999 Festival Way, Nagpur' },
 ];
 
 export default function InvoicePage() {
@@ -32,6 +32,14 @@ export default function InvoicePage() {
   const handleShareBill = (partyName: string) => {
     // Placeholder for bill sharing logic
     alert(`Sharing bill for ${partyName}...`);
+  };
+
+  const handleGenerateBill = () => {
+    if (!selectedParty) {
+      alert('Please select a party first.');
+      return;
+    }
+    router.push(`/dashboard/invoice/generate?partyId=${selectedParty}`);
   };
 
   return (
@@ -103,7 +111,7 @@ export default function InvoicePage() {
       </main>
 
       <footer className="p-4 flex-shrink-0 border-t bg-background">
-        <Button className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
+        <Button onClick={handleGenerateBill} className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
           Generate Bill
         </Button>
       </footer>
