@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, MessageCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -28,6 +28,11 @@ const parties = [
 export default function InvoicePage() {
   const router = useRouter();
   const [selectedParty, setSelectedParty] = useState<string | null>(null);
+
+  const handleShareBill = (partyName: string) => {
+    // Placeholder for bill sharing logic
+    alert(`Sharing bill for ${partyName}...`);
+  };
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -64,18 +69,34 @@ export default function InvoicePage() {
         <div className="flex-grow overflow-y-auto mb-4 border rounded-lg">
             <div className="space-y-1 p-2">
             {parties.map((party) => (
-                <button
-                key={party.id}
-                onClick={() => setSelectedParty(party.id)}
-                className={cn(
-                    'w-full text-left p-3 rounded-md transition-colors',
-                    selectedParty === party.id
-                    ? 'bg-accent text-accent-foreground'
-                    : 'hover:bg-muted'
-                )}
+                <div
+                    key={party.id}
+                    onClick={() => setSelectedParty(party.id)}
+                    className={cn(
+                        'w-full flex items-center justify-between p-3 rounded-md transition-colors cursor-pointer',
+                        selectedParty === party.id
+                        ? 'bg-accent text-accent-foreground'
+                        : 'hover:bg-muted'
+                    )}
                 >
-                {party.name}
-                </button>
+                    <span>{party.name}</span>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent party selection when clicking the icon
+                            handleShareBill(party.name);
+                        }}
+                        className={cn(
+                            'rounded-full h-8 w-8', 
+                            selectedParty === party.id 
+                                ? 'hover:bg-accent/80' 
+                                : 'hover:bg-muted-foreground/20'
+                        )}
+                    >
+                        <MessageCircle className="h-5 w-5 text-green-500" />
+                    </Button>
+                </div>
             ))}
             </div>
         </div>
