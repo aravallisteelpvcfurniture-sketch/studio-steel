@@ -101,7 +101,7 @@ export default function InvoicePage() {
         }
     });
 
-    const finalY = doc.lastAutoTable.finalY || 150;
+    const finalY = (doc as any).lastAutoTable.finalY || 150;
 
     // Total
     doc.setFontSize(14);
@@ -117,7 +117,6 @@ export default function InvoicePage() {
 
 
     doc.save(`invoice-${party.id.substring(0,6)}.pdf`);
-    alert('PDF downloaded! You can now share it via WhatsApp.');
   };
 
   const handleGenerateBill = () => {
