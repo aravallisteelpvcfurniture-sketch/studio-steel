@@ -34,11 +34,7 @@ export default function InvoicePage() {
   };
 
   const handleGenerateBill = () => {
-    if (!selectedParty) {
-      alert('Please select a party first.');
-      return;
-    }
-    router.push(`/dashboard/invoice/generate?partyId=${selectedParty}`);
+    router.push(`/dashboard/invoice/generate`);
   };
 
   const filteredParties = parties.filter((party) =>
