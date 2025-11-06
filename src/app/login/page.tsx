@@ -72,7 +72,7 @@ export default function LoginPage() {
             />
           </div>
           <Button type="submit" className="w-full h-12 rounded-full bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
-            SIGN IN
+            LOGIN
           </Button>
         </form>
         <p className="mt-8 text-center text-sm text-muted-foreground">
@@ -85,5 +85,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
