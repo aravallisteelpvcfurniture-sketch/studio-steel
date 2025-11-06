@@ -1,7 +1,8 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { ChevronLeft, User, Phone, Mail, MapPin } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,7 +30,15 @@ function GenerateBillContent() {
   
   const party = parties.find(p => p.id === partyId);
 
-  if (!party) {
+  const [partyDetails, setPartyDetails] = useState(party);
+
+  useEffect(() => {
+    if (party) {
+      setPartyDetails(party);
+    }
+  }, [party]);
+
+  if (!partyDetails) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center p-4">
         <h2 className="text-xl font-semibold text-destructive">Party not found!</h2>
@@ -39,11 +48,16 @@ function GenerateBillContent() {
     );
   }
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPartyDetails(prevDetails => prevDetails ? { ...prevDetails, [name]: value } : null);
+  };
+  
   const detailItems = [
-    { icon: User, label: 'Name', value: party.name },
-    { icon: Phone, label: 'Mobile', value: party.mobile },
-    { icon: Mail, label: 'Email', value: party.email },
-    { icon: MapPin, label: 'Address', value: party.address },
+    { name: 'name', icon: User, label: 'Name', value: partyDetails.name },
+    { name: 'mobile', icon: Phone, label: 'Mobile', value: partyDetails.mobile },
+    { name: 'email', icon: Mail, label: 'Email', value: partyDetails.email },
+    { name: 'address', icon: MapPin, label: 'Address', value: partyDetails.address },
   ];
 
   return (
@@ -53,17 +67,21 @@ function GenerateBillContent() {
           <CardTitle>Party Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <form className="space-y-6">
             {detailItems.map(item => (
-              <div key={item.label} className="flex items-start">
-                <item.icon className="h-5 w-5 text-muted-foreground mt-1 mr-4 flex-shrink-0" />
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium text-muted-foreground">{item.label}</span>
-                  <span className="text-base font-semibold text-foreground">{item.value}</span>
-                </div>
+              <div key={item.name} className="relative">
+                <item.icon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id={item.name}
+                  name={item.name}
+                  placeholder={item.label}
+                  value={item.value}
+                  onChange={handleInputChange}
+                  className="pl-10 rounded-xl h-12 bg-muted border-muted"
+                />
               </div>
             ))}
-          </div>
+          </form>
         </CardContent>
       </Card>
     </div>
