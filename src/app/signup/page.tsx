@@ -1,9 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@/firebase';
+import { useAuth, useUser } from '@/firebase';
 import { initiateEmailSignUp, initiateGoogleSignIn, initiateFacebookSignIn } from '@/firebase/non-blocking-login';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Mail, User, Lock, Facebook } from 'lucide-react';
@@ -34,7 +34,14 @@ export default function SignUpPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const auth = useAuth();
+  const { user } = useUser();
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();

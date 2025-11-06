@@ -4,7 +4,7 @@ import {
   signInAnonymously,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
   FacebookAuthProvider,
   // Assume getAuth and app are initialized elsewhere
@@ -34,15 +34,15 @@ export function initiateEmailSignIn(authInstance: Auth, email: string, password:
 /** Initiate Google sign-in (non-blocking). */
 export function initiateGoogleSignIn(authInstance: Auth): void {
   const provider = new GoogleAuthProvider();
-  // CRITICAL: Call signInWithPopup directly. Do NOT use 'await signInWithPopup(...)'.
-  signInWithPopup(authInstance, provider);
-  // Code continues immediately. Auth state change is handled by onAuthStateChanged listener.
+  // CRITICAL: Using signInWithRedirect for better PWA/mobile compatibility.
+  signInWithRedirect(authInstance, provider);
+  // The user is redirected, and the result is handled when they return to the app.
 }
 
 /** Initiate Facebook sign-in (non-blocking). */
 export function initiateFacebookSignIn(authInstance: Auth): void {
   const provider = new FacebookAuthProvider();
-  // CRITICAL: Call signInWithPopup directly. Do NOT use 'await signInWithPopup(...)'.
-  signInWithPopup(authInstance, provider);
-  // Code continues immediately. Auth state change is handled by onAuthStateChanged listener.
+  // CRITICAL: Using signInWithRedirect for better PWA/mobile compatibility.
+  signInWithRedirect(authInstance, provider);
+  // The user is redirected, and the result is handled when they return to the app.
 }

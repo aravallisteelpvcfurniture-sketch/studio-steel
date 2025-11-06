@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="theme-color" content="#14A3C7" />
-        <link rel="icon" href="/logo.svg" type="image/svg+xml" sizes="any" />
+        <link rel="icon" href="/logo.png" type="image/png" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
