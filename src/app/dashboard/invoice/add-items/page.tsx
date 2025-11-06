@@ -47,6 +47,31 @@ export default function AddItemsPage() {
     return items.reduce((sum, item) => sum + item.quantity * item.price, 0);
   }, [items]);
 
+  const handleGenerateFinalBill = () => {
+    const partyDetails = {
+        id: Date.now().toString(),
+        name: searchParams.get('name') || 'N/A',
+        mobile: searchParams.get('mobile') || '',
+        email: searchParams.get('email') || '',
+        address: searchParams.get('address') || '',
+    };
+
+    const invoice = {
+        ...partyDetails,
+        items,
+        totalAmount,
+        date: new Date().toISOString(),
+    };
+    
+    // Save to localStorage
+    const savedParties = JSON.parse(localStorage.getItem('parties') || '[]');
+    savedParties.push(invoice);
+    localStorage.setItem('parties', JSON.stringify(savedParties));
+
+    alert('Bill generated and saved!');
+    router.push('/dashboard/invoice');
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background">
       <header className="bg-primary text-primary-foreground p-4 flex items-center flex-shrink-0">
@@ -126,7 +151,11 @@ export default function AddItemsPage() {
       </main>
 
       <footer className="p-4 flex-shrink-0 border-t bg-background">
-        <Button className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
+        <Button 
+            onClick={handleGenerateFinalBill}
+            className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold"
+            disabled={items.length === 0}
+        >
           Generate Final Bill
         </Button>
       </footer>

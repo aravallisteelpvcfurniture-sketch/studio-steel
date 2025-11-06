@@ -3,17 +3,21 @@
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, MessageCircle, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 
-// Mock data for parties - this would typically come from an API or database
-const parties: any[] = [];
-
 export default function InvoicePage() {
   const router = useRouter();
+  const [parties, setParties] = useState<any[]>([]);
   const [selectedParty, setSelectedParty] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    // Load parties from localStorage on component mount
+    const savedParties = JSON.parse(localStorage.getItem('parties') || '[]');
+    setParties(savedParties.reverse()); // Show newest first
+  }, []);
 
   const handleShareBill = (partyName: string) => {
     // Placeholder for bill sharing logic
@@ -34,7 +38,7 @@ export default function InvoicePage() {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => router.back()}
+          onClick={() => router.push('/dashboard')}
           className="mr-2 hover:bg-primary/80"
         >
           <ChevronLeft />
@@ -75,7 +79,12 @@ export default function InvoicePage() {
                         : 'hover:bg-muted'
                     )}
                 >
-                    <span>{party.name}</span>
+                    <div className="flex flex-col">
+                      <span className="font-semibold">{party.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(party.date).toLocaleDateString()} - ₹{party.totalAmount.toFixed(2)}
+                      </span>
+                    </div>
                     <Button 
                         variant="ghost" 
                         size="icon" 
