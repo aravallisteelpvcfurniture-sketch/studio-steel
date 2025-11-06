@@ -20,8 +20,7 @@ export default function InvoicePage() {
   }, []);
 
   const handleShareBill = (partyName: string) => {
-    // Placeholder for bill sharing logic
-    alert(`Sharing bill for ${partyName}...`);
+    // Placeholder for bill sharing logic - removed alert
   };
 
   const handleGenerateBill = () => {
