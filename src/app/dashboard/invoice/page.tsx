@@ -54,25 +54,38 @@ export default function InvoicePage() {
     doc.text('TAX INVOICE', 105, 20, { align: 'center' });
     
     doc.setFontSize(12);
-    doc.text('Aravalli Steel PVC Furniture', 14, 35);
+    doc.setFont('helvetica', 'bold');
+    doc.text('ARAVALLI STEEL & PVC FURNITURE', 14, 35);
     doc.setFontSize(10);
-    doc.text('123 Example Street, City, State, PIN', 14, 40);
-    doc.text('GSTIN: YOUR_GSTIN', 14, 45);
-    doc.text('Email: your.email@example.com', 14, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Shop No. 1, Opp. Old Octroi Post, Near Essar Petrol Pump, G.I.D.C. Gate,', 14, 42);
+    doc.text('V.U. Nagar, Anand - 388121', 14, 48);
+    doc.text('GSTIN: YOUR_GSTIN_HERE', 14, 54);
+    
+    const contactX = 196;
+    doc.text('Rayyan R. Vhora: 99793 32583', contactX, 42, { align: 'right' });
+    doc.text('Mithun R. Vhora: 90333 46830', contactX, 48, { align: 'right' });
+    doc.text('aravallifurniture@gmail.com', contactX, 54, { align: 'right' });
+
 
     // Invoice Details
+    doc.setLineWidth(0.5);
+    doc.line(14, 60, 196, 60);
     doc.setFontSize(10);
-    doc.text(`Invoice No: ${invoiceId}`, 14, 60);
-    doc.text(`Date: ${new Date(party.date).toLocaleDateString()}`, 196, 60, { align: 'right' });
+    doc.text(`Invoice No: ${invoiceId}`, 14, 66);
+    doc.text(`Date: ${new Date(party.date).toLocaleDateString()}`, 196, 66, { align: 'right' });
+    doc.line(14, 70, 196, 70);
 
     // Bill To
     doc.setFontSize(12);
-    doc.text('Bill To:', 14, 70);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Bill To:', 14, 78);
     doc.setFontSize(10);
-    doc.text(party.name, 14, 75);
-    doc.text(party.address, 14, 80);
-    if(party.email) doc.text(party.email, 14, 85);
-    if(party.mobile) doc.text(party.mobile, 14, 90);
+    doc.setFont('helvetica', 'normal');
+    doc.text(party.name, 14, 84);
+    doc.text(party.address, 14, 90);
+    if(party.email) doc.text(party.email, 14, 96);
+    if(party.mobile) doc.text(party.mobile, 14, 102);
 
     // Items Table
     const tableColumn = ["Item Name", "Qty", "Rate", "Amount"];
@@ -91,10 +104,10 @@ export default function InvoicePage() {
     doc.autoTable({
         head: [tableColumn],
         body: tableRows,
-        startY: 95,
+        startY: 108,
         theme: 'grid',
         headStyles: { fillColor: [20, 163, 199] }, // Corresponds to primary color
-        styles: { halign: 'center', lineColor: [200, 200, 200], lineWidth: 0.1 },
+        styles: { halign: 'center', lineColor: [150, 150, 150], lineWidth: 0.1 },
         columnStyles: { 
             0: { halign: 'left' },
             2: { halign: 'right' },
@@ -113,7 +126,7 @@ export default function InvoicePage() {
     // Footer
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('For: Aravalli Steel PVC Furniture', 14, finalY + 30);
+    doc.text('For: Aravalli Steel & PVC Furniture', 14, finalY + 30);
     doc.text('Authorised Signatory', 196, finalY + 40, { align: 'right' });
 
     const pdfBlob = doc.output('blob');
