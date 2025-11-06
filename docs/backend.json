@@ -30,6 +30,10 @@
         "category": {
           "type": "string",
           "description": "Category of the product (e.g., chair, table)."
+        },
+        "material": {
+          "type": "string",
+          "description": "Material of the product (e.g., steel, PVC)."
         }
       },
       "required": [
@@ -38,7 +42,8 @@
         "description",
         "price",
         "imageUrl",
-        "category"
+        "category",
+        "material"
       ]
     },
     "Order": {
@@ -57,7 +62,7 @@
         },
         "orderDate": {
           "type": "string",
-          "description": "Date when the order was placed.",
+          "description": "Date the order was placed.",
           "format": "date-time"
         },
         "totalAmount": {
@@ -68,12 +73,9 @@
           "type": "string",
           "description": "Status of the order (e.g., pending, processing, shipped, completed)."
         },
-        "orderItems": {
-          "type": "array",
-          "description": "List of order items",
-          "items": {
-            "type": "string"
-          }
+        "shippingAddress": {
+          "type": "string",
+          "description": "Shipping address for the order."
         }
       },
       "required": [
@@ -82,7 +84,7 @@
         "orderDate",
         "totalAmount",
         "status",
-        "orderItems"
+        "shippingAddress"
       ]
     },
     "OrderItem": {
@@ -107,9 +109,9 @@
           "type": "number",
           "description": "Quantity of the product in the order item."
         },
-        "unitPrice": {
+        "itemPrice": {
           "type": "number",
-          "description": "Price of one unit of the product at the time of the order."
+          "description": "Price of the individual item"
         }
       },
       "required": [
@@ -117,7 +119,7 @@
         "orderId",
         "productId",
         "quantity",
-        "unitPrice"
+        "itemPrice"
       ]
     },
     "Customer": {
@@ -197,47 +199,41 @@
         "mediaType"
       ]
     },
-    "Greeting": {
+    "Recommendation": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Greeting",
+      "title": "Recommendation",
       "type": "object",
-      "description": "Represents a greeting message for visitors.",
+      "description": "Represents a recommended product for a customer.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the greeting."
+          "description": "Unique identifier for the recommendation."
         },
-        "message": {
+        "customerId": {
           "type": "string",
-          "description": "The greeting message to display."
+          "description": "Reference to Customer. (Relationship: Customer 1:N Recommendation)"
         },
-        "type": {
+        "productId": {
           "type": "string",
-          "description": "Type of greeting (e.g., welcome, returning)."
+          "description": "Reference to Product. (Relationship: Product 1:N Recommendation)"
         },
-        "startDate": {
+        "reason": {
           "type": "string",
-          "description": "Date and time when the greeting should start being displayed.",
-          "format": "date-time"
-        },
-        "endDate": {
-          "type": "string",
-          "description": "Date and time when the greeting should stop being displayed.",
-          "format": "date-time"
+          "description": "Reason for the recommendation (e.g., browsing history, previous order)."
         }
       },
       "required": [
         "id",
-        "message",
-        "type",
-        "startDate",
-        "endDate"
+        "customerId",
+        "productId",
+        "reason"
       ]
     }
   },
   "auth": {
     "providers": [
-      "password"
+      "password",
+      "anonymous"
     ]
   },
   "firestore": {
@@ -249,71 +245,71 @@
           "schema": {
             "$ref": "#/backend/entities/Product"
           },
-          "description": "Stores product information.  No denormalized authorization fields are needed as access is public.",
+          "description": "Stores furniture product information.",
           "params": [
             {
               "name": "productId",
-              "description": "The unique ID of the product."
+              "description": "Unique identifier for the product."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}",
+        "path": "/customers/{customerId}",
         "definition": {
           "entityName": "Customer",
           "schema": {
             "$ref": "#/backend/entities/Customer"
           },
-          "description": "Stores customer profile information.  The userId is the Firebase Authentication UID.",
+          "description": "Stores customer profile information.  Customers can only access their own profile.",
           "params": [
             {
-              "name": "userId",
-              "description": "The unique ID of the user, corresponding to their Firebase Auth UID."
+              "name": "customerId",
+              "description": "Unique identifier for the customer."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/orders/{orderId}",
+        "path": "/customers/{customerId}/orders/{orderId}",
         "definition": {
           "entityName": "Order",
           "schema": {
             "$ref": "#/backend/entities/Order"
           },
-          "description": "Stores order information for a specific user. Includes customerId to identify the owner (denormalized).",
+          "description": "Stores customer order information. Orders are a subcollection of Customer to enforce ownership.",
           "params": [
             {
-              "name": "userId",
-              "description": "The unique ID of the user who placed the order."
+              "name": "customerId",
+              "description": "Unique identifier for the customer."
             },
             {
               "name": "orderId",
-              "description": "The unique ID of the order."
+              "description": "Unique identifier for the order."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/orders/{orderId}/orderItems/{orderItemId}",
+        "path": "/customers/{customerId}/orders/{orderId}/orderItems/{orderItemId}",
         "definition": {
           "entityName": "OrderItem",
           "schema": {
             "$ref": "#/backend/entities/OrderItem"
           },
-          "description": "Stores individual items within an order. Includes orderId for association with the parent order (denormalized).",
+          "description": "Stores individual order items within a specific order. OrderItems are subcollections of Orders.",
           "params": [
             {
-              "name": "userId",
-              "description": "The unique ID of the user who placed the order."
+              "name": "customerId",
+              "description": "Unique identifier for the customer."
             },
             {
               "name": "orderId",
-              "description": "The unique ID of the order."
+              "description": "Unique identifier for the order."
             },
             {
               "name": "orderItemId",
-              "description": "The unique ID of the order item."
+              "description": "Unique identifier for the order item."
             }
           ]
         }
@@ -325,34 +321,36 @@
           "schema": {
             "$ref": "#/backend/entities/GalleryItem"
           },
-          "description": "Stores gallery items (images, videos). No denormalized authorization fields are needed as access is public.",
+          "description": "Stores gallery items (images, videos) available to all users.",
           "params": [
             {
               "name": "galleryItemId",
-              "description": "The unique ID of the gallery item."
+              "description": "Unique identifier for the gallery item."
             }
           ]
         }
       },
       {
-        "path": "/greetings/{greetingId}",
+        "path": "/customers/{customerId}/recommendations/{recommendationId}",
         "definition": {
-          "entityName": "Greeting",
+          "entityName": "Recommendation",
           "schema": {
-            "$ref": "#/backend/entities/Greeting"
+            "$ref": "#/backend/entities/Recommendation"
           },
-          "description": "Stores greeting messages for visitors.  No denormalized authorization fields are needed as configuration is managed by admins.",
+          "description": "Stores product recommendations for individual customers. Recommendations are a subcollection of Customer to enforce ownership.",
           "params": [
             {
-              "name": "greetingId",
-              "description": "The unique ID of the greeting message."
+              "name": "customerId",
+              "description": "Unique identifier for the customer."
+            },
+            {
+              "name": "recommendationId",
+              "description": "Unique identifier for the recommendation."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore data structure is designed to support Aravalli Home Studio's application requirements, focusing on products, orders, customers, gallery items, and greetings. User data and associated content (orders) are structured under the `/users/{userId}` path for clear ownership and security. Products and GalleryItems are placed in root-level collections for easy listing and global access, while Greetings are in a root collection for global configuration. This design achieves authorization independence by avoiding hierarchical dependencies.  For example, order data is nested under the user document to reflect ownership. The structure supports QAPs by segregating data based on access requirements (e.g., user-specific data under `/users/{userId}`, and public product/gallery data at the root)."
+    "reasoning": "The Firestore structure is designed to support Aravalli Home Studio's core features, emphasizing security, scalability, and ease of debugging.  It leverages path-based ownership and denormalization to ensure authorization independence. The structure is segregated by entity type, aligning with the principle of homogeneous security posture, where each collection has distinct and predictable security requirements.\n\n*   **Products Collection:** Stores product information, accessible for reading by all users (for catalog display). Write access is restricted to admins (not implemented here).\n*   **Customers Collection:** Stores customer profiles. Customers can only read/write their own profiles. This uses path-based ownership (`/users/{userId}/...`).\n*   **Orders and OrderItems Collections:** Orders are stored as subcollections under the respective customer document (`/customers/{customerId}/orders/{orderId}`).  This enforces ownership and simplifies security rules for orders and order items.  OrderItems are stored as subcollections of Orders.\n*   **GalleryItems Collection:** Stores image and video gallery items.  These are readable by everyone.\n*   **Recommendations Collection:** Recommendations are stored as subcollections under the customer documents to whom they are recommended. (`/customers/{customerId}/recommendations/{recommendationId}`).\n\n**Authorization Independence:**  Achieved through path-based ownership. For example, orders and recommendations are subcollections of customers, ensuring that security rules can be written based on the `request.auth.uid` matching the `customerId` segment of the path, without needing `get()` calls to parent documents.\n\n**QAPs Support:**\n*   Secure `list` operations are facilitated by the segregation of data into different collections with well-defined access control policies. Only admins can `list` all products, and users can only `list` orders associated with their customer ID. This segregation, combined with appropriate security rules, prevents unauthorized data listing.\n*   Path-based ownership secures user data.  A user can only access data under their `/customers/{customerId}` path, so listing resources from `/customers/{customerId}/orders` will only return their orders."
   }
 }
-
-    
