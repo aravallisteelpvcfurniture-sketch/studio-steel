@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
   // Assume getAuth and app are initialized elsewhere
 } from 'firebase/auth';
 
@@ -33,7 +34,16 @@ export function initiateEmailSignIn(authInstance: Auth, email: string, password:
 /** Initiate Google sign-in (non-blocking). */
 export function initiateGoogleSignIn(authInstance: Auth): void {
   const provider = new GoogleAuthProvider();
-  // CRITICAL: Call signInWithPopup directly. Do NOT use 'await signInWithPopup(...)'.
-  signInWithPopup(authInstance, provider);
+
+  // Check if the app is running in standalone mode (PWA).
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+  if (isStandalone) {
+    // For PWAs, redirect is more reliable than popup.
+    signInWithRedirect(authInstance, provider);
+  } else {
+    // For regular browser tabs, popup is fine.
+    signInWithPopup(authInstance, provider);
+  }
   // Code continues immediately. Auth state change is handled by onAuthStateChanged listener.
 }
