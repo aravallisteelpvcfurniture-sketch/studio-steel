@@ -51,7 +51,7 @@ export default function DashboardPage() {
       <main className="flex-grow overflow-y-auto bg-background">
         <div className="p-8 text-foreground min-h-full">
           <div className="grid grid-cols-3 gap-4 text-center">
-            <Link href="#" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
+            <Link href="/dashboard/invoice" className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted">
               <div className="bg-accent/20 p-3 rounded-full">
                   <Receipt className="h-8 w-8 text-accent" />
               </div>
