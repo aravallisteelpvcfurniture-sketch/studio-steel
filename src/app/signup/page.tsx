@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/firebase';
 import { initiateEmailSignUp, initiateGoogleSignIn, initiateFacebookSignIn } from '@/firebase/non-blocking-login';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Mail, User, Lock, Facebook, Twitter } from 'lucide-react';
+import { ChevronLeft, Mail, User, Lock, Facebook } from 'lucide-react';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 48 48">
@@ -21,10 +21,7 @@ const GoogleIcon = () => (
     <path
       fill="#4CAF50"
       d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.519-3.317-11.275-7.746l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-    />
-    <path
-      fill="#1976D2"
-      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C44.57,34,48,28.686,48,24C48,22.659,47.862,21.35,47.611,20.083z"
+d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C44.57,34,48,28.686,48,24C48,22.659,47.862,21.35,47.611,20.083z"
     />
   </svg>
 );
@@ -69,7 +66,6 @@ export default function SignUpPage() {
         <div className="flex justify-center space-x-4 mb-8">
           <Button variant="outline" size="icon" className="rounded-full h-12 w-12" onClick={handleGoogleSignIn}><GoogleIcon /></Button>
           <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#3b5998] text-white" onClick={handleFacebookSignIn}><Facebook /></Button>
-          <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#1DA1F2] text-white"><Twitter /></Button>
         </div>
 
         <form onSubmit={handleSignUp} className="space-y-6">

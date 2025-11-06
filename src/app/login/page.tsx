@@ -7,7 +7,7 @@ import { useAuth, useUser } from '@/firebase';
 import { initiateEmailSignIn, initiateGoogleSignIn, initiateFacebookSignIn } from '@/firebase/non-blocking-login';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { ChevronLeft, User, Lock, Facebook, Twitter } from 'lucide-react';
+import { ChevronLeft, User, Lock, Facebook } from 'lucide-react';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 48 48">
@@ -74,7 +74,6 @@ export default function LoginPage() {
         <div className="flex justify-center space-x-4 mb-8">
           <Button variant="outline" size="icon" className="rounded-full h-12 w-12" onClick={handleGoogleSignIn}><GoogleIcon /></Button>
           <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#3b5998] text-white" onClick={handleFacebookSignIn}><Facebook /></Button>
-          <Button variant="outline" size="icon" className="rounded-full h-12 w-12 bg-[#1DA1F2] text-white"><Twitter /></Button>
         </div>
         <form onSubmit={handleSignIn} className="space-y-6">
           <div className="relative">
