@@ -46,7 +46,6 @@ export default function SignUpPage() {
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
     initiateEmailSignUp(auth, email, password);
-    router.push('/login');
   };
 
   const handleGoogleSignIn = () => {
