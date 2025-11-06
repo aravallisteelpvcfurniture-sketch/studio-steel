@@ -1,11 +1,22 @@
 'use client';
 import {
   Auth, // Import Auth type for type hinting
+  GoogleAuthProvider,
+  signInWithRedirect,
   signInAnonymously,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   // Assume getAuth and app are initialized elsewhere
 } from 'firebase/auth';
+
+/** Initiate Google sign-in (non-blocking). */
+export function initiateGoogleSignIn(authInstance: Auth | null): void {
+  if (!authInstance) return;
+  const provider = new GoogleAuthProvider();
+  // CRITICAL: Call signInWithRedirect directly. Do NOT use 'await signInWithRedirect(...)'.
+  signInWithRedirect(authInstance, provider);
+  // Code continues immediately. Auth state change is handled by onAuthStateChanged listener.
+}
 
 /** Initiate anonymous sign-in (non-blocking). */
 export function initiateAnonymousSignIn(authInstance: Auth): void {
