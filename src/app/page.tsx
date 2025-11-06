@@ -15,48 +15,19 @@ export default function WelcomePage() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-background text-white overflow-hidden">
-      <main className="relative z-10 flex-grow flex flex-col items-center justify-center text-center px-4 animate-fade-in-up">
-        <div className="w-48 h-48 relative mb-4">
-          <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="logoGradient" x1="0.5" y1="0" x2="0.5" y2="1">
-                <stop offset="0%" stop-color="#A0DDEE" />
-                <stop offset="100%" stop-color="#E6C9E1" />
-              </linearGradient>
-              <filter id="dropShadow" x="-0.2" y="-0.2" width="1.4" height="1.4">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-                <feOffset dx="1" dy="2"/>
-                <feComposite in2="SourceGraphic" operator="atop"/>
-              </filter>
-            </defs>
-          
-            <g transform="translate(0, -5)">
-              {/* Outer border - dark part */}
-              <path d="M100 0 L195 55 V165 L100 220 L5 165 V55 Z" fill="#4a4a4a"/>
-              {/* Middle border - light part */}
-              <path d="M100 5 L187 56 V164 L100 215 L13 164 V56 Z" fill="#d3d3d3"/>
-              {/* Inner border - dark part */}
-              <path d="M100 10 L180 60 V160 L100 210 L20 160 V60 Z" fill="#888888"/>
-          
-              {/* Main hexagon background with gradient */}
-              <path d="M100 15 L175 62 V158 L100 205 L25 158 V62 Z" fill="url(#logoGradient)"/>
-          
-              {/* Inner shadow for depth */}
-              <path d="M100 15 L175 62 V158 L100 205 L25 158 V62 Z" fill="black" fill-opacity="0.1" stroke-width="0"/>
-          
-              {/* Text */}
-              <text x="100" y="120"
-                    font-family="sans-serif"
-                    font-size="40"
-                    font-weight="bold"
-                    fill="white"
-                    text-anchor="middle"
-                    filter="url(#dropShadow)">
-                Aravalli
-              </text>
-            </g>
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full filter blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/20 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000"></div>
+      </div>
+      <main className="relative z-10 flex-grow flex flex-col items-center justify-center text-center px-4">
+        <div className="w-48 h-48 relative mb-4 animate-fade-in-up">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            <path d="M50 5 L95 95 H5 Z" fill="none" stroke="currentColor" strokeWidth="5" />
+            <path d="M27 65 L73 65" fill="none" stroke="currentColor" strokeWidth="5" />
           </svg>
         </div>
+        <h1 className="text-4xl font-bold tracking-wider animate-fade-in-up animation-delay-[500ms]">ARAVALLI</h1>
+        <p className="text-lg text-white/80 tracking-widest animate-fade-in-up animation-delay-[700ms]">STEEL & PVC FURNITURE</p>
       </main>
     </div>
   );
