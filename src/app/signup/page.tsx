@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth, useUser } from '@/firebase';
-import { initiateEmailSignUp, initiateGoogleSignIn, initiateFacebookSignIn } from '@/firebase/non-blocking-login';
+import { initiateEmailSignUp, initiateGoogleSignIn } from '@/firebase/non-blocking-login';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Mail, User, Lock, Facebook } from 'lucide-react';
 
@@ -53,7 +53,8 @@ export default function SignUpPage() {
   };
   
   const handleFacebookSignIn = () => {
-    initiateFacebookSignIn(auth);
+    // initiateFacebookSignIn(auth);
+    console.log("Facebook Sign in not implemented yet")
   };
 
   return (
