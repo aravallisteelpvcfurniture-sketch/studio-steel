@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { ChevronLeft, User, Phone, Mail, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
 
 export default function GenerateBillPage() {
   const router = useRouter();
@@ -28,6 +29,17 @@ export default function GenerateBillPage() {
     { name: 'email', icon: Mail, label: 'Email', value: partyDetails.email },
     { name: 'address', icon: MapPin, label: 'Address', value: partyDetails.address },
   ];
+
+  const createQueryString = () => {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(partyDetails)) {
+      if (value) {
+        params.append(key, value);
+      }
+    }
+    return params.toString();
+  };
+
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -71,9 +83,11 @@ export default function GenerateBillPage() {
       </main>
 
       <footer className="p-4 flex-shrink-0 border-t bg-background">
-        <Button className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
-          Proceed to Add Items
-        </Button>
+        <Link href={`/dashboard/invoice/add-items?${createQueryString()}`} passHref>
+            <Button className="w-full h-12 rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 text-lg font-bold">
+            Proceed to Add Items
+            </Button>
+        </Link>
       </footer>
     </div>
   );

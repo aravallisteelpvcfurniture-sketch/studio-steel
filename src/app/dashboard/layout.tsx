@@ -9,7 +9,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname();
-  const hideBottomNavOnRoutes = ['/dashboard/invoice', '/dashboard/invoice/generate'];
+  const hideBottomNavOnRoutes = ['/dashboard/invoice', '/dashboard/invoice/generate', '/dashboard/invoice/add-items'];
   const showBottomNav = !hideBottomNavOnRoutes.includes(pathname);
 
   return (
