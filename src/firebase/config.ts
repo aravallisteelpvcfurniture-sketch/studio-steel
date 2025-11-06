@@ -7,3 +7,5 @@ export const firebaseConfig = {
   "messagingSenderId": "638349737153",
   "storageBucket": "studio-8143900809-49441.appspot.com"
 };
+
+    
