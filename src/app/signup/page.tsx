@@ -21,7 +21,10 @@ const GoogleIcon = () => (
     <path
       fill="#4CAF50"
       d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.519-3.317-11.275-7.746l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C44.57,34,48,28.686,48,24C48,22.659,47.862,21.35,47.611,20.083z"
+    />
+    <path
+      fill="#1976D2"
+      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C44.57,34,48,28.686,48,24C48,22.659,47.862,21.35,47.611,20.083z"
     />
   </svg>
 );
@@ -48,8 +51,8 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-primary">
-       <div className="flex justify-between items-center p-4 text-white">
+    <div className="min-h-screen bg-primary flex flex-col overflow-hidden">
+       <div className="flex justify-between items-center p-4 text-white flex-shrink-0">
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ChevronLeft />
         </Button>
@@ -57,7 +60,7 @@ export default function SignUpPage() {
           Need some help?
         </Link>
       </div>
-      <div className="bg-background rounded-t-[3rem] p-8 pt-12 mt-4 min-h-[calc(100vh-80px)]">
+      <div className="bg-background rounded-t-[3rem] p-8 pt-12 mt-4 flex-grow">
         <div className="text-left mb-8">
           <h1 className="text-3xl font-bold">Getting started</h1>
           <p className="text-muted-foreground">Create account to continue!</p>

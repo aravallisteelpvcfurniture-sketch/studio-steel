@@ -57,8 +57,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-primary">
-      <div className="flex justify-between items-center p-4 text-white">
+    <div className="min-h-screen bg-primary flex flex-col overflow-hidden">
+      <div className="flex justify-between items-center p-4 text-white flex-shrink-0">
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ChevronLeft />
         </Button>
@@ -66,7 +66,7 @@ export default function LoginPage() {
           Forgot your password?
         </Link>
       </div>
-      <div className="bg-background rounded-t-[3rem] p-8 pt-12 mt-4 min-h-[calc(100vh-80px)]">
+      <div className="bg-background rounded-t-[3rem] p-8 pt-12 mt-4 flex-grow">
         <div className="text-left mb-8">
           <h1 className="text-3xl font-bold">Let's get something</h1>
           <p className="text-muted-foreground">Good to see you back.</p>
@@ -107,7 +107,7 @@ export default function LoginPage() {
         <p className="mt-8 text-center text-sm text-muted-foreground">
           Don't have an account?{' '}
           <Link href="/signup" className="font-semibold text-accent hover:underline">
-            Sign in
+            Sign up
           </Link>
         </p>
       </div>
