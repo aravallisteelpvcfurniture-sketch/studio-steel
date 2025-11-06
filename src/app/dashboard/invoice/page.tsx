@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 interface Item {
   name: string;
@@ -24,6 +26,12 @@ interface Party {
     date: string;
 }
 
+// Extend the jsPDF type to include the autoTable method from the plugin
+interface jsPDFWithAutoTable extends jsPDF {
+  autoTable: (options: any) => jsPDF;
+}
+
+
 export default function InvoicePage() {
   const router = useRouter();
   const [parties, setParties] = useState<Party[]>([]);
@@ -37,45 +45,79 @@ export default function InvoicePage() {
   }, []);
 
   const handleShareBill = (party: Party) => {
-    if (!party.mobile) {
-      alert("This party doesn't have a mobile number saved.");
-      return;
-    }
+    const doc = new jsPDF() as jsPDFWithAutoTable;
 
-    const itemsText = party.items.map(item => 
-      `${item.name}\nQty: ${item.quantity}, Rate: ₹${item.price.toFixed(2)}, Amount: ₹${(item.quantity * item.price).toFixed(2)}`
-    ).join('\n\n');
+    // Header
+    doc.setFontSize(20);
+    doc.text('TAX INVOICE', 105, 20, { align: 'center' });
+    
+    doc.setFontSize(12);
+    doc.text('Aravalli Steel PVC Furniture', 14, 35);
+    doc.setFontSize(10);
+    doc.text('123 Example Street, City, State, PIN', 14, 40);
+    doc.text('GSTIN: YOUR_GSTIN', 14, 45);
+    doc.text('Email: your.email@example.com', 14, 50);
 
-    const billDetails = `
-*TAX INVOICE*
------------------------------------
-*Aravalli Steel PVC Furniture*
-123 Example Street, City, State, PIN
-GSTIN: YOUR_GSTIN
-Email: your.email@example.com
+    // Invoice Details
+    doc.setFontSize(10);
+    doc.text(`Invoice No: ${party.id.substring(0, 6)}`, 14, 60);
+    doc.text(`Date: ${new Date(party.date).toLocaleDateString()}`, 196, 60, { align: 'right' });
 
-INVOICE NO: ${party.id.substring(0, 6)}
-DATE: ${new Date(party.date).toLocaleDateString()}
------------------------------------
-*Bill To:*
-${party.name}
-${party.address}
-${party.email}
------------------------------------
-*Description*
-${itemsText}
------------------------------------
-*Grand Total: ₹${party.totalAmount.toFixed(2)}*
------------------------------------
-For: Aravalli Steel PVC Furniture
+    // Bill To
+    doc.setFontSize(12);
+    doc.text('Bill To:', 14, 70);
+    doc.setFontSize(10);
+    doc.text(party.name, 14, 75);
+    doc.text(party.address, 14, 80);
+    if(party.email) doc.text(party.email, 14, 85);
+    if(party.mobile) doc.text(party.mobile, 14, 90);
 
-Authorised Signatory
-    `;
+    // Items Table
+    const tableColumn = ["#", "Item Name", "Qty", "Rate", "Amount"];
+    const tableRows: (string|number)[][] = [];
 
-    const encodedMessage = encodeURIComponent(billDetails.trim());
-    const whatsappUrl = `https://wa.me/${party.mobile}?text=${encodedMessage}`;
+    party.items.forEach((item, index) => {
+      const itemData = [
+        index + 1,
+        item.name,
+        item.quantity,
+        `₹${item.price.toFixed(2)}`,
+        `₹${(item.quantity * item.price).toFixed(2)}`
+      ];
+      tableRows.push(itemData);
+    });
 
-    window.open(whatsappUrl, '_blank');
+    doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 95,
+        theme: 'striped',
+        headStyles: { fillColor: [20, 163, 199] }, // Corresponds to primary color
+        styles: { halign: 'center' },
+        columnStyles: { 
+            1: { halign: 'left' },
+            3: { halign: 'right' },
+            4: { halign: 'right' },
+        }
+    });
+
+    const finalY = doc.lastAutoTable.finalY || 150;
+
+    // Total
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Grand Total:', 150, finalY + 15, { align: 'right' });
+    doc.text(`₹${party.totalAmount.toFixed(2)}`, 196, finalY + 15, { align: 'right' });
+
+    // Footer
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('For: Aravalli Steel PVC Furniture', 14, finalY + 30);
+    doc.text('Authorised Signatory', 196, finalY + 40, { align: 'right' });
+
+
+    doc.save(`invoice-${party.id.substring(0,6)}.pdf`);
+    alert('PDF downloaded! You can now share it via WhatsApp.');
   };
 
   const handleGenerateBill = () => {
