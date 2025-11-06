@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, Trash2 } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -39,10 +39,6 @@ export default function AddItemsPage() {
     }
   };
 
-  const handleRemoveItem = (index: number) => {
-    setItems(prev => prev.filter((_, i) => i !== index));
-  };
-  
   const totalAmount = useMemo(() => {
     return items.reduce((sum, item) => sum + item.quantity * item.price, 0);
   }, [items]);
@@ -133,9 +129,6 @@ export default function AddItemsPage() {
                                     {item.quantity} x ₹{item.price.toFixed(2)} = ₹{(item.quantity * item.price).toFixed(2)}
                                 </p>
                             </div>
-                            <Button variant="ghost" size="icon" onClick={() => handleRemoveItem(index)}>
-                                <Trash2 className="h-5 w-5 text-destructive" />
-                            </Button>
                         </div>
                         ))}
                     </div>
