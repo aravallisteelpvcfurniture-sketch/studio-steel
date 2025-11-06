@@ -1,147 +1,65 @@
 /**
- * @file Firestore Security Rules for Aravalli Home Studio.
+ * @fileOverview Firestore Security Rules for Aravalli Home Studio.
  *
- * @corePhilosophy This ruleset enforces a strict user-ownership model for user-related data
- *                 (profiles, orders, recommendations) and allows public read access to product
- *                 catalogs, greetings, and gallery items. Write access to user-owned data is
- *                 restricted to the authenticated user.
+ * Core Philosophy:
+ * This ruleset enforces a strict user-ownership model for customer-related data (orders, recommendations).
+ * Products and gallery items are considered publicly accessible.
  *
- * @dataStructure The Firestore database is structured as follows:
- *                 - /users/{userId}: User profiles, owned by the user.
- *                 - /users/{userId}/orders/{orderId}: Orders placed by a user, owned by the user.
- *                 - /users/{userId}/orders/{orderId}/orderItems/{orderItemId}: Items within an order, owned by the user.
- *                 - /users/{userId}/recommendations/{recommendationId}: Product recommendations for a user, owned by the user.
- *                 - /products/{productId}: Product catalog, publicly readable.
- *                 - /greetings/{greetingId}: Greeting messages, publicly readable.
- *                 - /gallery/{galleryItemId}: Gallery items (images, videos), publicly readable.
+ * Data Structure:
+ * - /products/{productId}: Public product catalog.
+ * - /customers/{customerId}: Customer profiles, accessible only by the owning user.
+ * - /customers/{customerId}/orders/{orderId}: Orders belonging to a specific customer.
+ * - /customers/{customerId}/orders/{orderId}/orderItems/{orderItemId}: Items within an order, accessible only by the order's owner.
+ * - /customers/{customerId}/recommendations/{recommendationId}: Product recommendations for a customer.
+ * - /galleryItems/{galleryItemId}: Public gallery items.
  *
- * @keySecurityDecisions
- *   - User data is strictly owned and controlled by the authenticated user.
- *   - Public collections (products, greetings, gallery) are readable by anyone but writes are disabled
- *   - Listing of user documents is allowed only for the owning user.
+ * Key Security Decisions:
+ * - Customers can only access their own data (profile, orders, recommendations).
+ * - Public read access is granted for products and gallery items.
+ * - No user listing is allowed.
  *
- * @denormalizationForAuthorization N/A - Path-based ownership avoids the need for data denormalization.
- * @structuralSegregation Public and private data are stored in separate collections to simplify
- *                         security rules and improve performance.
+ * Denormalization for Authorization:
+ *  -  The `customerId` is used in the paths for orders and recommendations to enforce ownership.
+ *
+ * Structural Segregation:
+ * - Public data (products, gallery items) is stored in top-level collections, while private user data is stored under /customers/{customerId}.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Controls access to user profile documents.
-     * @path /users/{userId}
-     * @allow (create) User with UID 'user_abc' can create their own profile document with id 'user_abc'.
-     * @allow (get, list, update, delete) User with UID 'user_abc' can read, update, and delete their own profile document with id 'user_abc'.
-     * @deny (create) User with UID 'user_xyz' cannot create a profile document with id 'user_abc'.
-     * @deny (get, list, update, delete) User with UID 'user_xyz' cannot read, update, or delete the profile document of user 'user_abc'.
-     * @principle Enforces document ownership for user profiles, ensuring only the user can access their data.
+     * @description Checks if the request is authenticated.
+     * @returns {boolean} True if the user is signed in, false otherwise.
      */
-    match /users/{userId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-      function isOwner(userId) {
-        return request.auth.uid == userId;
-      }
-      function isExistingOwner(userId) {
-        return isOwner(userId) && resource != null;
-      }
-
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-      allow delete: if isExistingOwner(userId);
+    function isSignedIn() {
+      return request.auth != null;
     }
 
     /**
-     * @description Controls access to order documents within a user's profile.
-     * @path /users/{userId}/orders/{orderId}
-     * @allow (create) User with UID 'user_abc' can create an order document under their profile.
-     * @allow (get, list, update, delete) User with UID 'user_abc' can read, update, and delete their own order documents.
-     * @deny (create) User with UID 'user_xyz' cannot create an order document under user 'user_abc''s profile.
-     * @deny (get, list, update, delete) User with UID 'user_xyz' cannot read, update, or delete order documents of user 'user_abc'.
-     * @principle Enforces document ownership for orders, ensuring only the user can access their order history.
+     * @description Checks if the authenticated user is the owner of the resource.
+     * @param {string} userId - The user ID to compare against the authenticated user's ID.
+     * @returns {boolean} True if the user IDs match, false otherwise.
      */
-    match /users/{userId}/orders/{orderId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-      function isOwner(userId) {
-        return request.auth.uid == userId;
-      }
-      function isExistingOwner(userId) {
-        return isOwner(userId) && resource != null;
-      }
-
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-      allow delete: if isExistingOwner(userId);
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
     }
 
     /**
-     * @description Controls access to order item documents within an order.
-     * @path /users/{userId}/orders/{orderId}/orderItems/{orderItemId}
-     * @allow (create) User with UID 'user_abc' can create an order item document under their order.
-     * @allow (get, list, update, delete) User with UID 'user_abc' can read, update, and delete their own order item documents.
-     * @deny (create) User with UID 'user_xyz' cannot create an order item document under user 'user_abc''s order.
-     * @deny (get, list, update, delete) User with UID 'user_xyz' cannot read, update, or delete order item documents of user 'user_abc'.
-     * @principle Enforces document ownership for order items, ensuring only the user can access their order details.
+     * @description Checks if the authenticated user is the owner of the resource and the resource exists.
+     * @param {string} userId - The user ID to compare against the authenticated user's ID.
+     * @returns {boolean} True if the user IDs match and the resource exists, false otherwise.
      */
-    match /users/{userId}/orders/{orderId}/orderItems/{orderItemId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-      function isOwner(userId) {
-        return request.auth.uid == userId;
-      }
-      function isExistingOwner(userId) {
+    function isExistingOwner(userId) {
         return isOwner(userId) && resource != null;
-      }
-
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId);
-      allow update: if isExistingOwner(userId);
-      allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Controls access to product recommendation documents within a user's profile.
-     * @path /users/{userId}/recommendations/{recommendationId}
-     * @allow (create) User with UID 'user_abc' can create a recommendation document under their profile.
-     * @allow (get, list, update, delete) User with UID 'user_abc' can read, update, and delete their own recommendation documents.
-     * @deny (create) User with UID 'user_xyz' cannot create a recommendation document under user 'user_abc''s profile.
-     * @deny (get, list, update, delete) User with UID 'user_xyz' cannot read, update, or delete recommendation documents of user 'user_abc'.
-     * @principle Enforces document ownership for recommendations, ensuring only the user can access their personalized recommendations.
-     */
-    match /users/{userId}/recommendations/{recommendationId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-      function isOwner(userId) {
-        return request.auth.uid == userId;
-      }
-      function isExistingOwner(userId) {
-        return isOwner(userId) && resource != null;
-      }
-
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-      allow delete: if isExistingOwner(userId);
-    }
-
-    /**
-     * @description Controls access to product documents. Products are publicly readable but not writable.
+     * @description Rules for the /products collection.
      * @path /products/{productId}
-     * @allow (get, list) Any user can read product documents.
-     * @deny (create, update, delete) No user can create, update, or delete product documents.
-     * @principle Products are publicly available for viewing, but only the admin can modify the product catalog (this would need to be implemented out-of-band via the Firebase Admin SDK).
+     * @allow (get, list) Any user can read product information.
+     * @deny (create, update, delete) No user can create, update, or delete product information through the client.
+     * @principle Allows public read access to product information.
      */
     match /products/{productId} {
       allow get, list: if true;
@@ -149,25 +67,76 @@ service cloud.firestore {
     }
 
     /**
-     * @description Controls access to greeting documents. Greetings are publicly readable but not writable.
-     * @path /greetings/{greetingId}
-     * @allow (get, list) Any user can read greeting documents.
-     * @deny (create, update, delete) No user can create, update, or delete greeting documents.
-     * @principle Greetings are publicly available for viewing, but only the admin can modify the greeting messages (this would need to be implemented out-of-band via the Firebase Admin SDK).
+     * @description Rules for the /customers collection.
+     * @path /customers/{customerId}
+     * @allow (create) An authenticated user can create their own customer document.
+     * @allow (get, update, delete) An authenticated user can only access and modify their own customer document.
+     * @deny (list) No user can list all customer documents.
+     * @deny (create) An unauthenticated user cannot create a customer document.
+     * @deny (get, update, delete) An authenticated user cannot access or modify another user's customer document.
+     * @principle Enforces document ownership for customer profiles.
      */
-    match /greetings/{greetingId} {
-      allow get, list: if true;
-      allow create, update, delete: if false;
+    match /customers/{customerId} {
+      allow get: if isOwner(customerId);
+      allow list: if false;
+      allow create: if isOwner(customerId);
+      allow update: if isExistingOwner(customerId);
+      allow delete: if isExistingOwner(customerId);
     }
 
     /**
-     * @description Controls access to gallery item documents. Gallery items are publicly readable but not writable.
-     * @path /gallery/{galleryItemId}
-     * @allow (get, list) Any user can read gallery item documents.
-     * @deny (create, update, delete) No user can create, update, or delete gallery item documents.
-     * @principle Gallery items are publicly available for viewing, but only the admin can modify the gallery (this would need to be implemented out-of-band via the Firebase Admin SDK).
+     * @description Rules for the /customers/{customerId}/orders collection.
+     * @path /customers/{customerId}/orders/{orderId}
+     * @allow (create, get, update, delete, list) An authenticated user can only manage their own orders.
+     * @deny An authenticated user cannot manage another user's orders.
+     * @principle Enforces document ownership for orders.
      */
-    match /gallery/{galleryItemId} {
+    match /customers/{customerId}/orders/{orderId} {
+      allow get: if isOwner(customerId);
+      allow list: if isOwner(customerId);
+      allow create: if isOwner(customerId);
+      allow update: if isExistingOwner(customerId);
+      allow delete: if isExistingOwner(customerId);
+    }
+
+    /**
+     * @description Rules for the /customers/{customerId}/orders/{orderId}/orderItems collection.
+     * @path /customers/{customerId}/orders/{orderId}/orderItems/{orderItemId}
+     * @allow (create, get, update, delete, list) An authenticated user can only manage their own order items.
+     * @deny An authenticated user cannot manage another user's order items.
+     * @principle Enforces document ownership for order items.
+     */
+    match /customers/{customerId}/orders/{orderId}/orderItems/{orderItemId} {
+      allow get: if isOwner(customerId);
+      allow list: if isOwner(customerId);
+      allow create: if isOwner(customerId);
+      allow update: if isExistingOwner(customerId);
+      allow delete: if isExistingOwner(customerId);
+    }
+
+    /**
+     * @description Rules for the /customers/{customerId}/recommendations collection.
+     * @path /customers/{customerId}/recommendations/{recommendationId}
+     * @allow (create, get, update, delete, list) An authenticated user can only manage their own recommendations.
+     * @deny An authenticated user cannot manage another user's recommendations.
+     * @principle Enforces document ownership for recommendations.
+     */
+    match /customers/{customerId}/recommendations/{recommendationId} {
+      allow get: if isOwner(customerId);
+      allow list: if isOwner(customerId);
+      allow create: if isOwner(customerId);
+      allow update: if isExistingOwner(customerId);
+      allow delete: if isExistingOwner(customerId);
+    }
+
+    /**
+     * @description Rules for the /galleryItems collection.
+     * @path /galleryItems/{galleryItemId}
+     * @allow (get, list) Any user can read gallery item information.
+     * @deny (create, update, delete) No user can create, update, or delete gallery item information through the client.
+     * @principle Allows public read access to gallery items.
+     */
+    match /galleryItems/{galleryItemId} {
       allow get, list: if true;
       allow create, update, delete: if false;
     }
