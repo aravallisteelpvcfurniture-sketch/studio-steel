@@ -44,8 +44,10 @@ export default function InvoicePage() {
     setParties(savedParties.reverse()); // Show newest first
   }, []);
 
-  const handleShareBill = (party: Party) => {
+  const handleShareBill = async (party: Party) => {
     const doc = new jsPDF() as jsPDFWithAutoTable;
+    const invoiceId = party.id.substring(0,6);
+    const fileName = `invoice-${invoiceId}.pdf`;
 
     // Header
     doc.setFontSize(20);
@@ -60,7 +62,7 @@ export default function InvoicePage() {
 
     // Invoice Details
     doc.setFontSize(10);
-    doc.text(`Invoice No: ${party.id.substring(0, 6)}`, 14, 60);
+    doc.text(`Invoice No: ${invoiceId}`, 14, 60);
     doc.text(`Date: ${new Date(party.date).toLocaleDateString()}`, 196, 60, { align: 'right' });
 
     // Bill To
@@ -115,8 +117,26 @@ export default function InvoicePage() {
     doc.text('For: Aravalli Steel PVC Furniture', 14, finalY + 30);
     doc.text('Authorised Signatory', 196, finalY + 40, { align: 'right' });
 
+    const pdfBlob = doc.output('blob');
+    const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
 
-    doc.save(`invoice-${party.id.substring(0,6)}.pdf`);
+    // Use Web Share API if available
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      try {
+        await navigator.share({
+          files: [pdfFile],
+          title: `Invoice ${invoiceId}`,
+          text: `Here is the invoice for ${party.name}.`,
+        });
+      } catch (error) {
+        console.error('Sharing failed', error);
+        // Fallback to download if user cancels share
+        doc.save(fileName);
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      doc.save(fileName);
+    }
   };
 
   const handleGenerateBill = () => {
