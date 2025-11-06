@@ -1,39 +1,15 @@
-<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="logoGradient" x1="0.5" y1="0" x2="0.5" y2="1">
-      <stop offset="0%" stop-color="#A0DDEE" />
-      <stop offset="100%" stop-color="#E6C9E1" />
-    </linearGradient>
-    <filter id="dropShadow" x="-0.2" y="-0.2" width="1.4" height="1.4">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-      <feOffset dx="1" dy="2"/>
-      <feComposite in2="SourceGraphic" operator="atop"/>
-    </filter>
-  </defs>
-
-  <g transform="translate(0, -5)">
-    <!-- Outer border - dark part -->
-    <path d="M100 0 L195 55 V165 L100 220 L5 165 V55 Z" fill="#4a4a4a"/>
-    <!-- Middle border - light part -->
-    <path d="M100 5 L187 56 V164 L100 215 L13 164 V56 Z" fill="#d3d3d3"/>
-    <!-- Inner border - dark part -->
-    <path d="M100 10 L180 60 V160 L100 210 L20 160 V60 Z" fill="#888888"/>
-
-    <!-- Main hexagon background with gradient -->
-    <path d="M100 15 L175 62 V158 L100 205 L25 158 V62 Z" fill="url(#logoGradient)"/>
-
-    <!-- Inner shadow for depth -->
-    <path d="M100 15 L175 62 V158 L100 205 L25 158 V62 Z" fill="black" fill-opacity="0.1" stroke-width="0"/>
-
-    <!-- Text -->
-    <text x="100" y="120"
-          font-family="sans-serif"
-          font-size="40"
-          font-weight="bold"
-          fill="white"
-          text-anchor="middle"
-          filter="url(#dropShadow)">
-      Aravalli
-    </text>
-  </g>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" style="stop-color:rgb(20,163,199);stop-opacity:1" />
+  <stop offset="100%" style="stop-color:rgb(12,84,102);stop-opacity:1" />
+</linearGradient>
+<linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" style="stop-color:rgb(220,220,220);stop-opacity:1" />
+  <stop offset="100%" style="stop-color:rgb(160,160,160);stop-opacity:1" />
+</linearGradient>
+</defs>
+<circle cx="128" cy="128" r="128" fill="url(#grad1)"/>
+<circle cx="128" cy="128" r="118" stroke="url(#grad2)" stroke-width="12"/>
+<path d="M93.3469 184L128 72L162.653 184H145.408L136.408 156.8H119.592L110.592 184H93.3469ZM122.245 142.4H133.755L128 124.8L122.245 142.4Z" fill="white"/>
 </svg>
