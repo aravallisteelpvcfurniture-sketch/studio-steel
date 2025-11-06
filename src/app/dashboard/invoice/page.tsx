@@ -43,19 +43,33 @@ export default function InvoicePage() {
     }
 
     const itemsText = party.items.map(item => 
-      `${item.name} (Qty: ${item.quantity}, Price: ₹${item.price.toFixed(2)}) - ₹${(item.quantity * item.price).toFixed(2)}`
-    ).join('\n');
+      `${item.name}\nQty: ${item.quantity}, Rate: ₹${item.price.toFixed(2)}, Amount: ₹${(item.quantity * item.price).toFixed(2)}`
+    ).join('\n\n');
 
     const billDetails = `
-Hello ${party.name},
-
-Here is your bill from Aravalli Steel PVC Furniture:
+*TAX INVOICE*
 -----------------------------------
+*Aravalli Steel PVC Furniture*
+123 Example Street, City, State, PIN
+GSTIN: YOUR_GSTIN
+Email: your.email@example.com
+
+INVOICE NO: ${party.id.substring(0, 6)}
+DATE: ${new Date(party.date).toLocaleDateString()}
+-----------------------------------
+*Bill To:*
+${party.name}
+${party.address}
+${party.email}
+-----------------------------------
+*Description*
 ${itemsText}
 -----------------------------------
-*Total Amount: ₹${party.totalAmount.toFixed(2)}*
+*Grand Total: ₹${party.totalAmount.toFixed(2)}*
+-----------------------------------
+For: Aravalli Steel PVC Furniture
 
-Thank you for your business!
+Authorised Signatory
     `;
 
     const encodedMessage = encodeURIComponent(billDetails.trim());
