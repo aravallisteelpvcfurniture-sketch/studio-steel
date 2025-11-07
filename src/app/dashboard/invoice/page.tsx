@@ -87,8 +87,8 @@ export default function InvoicePage() {
         index + 1,
         item.name,
         item.quantity,
-        `₹${item.price.toFixed(2)}`,
-        `₹${(item.quantity * item.price).toFixed(2)}`
+        item.price.toFixed(2),
+        (item.quantity * item.price).toFixed(2)
       ];
       tableRows.push(itemData);
     });
@@ -114,7 +114,7 @@ export default function InvoicePage() {
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text('TOTAL AMOUNT:', 15, finalY + 15);
-    doc.text(`₹${party.totalAmount.toFixed(2)}`, 196, finalY + 15, { align: 'right' });
+    doc.text(`${party.totalAmount.toFixed(2)}`, 196, finalY + 15, { align: 'right' });
   
     // Footer
     doc.line(14, finalY + 20, 196, finalY + 20);
