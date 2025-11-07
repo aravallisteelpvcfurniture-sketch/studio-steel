@@ -46,53 +46,45 @@ export default function InvoicePage() {
 
   const handleShareBill = async (party: Party) => {
     const doc = new jsPDF() as jsPDFWithAutoTable;
-    const invoiceId = party.id.substring(0,6);
+    const invoiceId = party.id.substring(0, 6);
     const fileName = `invoice-${invoiceId}.pdf`;
-
+  
+    // --- PDF Styling based on the image ---
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+  
     // Header
-    doc.setFontSize(20);
-    doc.text('TAX INVOICE', 105, 20, { align: 'center' });
-    
+    doc.text('BILL / CASH MEMO', 105, 15, { align: 'center' });
+  
+    // Company Details
     doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('ARAVALLI STEEL & PVC FURNITURE', 14, 35);
+    doc.text('ARAVALLI STEEL & PVC FURNITURE', 20, 25);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('Shop No. 1, Opp. Old Octroi Post, Near Essar Petrol Pump, G.I.D.C. Gate,', 14, 42);
-    doc.text('V.U. Nagar, Anand - 388121', 14, 48);
-    doc.text('GSTIN: YOUR_GSTIN_HERE', 14, 54);
-    
-    const contactX = 196;
-    doc.text('Rayyan R. Vhora: 99793 32583', contactX, 42, { align: 'right' });
-    doc.text('Mithun R. Vhora: 90333 46830', contactX, 48, { align: 'right' });
-    doc.text('aravallifurniture@gmail.com', contactX, 54, { align: 'right' });
-
-
-    // Invoice Details
-    doc.setLineWidth(0.5);
-    doc.line(14, 60, 196, 60);
-    doc.setFontSize(10);
-    doc.text(`Invoice No: ${invoiceId}`, 14, 66);
-    doc.text(`Date: ${new Date(party.date).toLocaleDateString()}`, 196, 66, { align: 'right' });
-    doc.line(14, 70, 196, 70);
-
-    // Bill To
-    doc.setFontSize(12);
+    doc.text('Shop No. 1, Opp. Old Octroi Post, Near Essar Petrol Pump,', 20, 31);
+    doc.text('G.I.D.C. Gate, V.U. Nagar, Anand - 388121', 20, 36);
+    doc.text(`Phone No: 9979332583, 9033346830`, 20, 41)
+  
+    // Bill Details
+    doc.text(`Bill No: ${invoiceId}`, 150, 25);
+    doc.text(`Date: ${new Date(party.date).toLocaleDateString()}`, 150, 31);
+  
+    // "To" section
+    doc.line(14, 45, 196, 45); // Line below header
     doc.setFont('helvetica', 'bold');
-    doc.text('Bill To:', 14, 78);
-    doc.setFontSize(10);
+    doc.text('To:', 15, 52);
     doc.setFont('helvetica', 'normal');
-    doc.text(party.name, 14, 84);
-    doc.text(party.address, 14, 90);
-    if(party.email) doc.text(party.email, 14, 96);
-    if(party.mobile) doc.text(party.mobile, 14, 102);
-
+    doc.text(party.name, 25, 52);
+    if(party.address) doc.text(party.address, 15, 58);
+    doc.line(14, 65, 196, 65); // Line below "To" section
+  
     // Items Table
-    const tableColumn = ["Item Name", "Qty", "Rate", "Amount"];
+    const tableColumn = ["SL.No", "PARTICULARS", "QTY", "RATE", "AMOUNT"];
     const tableRows: (string|number)[][] = [];
-
-    party.items.forEach((item) => {
+  
+    party.items.forEach((item, index) => {
       const itemData = [
+        index + 1,
         item.name,
         item.quantity,
         `₹${item.price.toFixed(2)}`,
@@ -100,38 +92,46 @@ export default function InvoicePage() {
       ];
       tableRows.push(itemData);
     });
-
+  
     doc.autoTable({
-        head: [tableColumn],
-        body: tableRows,
-        startY: 108,
-        theme: 'grid',
-        headStyles: { fillColor: [20, 163, 199] }, // Corresponds to primary color
-        styles: { halign: 'center', lineColor: [150, 150, 150], lineWidth: 0.1 },
-        columnStyles: { 
-            0: { halign: 'left' },
-            2: { halign: 'right' },
-            3: { halign: 'right' },
-        }
+      head: [tableColumn],
+      body: tableRows,
+      startY: 68,
+      theme: 'grid',
+      headStyles: { fillColor: [240, 240, 240], textColor: [0,0,0], fontStyle: 'bold' },
+      styles: { lineColor: [100, 100, 100], lineWidth: 0.1 },
+      columnStyles: { 
+        0: { halign: 'center' },
+        2: { halign: 'center' },
+        3: { halign: 'right' },
+        4: { halign: 'right' },
+      }
     });
-
+  
     const finalY = (doc as any).lastAutoTable.finalY || 150;
-
-    // Total
-    doc.setFontSize(14);
+  
+    // Total Amount
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('Grand Total:', 150, finalY + 15, { align: 'right' });
+    doc.text('TOTAL AMOUNT:', 15, finalY + 15);
     doc.text(`₹${party.totalAmount.toFixed(2)}`, 196, finalY + 15, { align: 'right' });
-
+  
     // Footer
+    doc.line(14, finalY + 20, 196, finalY + 20);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('For: Aravalli Steel & PVC Furniture', 14, finalY + 30);
-    doc.text('Authorised Signatory', 196, finalY + 40, { align: 'right' });
-
+    doc.text('Terms and Conditions', 15, finalY + 25);
+    // Add specific terms here if needed
+  
+    doc.setFont('helvetica', 'bold');
+    doc.text('For: Aravalli Steel & PVC Furniture', 150, finalY + 35, { align: 'center'});
+    doc.text('Authorized Signatory', 150, finalY + 50, { align: 'center'});
+  
+    // --- End PDF Styling ---
+  
     const pdfBlob = doc.output('blob');
     const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
-
+  
     // Use Web Share API if available
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
       try {
