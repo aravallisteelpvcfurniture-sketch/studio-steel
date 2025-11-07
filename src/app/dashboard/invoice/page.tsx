@@ -63,7 +63,7 @@ export default function InvoicePage() {
     doc.setFont('helvetica', 'normal');
     doc.text('Shop No. 1, Opp. Old Octroi Post, Near Essar Petrol Pump,', 20, 31);
     doc.text('G.I.D.C. Gate, V.U. Nagar, Anand - 388121', 20, 36);
-    doc.text(`Rayyan R. Vhora: 9979332583, Mithun R. Vhora: 9033346830`, 20, 41)
+    doc.text('Rayyan R. Vhora: 9979332583, Mithun R. Vhora: 9033346830', 20, 41)
   
     // Bill Details
     doc.text(`Bill No: ${invoiceId}`, 150, 25);
@@ -129,9 +129,10 @@ export default function InvoicePage() {
   
     // --- End PDF Styling ---
   
-    doc.save(fileName); // Always save the PDF for manual attachment
+    doc.save(fileName); // Save the PDF to the user's device
 
     if (party.mobile) {
+      alert("PDF has been downloaded. You can now attach it in WhatsApp.");
       const message = `Dear ${party.name},\n\nPlease find your invoice attached.\n\nTotal Amount: ${party.totalAmount.toFixed(2)}\n\nThank you for your business!\nAravalli Steel & PVC Furniture`;
       const whatsappUrl = `https://wa.me/91${party.mobile}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
